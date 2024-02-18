@@ -1,31 +1,44 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/status.dart' as status;
 
 import 'package:flustr/external/stream_wrapper.dart';
 import 'package:flustr/external/subscription.dart';
 import 'package:nostr/nostr.dart';
 
 class ConnectionPool {
+  List<WebSocketChannel> webSockets = <WebSocketChannel>[];
+
   ConnectionPool(this._urls) {
     final completer = Completer<void>();
     connected = completer.future;
 
-    final socketFutures = <Future<WebSocket>>[];
+    //final socketFutures = <Future<WebSocket>>[];
+    final socketFutures = <Future<void>>[];
     for (final url in _urls) {
-      socketFutures.add(WebSocket.connect(url));
+      //socketFutures.add(WebSocket.connect(url));
+      var webSocket = WebSocketChannel.connect(Uri.parse(url));
+      this.webSockets.add(webSocket);
+      socketFutures.add(webSocket.ready);
     }
     Future.wait(socketFutures).then(
-      (sockets) async {
-        final tmp = sockets.map((e) => (e, e.asBroadcastStream())).toList();
-        relays = tmp;
-        completer.complete();
-      },
+      //(sockets) async {
+      (voids) async {
+          //final tmp = sockets.map((e) => (e, e.asBroadcastStream())).toList();
+          //final tmp = webSockets.map((e) => (e, e.stream)).toList();
+          final tmp = webSockets.map((e) => (e, e.stream.asBroadcastStream())).toList();
+          relays = tmp;
+          completer.complete();
+        }
+      //},
     );
   }
 
   void dispose() {
     for (final (socket, _) in relays) {
-      socket.close();
+      //socket.close();
+      socket.sink.close(status.goingAway);
     }
   }
 
@@ -34,11 +47,13 @@ class ConnectionPool {
 
   // イベントが降ってくるリレー
   final List<String> _urls;
-  late final List<(WebSocket, Stream<dynamic>)> relays;
+  //late final List<(WebSocket, Stream<dynamic>)> relays;
+  late final List<(WebSocketChannel, Stream<dynamic>)> relays;
 
   Future<void> addEvent(Event e) async {
     for (final (adder, _) in relays) {
-      adder.add(e.serialize());
+      //adder.add(e.serialize());
+      adder.sink.add(e.serialize());
     }
   }
 
@@ -113,9 +128,11 @@ class ConnectionPool {
 
       // subscription stuff
       final req = Request(subId, filters);
-      relay.$1.add(req.serialize());
+      //relay.$1.add(req.serialize());
+      relay.$1.sink.add(req.serialize());
       closers.add(() {
-        relay.$1.add(Close(subId).serialize());
+        //relay.$1.add(Close(subId).serialize());
+        relay.$1.sink.add(Close(subId).serialize());
       });
     }
 
