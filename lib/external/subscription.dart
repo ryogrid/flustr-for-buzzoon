@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:nostr/nostr.dart';
 
+// TODO: need to remove summariseUntilEose func at subscription.dart
 // eoseまで一つのリレーから値を受け取るオブジェクト
 Future<List<Event>> summariseUntilEose(
   List<Filter> filters,

@@ -53,6 +53,7 @@ FutureOr<ProfileData> profile(ProfileRef ref, String pubHex) async {
 }
 
 Future<ProfileData> fetchProfile(ConnectionPool pool, String pubHex) async {
+  // TODO: need to modify for buzzoon (fetchProfile at profile_provider.dart)
   final events = await pool.getStoredEvent(
     [
       Filter(authors: [pubHex], kinds: [0], limit: 1),

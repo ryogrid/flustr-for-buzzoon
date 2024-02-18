@@ -8,6 +8,8 @@ part 'timeline_posts_notifier.g.dart';
 
 @riverpod
 class TimelinePostsNotifier extends _$TimelinePostsNotifier {
+
+  // TODO: need to modify for buzzoon TimelinePostsNotifier::build
   @override
   Future<List<Event>> build() async {
     final followeePubHexList = await ref.watch(followListProvider.future);

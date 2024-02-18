@@ -11,6 +11,8 @@ class ConnectionPool {
   List<WebSocketChannel> webSockets = <WebSocketChannel>[];
 
   ConnectionPool(this._urls) {
+    // TODO: need to rewrite for buzzoon (ConnectionPool::ConnectionPool)
+
     final completer = Completer<void>();
     connected = completer.future;
 
@@ -55,12 +57,15 @@ class ConnectionPool {
   late final List<(WebSocketChannel, Stream<dynamic>)> relays;
 
   Future<void> addEvent(Event e) async {
+    // TODO: need to rewrite for buzzoon (ConnectionPool::addEvent)
+
     for (final (adder, _) in relays) {
       //adder.add(e.serialize());
       adder.sink.add(e.serialize());
     }
   }
 
+  // TODO: need to remove for buzzoon (ConnectionPool::getStoredEvent)
   Future<List<Event>> getStoredEvent(
     List<Filter> filters, {
     Duration timeout = const Duration(milliseconds: 500),
@@ -90,6 +95,7 @@ class ConnectionPool {
     return events;
   }
 
+  // TODO: need to modify for buzzoon (ConnectionPool::getStreamAfterEose)
   // eose後の,複数relayからのstreamをよしなにまとめるStreamを返す
   StreamAggregator getEventStreamAfterEose(
     List<Filter> filters,

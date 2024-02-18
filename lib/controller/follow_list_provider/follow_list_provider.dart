@@ -6,6 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'follow_list_provider.g.dart';
 
+// TODO: need to modify followListProvider using codes for temporal grobal TL only impl
 @Riverpod(keepAlive: true)
 FutureOr<List<String>> followList(FollowListRef ref) async {
   final pool = await ref.watch(connectionPoolProvider.future);
