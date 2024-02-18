@@ -18,9 +18,13 @@ class ConnectionPool {
     final socketFutures = <Future<void>>[];
     for (final url in _urls) {
       //socketFutures.add(WebSocket.connect(url));
-      var webSocket = WebSocketChannel.connect(Uri.parse(url));
-      this.webSockets.add(webSocket);
-      socketFutures.add(webSocket.ready);
+      try{
+        var webSocket = WebSocketChannel.connect(Uri.parse(url));
+        this.webSockets.add(webSocket);
+        socketFutures.add(webSocket.ready.catchError((e) => print("${e}")));
+      }catch(e){
+        // do nothing
+      }
     }
     Future.wait(socketFutures).then(
       //(sockets) async {
