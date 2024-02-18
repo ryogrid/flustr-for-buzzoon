@@ -6,10 +6,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'relay_url_provider.g.dart';
 
 final _tmpRelays = [
-  'wss://relay-jp.nostr.wirednet.jp/',
-  'wss://relay.nostr.wirednet.jp/',
-  'wss://relay.damus.io',
-  'wss://nos.lol',
+  'wss://yabu.me/'
+  // 'wss://relay-jp.nostr.wirednet.jp/',
+  // 'wss://relay.nostr.wirednet.jp/',
+  // 'wss://relay.damus.io',
+  // 'wss://nos.lol',
 ];
 
 @Riverpod(keepAlive: true)
@@ -34,5 +35,6 @@ FutureOr<List<String>> relayUrl(RelayUrlRef ref) async {
       .where((element) => element.length == 2)
       .map((e) => e[1])
       .toList();
-  return urls;
+  //return urls;
+  return ["wss://yabu.me/"];
 }

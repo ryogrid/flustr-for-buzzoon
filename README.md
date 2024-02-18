@@ -1,3 +1,7 @@
+This is a fork of flustr for buzzoon
+
+---
+
 # flustr
 
 a minimal nostr client, built with flutter.
