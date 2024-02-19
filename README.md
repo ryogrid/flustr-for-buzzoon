@@ -1,4 +1,8 @@
-This is a fork of flustr for buzzoon
+This branch is a fork of flustr added modification for Web build  
+- Build
+  - <pre>$ flutter build web --web-renderer html</pre>
+    - default renderer which uses canvas can't display not ASCII caractors collectly
+
 
 ---
 
