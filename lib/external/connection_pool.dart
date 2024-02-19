@@ -19,9 +19,13 @@ class ConnectionPool {
     for (final url in _urls) {
       //socketFutures.add(WebSocket.connect(url));
       try{
-        var webSocket = WebSocketChannel.connect(Uri.parse(url));
-        this.webSockets.add(webSocket);
-        socketFutures.add(webSocket.ready.catchError((e) => print("${e}")));
+        runZonedGuarded(() {
+          var webSocket = WebSocketChannel.connect(Uri.parse(url));
+          this.webSockets.add(webSocket);
+          socketFutures.add(webSocket.ready);
+          },(err, stack) {
+            print("catched: " + err.toString());
+        });
       }catch(e){
         // do nothing
       }
@@ -29,12 +33,17 @@ class ConnectionPool {
     Future.wait(socketFutures).then(
       //(sockets) async {
       (voids) async {
+        runZonedGuarded(() {
           //final tmp = sockets.map((e) => (e, e.asBroadcastStream())).toList();
           //final tmp = webSockets.map((e) => (e, e.stream)).toList();
-          final tmp = webSockets.map((e) => (e, e.stream.asBroadcastStream())).toList();
+          final tmp = webSockets.map((e) => (e, e.stream.asBroadcastStream()))
+              .toList();
           relays = tmp;
           completer.complete();
-        }
+        }, (err, stack) {
+          print("catched: " + err.toString());
+        });
+      }
       //},
     );
   }

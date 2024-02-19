@@ -35,6 +35,6 @@ FutureOr<List<String>> relayUrl(RelayUrlRef ref) async {
       .where((element) => element.length == 2)
       .map((e) => e[1])
       .toList();
-  return urls;
-  //return ["wss://yabu.me/"];
+  //return urls;
+  return ["wss://yabu.me", "wss://relay-jp.nostr.wirednet.jp","wss://relay.damus.io","wss://nos.lol"];
 }
