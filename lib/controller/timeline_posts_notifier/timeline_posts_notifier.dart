@@ -12,7 +12,7 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
   // TODO: need to modify for buzzoon TimelinePostsNotifier::build
   @override
   Future<List<Event>> build() async {
-    final followeePubHexList = await ref.watch(followListProvider.future);
+    //final followeePubHexList = await ref.watch(followListProvider.future);
     final pool = await ref.watch(connectionPoolProvider.future);
     final posts = await pool.getStoredEvent(
       [
@@ -63,7 +63,7 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
       return;
     }
 
-    final followees = await ref.read(followListProvider.future);
+    //final followees = await ref.read(followListProvider.future);
 
     final last = currentPosts.last;
     final oldEvents = await pool.getStoredEvent(
