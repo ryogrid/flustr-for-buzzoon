@@ -1,4 +1,4 @@
-import 'package:flustr/view/screen/home_screen.dart';
+import 'package:buzzoon/view/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

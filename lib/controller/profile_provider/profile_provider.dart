@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:flustr/controller/connection_pool_provider/connection_pool_provider.dart';
-import 'package:flustr/controller/profile_cache_provider/profile_cache_provider.dart';
-import 'package:flustr/external/connection_pool.dart';
+import 'package:buzzoon/controller/connection_pool_provider/connection_pool_provider.dart';
+import 'package:buzzoon/controller/profile_cache_provider/profile_cache_provider.dart';
+import 'package:buzzoon/external/connection_pool.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nostr/nostr.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -54,20 +54,27 @@ FutureOr<ProfileData> profile(ProfileRef ref, String pubHex) async {
 
 Future<ProfileData> fetchProfile(ConnectionPool pool, String pubHex) async {
   // TODO: need to modify for buzzoon (fetchProfile at profile_provider.dart)
-  final events = await pool.getStoredEvent(
-    [
-      Filter(authors: [pubHex], kinds: [0], limit: 1),
-    ],
-    timeout: const Duration(seconds: 10),
-  );
+  // final events = await pool.getStoredEvent(
+  //   [
+  //     Filter(authors: [pubHex], kinds: [0], limit: 1),
+  //   ],
+  //   timeout: const Duration(seconds: 10),
+  // );
+  //
+  // // パースで死ぬことを考慮
+  // try {
+  //   if (events.length == 1) {
+  //     return ProfileData.fromEvent(events.first);
+  //   }
+  // } catch (e) {
+  //   debugPrint('hogehoge $e');
+  // }
+  // throw Exception('profile not found.');
 
-  // パースで死ぬことを考慮
-  try {
-    if (events.length == 1) {
-      return ProfileData.fromEvent(events.first);
-    }
-  } catch (e) {
-    debugPrint('hogehoge $e');
-  }
-  throw Exception('profile not found.');
+  return ProfileData(
+    name: '月野うさぎ',
+    picture: 'http://robohash.org/tsukinousagi.png?size=200x200',
+    about: '月に代わっておしおきよ！',
+    pubHex: "eb119234c467ac9d2ffea5b7284f3a74bd04287a12cfd58a22d19626434cddf2",
+  );
 }

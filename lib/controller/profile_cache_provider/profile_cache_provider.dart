@@ -1,6 +1,6 @@
-import 'package:flustr/controller/connection_pool_provider/connection_pool_provider.dart';
-import 'package:flustr/controller/follow_list_provider/follow_list_provider.dart';
-import 'package:flustr/controller/profile_provider/profile_provider.dart';
+import 'package:buzzoon/controller/connection_pool_provider/connection_pool_provider.dart';
+import 'package:buzzoon/controller/follow_list_provider/follow_list_provider.dart';
+import 'package:buzzoon/controller/profile_provider/profile_provider.dart';
 import 'package:nostr/nostr.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

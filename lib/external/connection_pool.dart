@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
-import 'package:flustr/external/stream_wrapper.dart';
-import 'package:flustr/external/subscription.dart';
+import 'package:buzzoon/external/stream_wrapper.dart';
+import 'package:buzzoon/external/subscription.dart';
 import 'package:nostr/nostr.dart';
 
 class ConnectionPool {

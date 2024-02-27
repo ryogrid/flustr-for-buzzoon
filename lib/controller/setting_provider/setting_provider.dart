@@ -1,4 +1,4 @@
-import 'package:flustr/const.dart';
+import 'package:buzzoon/const.dart';
 import 'package:nostr/nostr.dart';
 import 'package:bip340/bip340.dart' as bip340;
 import 'package:riverpod_annotation/riverpod_annotation.dart';

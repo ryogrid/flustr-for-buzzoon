@@ -1,5 +1,5 @@
-import 'package:flustr/controller/setting_provider/setting_provider.dart';
-import 'package:flustr/view/component/section.dart';
+import 'package:buzzoon/controller/setting_provider/setting_provider.dart';
+import 'package:buzzoon/view/component/section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

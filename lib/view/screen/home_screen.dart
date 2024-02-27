@@ -1,12 +1,12 @@
-import 'package:flustr/controller/connection_pool_provider/connection_pool_provider.dart';
-import 'package:flustr/controller/current_pubhex_provider/current_pubhex_provider.dart';
-import 'package:flustr/controller/current_sechex_provider/current_sechex_provider.dart';
-import 'package:flustr/controller/is_seckey_available_provider/is_seckey_available_provider.dart';
-import 'package:flustr/controller/timeline_posts_notifier/timeline_posts_notifier.dart';
-import 'package:flustr/external/connection_pool.dart';
-import 'package:flustr/view/component/event_view.dart';
-import 'package:flustr/view/screen/profile_screen.dart';
-import 'package:flustr/view/screen/setting_screen.dart';
+import 'package:buzzoon/controller/connection_pool_provider/connection_pool_provider.dart';
+import 'package:buzzoon/controller/current_pubhex_provider/current_pubhex_provider.dart';
+import 'package:buzzoon/controller/current_sechex_provider/current_sechex_provider.dart';
+import 'package:buzzoon/controller/is_seckey_available_provider/is_seckey_available_provider.dart';
+import 'package:buzzoon/controller/timeline_posts_notifier/timeline_posts_notifier.dart';
+import 'package:buzzoon/external/connection_pool.dart';
+import 'package:buzzoon/view/component/event_view.dart';
+import 'package:buzzoon/view/screen/profile_screen.dart';
+import 'package:buzzoon/view/screen/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
-import 'package:flustr/controller/connection_pool_provider/connection_pool_provider.dart';
-import 'package:flustr/controller/current_pubhex_provider/current_pubhex_provider.dart';
+import 'package:buzzoon/controller/connection_pool_provider/connection_pool_provider.dart';
+import 'package:buzzoon/controller/current_pubhex_provider/current_pubhex_provider.dart';
 import 'package:nostr/nostr.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

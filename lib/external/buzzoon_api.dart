@@ -1,4 +1,4 @@
-import 'package:flustr/controller/profile_provider/profile_provider.dart';
+import 'package:buzzoon/controller/profile_provider/profile_provider.dart';
 import 'package:nostr/nostr.dart';
 
 class BuzzonAPI {
