@@ -12,7 +12,7 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
   // TODO: need to modify for buzzoon TimelinePostsNotifier::build
   @override
   Future<List<Event>> build() async {
-    //final followeePubHexList = await ref.watch(followListProvider.future);
+    final followeePubHexList = await ref.watch(followListProvider.future);
     final pool = await ref.watch(connectionPoolProvider.future);
     final posts = await pool.getStoredEvent(
       [
@@ -25,24 +25,26 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
       // fixme: タイムアウトはもっと考えたほうが良さそう
       timeout: const Duration(seconds: 3),
     );
-    final aggregator = pool.getEventStreamAfterEose(
-      [
-        Filter(
-          authors: followeePubHexList,
-          kinds: [1],
-          limit: 30,
-        ),
-      ],
-    );
-    aggregator.eventStream.listen((e) {
-      state = switch (state) {
-        AsyncData(:final value) => AsyncData([e, ...value]),
-        _ => state,
-      };
-    });
-    ref.onDispose(() {
-      aggregator.dispose();
-    });
+    // TODO: need to get events with REST API with timer or etc? (TimeLinePostsNotifier::build)
+
+    // final aggregator = pool.getEventStreamAfterEose(
+    //   [
+    //     Filter(
+    //       authors: followeePubHexList,
+    //       kinds: [1],
+    //       limit: 30,
+    //     ),
+    //   ],
+    // );
+    // aggregator.eventStream.listen((e) {
+    //   state = switch (state) {
+    //     AsyncData(:final value) => AsyncData([e, ...value]),
+    //     _ => state,
+    //   };
+    // });
+    // ref.onDispose(() {
+    //   aggregator.dispose();
+    // });
     return posts
         .sortedBy<num>((element) => element.createdAt)
         .reversed
@@ -63,7 +65,7 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
       return;
     }
 
-    //final followees = await ref.read(followListProvider.future);
+    final followees = await ref.read(followListProvider.future);
 
     final last = currentPosts.last;
     final oldEvents = await pool.getStoredEvent(

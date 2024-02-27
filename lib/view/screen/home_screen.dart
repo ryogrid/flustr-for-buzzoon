@@ -21,7 +21,7 @@ class HomeScreen extends ConsumerWidget {
     final secHex = ref.watch(currentSecHexProvider);
     final timelinePosts = ref.watch(timelinePostsNotifierProvider);
     final isSeckeyAvailable = ref.watch(isSeckeyAvailableProvider);
-    //final pool = ref.watch(connectionPoolProvider);
+    final pool = ref.watch(connectionPoolProvider);
 
     return Scaffold(
       // 投稿ボタン
