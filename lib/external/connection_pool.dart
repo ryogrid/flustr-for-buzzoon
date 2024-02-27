@@ -55,6 +55,7 @@ class ConnectionPool {
   //late final List<(WebSocketChannel, Stream<dynamic>)> relays;
 
   List<Event> _events = <Event>[];
+  StreamAggregator _lastGeneratedAggregator = new StreamAggregator();
 
   Future<void> addEvent(Event e) async {
 
@@ -63,7 +64,8 @@ class ConnectionPool {
     //   adder.sink.add(e.serialize());
     // }
 
-    this._events.add(e);
+    //this._events.add(e);
+    this._lastGeneratedAggregator.addEvent(e);
   }
 
   Future<List<Event>> getStoredEvent(
@@ -102,6 +104,7 @@ class ConnectionPool {
     List<Filter> filters,
   ) {
     final aggregator = StreamAggregator();
+    this._lastGeneratedAggregator = aggregator;
 
     // // list of functions that closes each subscription by sending Close(subId)
     // final closers = <void Function()>[];

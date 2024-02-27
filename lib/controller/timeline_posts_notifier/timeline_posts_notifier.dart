@@ -27,24 +27,24 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
     );
     // TODO: need to get events with REST API with timer or etc? (TimeLinePostsNotifier::build)
 
-    // final aggregator = pool.getEventStreamAfterEose(
-    //   [
-    //     Filter(
-    //       authors: followeePubHexList,
-    //       kinds: [1],
-    //       limit: 30,
-    //     ),
-    //   ],
-    // );
-    // aggregator.eventStream.listen((e) {
-    //   state = switch (state) {
-    //     AsyncData(:final value) => AsyncData([e, ...value]),
-    //     _ => state,
-    //   };
-    // });
-    // ref.onDispose(() {
-    //   aggregator.dispose();
-    // });
+    final aggregator = pool.getEventStreamAfterEose(
+      [
+        Filter(
+          authors: followeePubHexList,
+          kinds: [1],
+          limit: 30,
+        ),
+      ],
+    );
+    aggregator.eventStream.listen((e) {
+      state = switch (state) {
+        AsyncData(:final value) => AsyncData([e, ...value]),
+        _ => state,
+      };
+    });
+    ref.onDispose(() {
+      aggregator.dispose();
+    });
     return posts
         .sortedBy<num>((element) => element.createdAt)
         .reversed
