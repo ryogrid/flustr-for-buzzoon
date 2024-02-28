@@ -23,6 +23,8 @@ class BuzzonAPI {
 
   static Future<List<Event>> getEvents(int since, int until) async {
     // TODO: need to implement BuzzonAPI::getEvents
+
+    // TODO: need to zero-padding to event_id
     return [Event("0", "0", 0, 0, [["hoge"]], "content", "sig")];
   }
 }

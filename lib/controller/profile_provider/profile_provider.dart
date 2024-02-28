@@ -71,10 +71,11 @@ Future<ProfileData> fetchProfile(ConnectionPool pool, String pubHex) async {
   // }
   // throw Exception('profile not found.');
 
-  return ProfileData(
-    name: '月野うさぎ',
-    picture: 'http://robohash.org/tsukinousagi.png?size=200x200',
-    about: '月に代わっておしおきよ！',
-    pubHex: "eb119234c467ac9d2ffea5b7284f3a74bd04287a12cfd58a22d19626434cddf2",
-  );
+  return pool.fetchProfile(pubHex);
+  // return ProfileData(
+  //   name: '月野うさぎ',
+  //   picture: 'http://robohash.org/tsukinousagi.png?size=200x200',
+  //   about: '月に代わっておしおきよ！',
+  //   pubHex: "eb119234c467ac9d2ffea5b7284f3a74bd04287a12cfd58a22d19626434cddf2",
+  // );
 }

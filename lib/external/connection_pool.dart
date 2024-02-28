@@ -3,14 +3,19 @@ import 'dart:io';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
+import 'package:buzzoon/controller/profile_provider/profile_provider.dart';
 import 'package:buzzoon/external/stream_wrapper.dart';
 import 'package:buzzoon/external/subscription.dart';
 import 'package:nostr/nostr.dart';
+import 'package:buzzoon/external/buzzoon_api.dart';
 
 class ConnectionPool {
   //List<WebSocketChannel> webSockets = <WebSocketChannel>[];
 
   ConnectionPool(_urls) {
+    // TODO: need to set timer periodically call BuzzonAPI::getEvents (ConnectionPool at connection_pool.dart)
+    //       and extract ProfileData from Event
+
     // final completer = Completer<void>();
     // connected = completer.future;
     //
@@ -55,6 +60,8 @@ class ConnectionPool {
   //late final List<(WebSocketChannel, Stream<dynamic>)> relays;
 
   List<Event> _events = <Event>[];
+  List<ProfileData> _profiles = <ProfileData>[];
+  bool _isAggregatorGenerated = false;
   StreamAggregator _lastGeneratedAggregator = new StreamAggregator();
 
   Future<void> addEvent(Event e) async {
@@ -68,6 +75,15 @@ class ConnectionPool {
     this._lastGeneratedAggregator.addEvent(e);
   }
 
+  Future<ProfileData> fetchProfile(String pubHex) async {
+    // TODO: refer local profile cache data first (fetchProfile at connection_pool.dart)
+
+    BuzzonAPI.getProfile(pubHex);
+
+    return this._profiles.first;
+  }
+
+  // ATTENTION: always returns empty list
   Future<List<Event>> getStoredEvent(
     List<Filter> filters, {
     Duration timeout = const Duration(milliseconds: 500),
@@ -96,7 +112,8 @@ class ConnectionPool {
     //
     // return events;
 
-    return this._events;
+    //return this._events;
+    return Future(() => <Event>[]);
   }
 
   // eose後の,複数relayからのstreamをよしなにまとめるStreamを返す
@@ -105,6 +122,7 @@ class ConnectionPool {
   ) {
     final aggregator = StreamAggregator();
     this._lastGeneratedAggregator = aggregator;
+    this._isAggregatorGenerated = true;
 
     // // list of functions that closes each subscription by sending Close(subId)
     // final closers = <void Function()>[];
