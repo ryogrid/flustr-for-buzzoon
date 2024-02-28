@@ -1,4 +1,6 @@
-This is a fork of flustr for buzzoon
+This is a fork of flustr for buzzoon  
+
+[server side](https://github.com/ryogrid/buzzoon)
 
 ---
 
