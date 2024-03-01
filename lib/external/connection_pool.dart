@@ -11,8 +11,29 @@ import 'package:buzzoon/external/buzzoon_api.dart';
 
 class ConnectionPool {
   //List<WebSocketChannel> webSockets = <WebSocketChannel>[];
+  int lastEvtReceived = -1;
 
   ConnectionPool(_urls) {
+    Timer.periodic(Duration(seconds: 10), (timer) async {
+      print(timer.tick);
+      if (this._isAggregatorGenerated) {
+        final now = DateTime.now();
+        final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
+        int since;
+        if (lastEvtReceived == -1) {
+          since = nowUnix - 60 * 60 * 24 * 7; // 1 week ago
+        } else {
+          since = lastEvtReceived;
+        }
+
+        var events = await BuzzonAPI.getEvents(since, nowUnix);
+        print(events);
+        for (var e in events) {
+          await this.addEvent(e);
+        }
+      }
+    });
+
     // TODO: need to set timer periodically call BuzzonAPI::getEvents (ConnectionPool at connection_pool.dart)
     //       and extract ProfileData from Event
 
