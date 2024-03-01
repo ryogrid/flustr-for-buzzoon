@@ -26,7 +26,8 @@ class BuzzonAPI {
   }
 
   static Future<List<Event>> getEvents(int since, int until) async {
-    var resp = await BuzzonAPI._request('http://192.168.0.2:20001/getEvents', {"Since": since, "Until": until});
+    //var resp = await BuzzonAPI._request('http://192.168.0.2:20001/getEvents', {"Since": since, "Until": until});
+    var resp = await BuzzonAPI._request('http://localhost:20001/getEvents', {"Since": since, "Until": until});
     print(resp);
     return (resp["Events"] as List).map((e) => BuzzonAPI.jsonToEvent(e)).toList();
 
@@ -35,7 +36,7 @@ class BuzzonAPI {
 
   static Future<Map<String, dynamic>> _request(String destUrl, Object params) async {
     Uri url = Uri.parse(destUrl);
-    Map<String, String> headers = {'content-type': 'application/json'};
+    Map<String, String> headers = {'content-type': 'application/json', "accept": "application/json"};
     String body = json.encode(params);
     print(body);
     var client = httpClient();
