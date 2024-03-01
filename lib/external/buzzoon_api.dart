@@ -2,6 +2,8 @@ import 'package:buzzoon/controller/profile_provider/profile_provider.dart';
 import 'package:nostr/nostr.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../http_client_factory.dart'
+    if (dart.library.js_interop) '../http_client_factory_web.dart';
 
 class BuzzonAPI {
   static postEvent(String content) async {
@@ -36,7 +38,9 @@ class BuzzonAPI {
     Map<String, String> headers = {'content-type': 'application/json'};
     String body = json.encode(params);
     print(body);
-    http.Response resp = await http.post(url, headers: headers, body: body);
+    var client = httpClient();
+    //http.Response resp = await http.post(url, headers: headers, body: body);
+    http.Response resp = await client.post(url, headers: headers, body: body);
     print(resp);
     if (resp.statusCode == 200) {
       return json.decode(resp.body);

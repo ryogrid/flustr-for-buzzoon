@@ -201,6 +201,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  cronet_http:
+    dependency: "direct main"
+    description:
+      name: cronet_http
+      sha256: a38ffbb49797ae1e0f774fc884d128a7023986b14a3165e1e39841f9f7e22137
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   crypto:
     dependency: transitive
     description:
@@ -209,6 +217,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  cupertino_http:
+    dependency: "direct main"
+    description:
+      name: cupertino_http
+      sha256: "0e3ed481280ad41d42d4881d4b6f89c083c17aa010205c9381ecb4c7ea7bdf1f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -257,6 +273,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  fetch_api:
+    dependency: transitive
+    description:
+      name: fetch_api
+      sha256: "77f3be8c9acaa64ed37dd49c21c056da71b78053d31131ca26a273884a753f66"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0-wasm"
+  fetch_client:
+    dependency: "direct main"
+    description:
+      name: fetch_client
+      sha256: e11722d7d8cd21f944b52af780392274f7c34a41156b1c80053fc2a414e09a1b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0-wasm"
   ffi:
     dependency: transitive
     description:
@@ -408,6 +440,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  jni:
+    dependency: transitive
+    description:
+      name: jni
+      sha256: "0d88790bdf7e298aa65a9094c62b58ea231169a2deb84f23defc7d7955885b43"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.2"
   js:
     dependency: transitive
     description:
@@ -928,4 +968,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.3.0 <4.0.0"
-  flutter: ">=3.7.0"
+  flutter: ">=3.16.0"
