@@ -22,6 +22,7 @@ class ConnectionPool {
         int since;
         if (lastEvtReceived == -1) {
           since = nowUnix - 60 * 60 * 24 * 7; // 1 week ago
+          lastEvtReceived = nowUnix;
         } else {
           since = lastEvtReceived;
         }
@@ -29,7 +30,17 @@ class ConnectionPool {
         var events = await BuzzonAPI.getEvents(since, nowUnix);
         print(events);
         for (var e in events) {
-          await this.addEvent(e);
+          if (e.kind == 0) {
+            var profile = ProfileData(
+              name: e.tags.firstWhere((element) => element.first == 'name')[1],
+              picture: e.tags.firstWhere((element) => element.first == 'picture')[1],
+              about: e.tags.firstWhere((element) => element.first == 'about')[1],
+              pubHex: e.pubkey,
+            );
+            this.profiles.add(profile);
+          }else{
+            await this.addEvent(e);
+          }
         }
       }
     });
@@ -81,7 +92,7 @@ class ConnectionPool {
   //late final List<(WebSocketChannel, Stream<dynamic>)> relays;
 
   List<Event> _events = <Event>[];
-  List<ProfileData> _profiles = <ProfileData>[];
+  List<ProfileData> profiles = <ProfileData>[];
   bool _isAggregatorGenerated = false;
   StreamAggregator _lastGeneratedAggregator = new StreamAggregator();
 
@@ -101,7 +112,7 @@ class ConnectionPool {
 
     BuzzonAPI.getProfile(pubHex);
 
-    return this._profiles.first;
+    return this.profiles.first;
   }
 
   // ATTENTION: always returns empty list

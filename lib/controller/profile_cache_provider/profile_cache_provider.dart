@@ -9,7 +9,7 @@ part 'profile_cache_provider.g.dart';
 @Riverpod(keepAlive: true)
 Future<List<ProfileData>> profileCache(ProfileCacheRef ref) async {
   // final followees = await ref.watch(followListProvider.future);
-  // final pool = await ref.watch(connectionPoolProvider.future);
+  final pool = await ref.watch(connectionPoolProvider.future);
   // final result = await pool.getStoredEvent(
   //   [
   //     Filter(authors: followees, kinds: [0], limit: followees.length),
@@ -23,5 +23,7 @@ Future<List<ProfileData>> profileCache(ProfileCacheRef ref) async {
   //   // do nothing
   // }
   // throw Exception('profile not found.');
-  return Future(() => <ProfileData>[]);
+
+  //return Future(() => <ProfileData>[]);
+  return pool.profiles;
 }

@@ -26,11 +26,7 @@ class BuzzonAPI {
   static Future<List<Event>> getEvents(int since, int until) async {
     var resp = await BuzzonAPI._request('http://192.168.0.2:20001/getEvents', {"Since": since, "Until": until});
     print(resp);
-    if (resp == null) {
-      return [];
-    }else{
-      return (resp["Events"] as List).map((e) => BuzzonAPI.jsonToEvent(e)).toList();
-    }
+    return (resp["Events"] as List).map((e) => BuzzonAPI.jsonToEvent(e)).toList();
 
     //return [Event("0", "0", 0, 0, [["hoge"]], "content", "sig")];
   }
