@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
 import 'package:buzzoon/controller/profile_provider/profile_provider.dart';
 import 'package:buzzoon/external/stream_wrapper.dart';
-import 'package:buzzoon/external/subscription.dart';
 import 'package:nostr/nostr.dart';
 import 'package:buzzoon/external/buzzoon_api.dart';
 
@@ -25,6 +23,7 @@ class ConnectionPool {
           lastEvtReceived = nowUnix;
         } else {
           since = lastEvtReceived;
+          lastEvtReceived = nowUnix;
         }
 
         var events = await BuzzonAPI.getEvents(since, nowUnix);
@@ -33,49 +32,20 @@ class ConnectionPool {
           if (e.kind == 0) {
             var profile = ProfileData(
               name: e.tags.firstWhere((element) => element.first == 'name')[1],
-              picture: e.tags.firstWhere((element) => element.first == 'picture')[1],
-              about: e.tags.firstWhere((element) => element.first == 'about')[1],
+              picture: e.tags.firstWhere((element) =>
+              element.first == 'picture')[1],
+              about: e.tags.firstWhere((element) =>
+              element.first == 'about')[1],
               pubHex: e.pubkey,
             );
             this.profiles.add(profile);
-          }else{
+          } else {
             await this.addEvent(e);
           }
         }
       }
     });
-
-    // TODO: need to set timer periodically call BuzzonAPI::getEvents (ConnectionPool at connection_pool.dart)
-    //       and extract ProfileData from Event
-
-    // final completer = Completer<void>();
-    // connected = completer.future;
-    //
-    // //final socketFutures = <Future<WebSocket>>[];
-    // final socketFutures = <Future<void>>[];
-    // for (final url in _urls) {
-    //   //socketFutures.add(WebSocket.connect(url));
-    //   try{
-    //     var webSocket = WebSocketChannel.connect(Uri.parse(url));
-    //     this.webSockets.add(webSocket);
-    //     socketFutures.add(webSocket.ready.catchError((e) => print("${e}")));
-    //   }catch(e){
-    //     // do nothing
-    //   }
-    // }
-    // Future.wait(socketFutures).then(
-    //   //(sockets) async {
-    //   (voids) async {
-    //       //final tmp = sockets.map((e) => (e, e.asBroadcastStream())).toList();
-    //       //final tmp = webSockets.map((e) => (e, e.stream)).toList();
-    //       final tmp = webSockets.map((e) => (e, e.stream.asBroadcastStream())).toList();
-    //       relays = tmp;
-    //       completer.complete();
-    //     }
-    //   //},
-    // );
   }
-
 
   void dispose() {
     // for (final (socket, _) in relays) {
@@ -108,8 +78,6 @@ class ConnectionPool {
   }
 
   Future<ProfileData> fetchProfile(String pubHex) async {
-    // TODO: refer local profile cache data first (fetchProfile at connection_pool.dart)
-
     BuzzonAPI.getProfile(pubHex);
 
     return this.profiles.first;

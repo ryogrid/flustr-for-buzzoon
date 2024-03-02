@@ -112,6 +112,7 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: RefreshIndicator(
+        //onRefresh: () async => ref.invalidate(timelinePostsNotifierProvider),
         onRefresh: () async => ref.invalidate(timelinePostsNotifierProvider),
         child: ListView(
           children: switch (timelinePosts) {

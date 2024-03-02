@@ -45,10 +45,14 @@ class ProfileData with _$ProfileData {
 @Riverpod(keepAlive: true)
 FutureOr<ProfileData> profile(ProfileRef ref, String pubHex) async {
   final cache = await ref.watch(profileCacheProvider.future);
-  if (cache.any((element) => element.pubHex == pubHex)) {
-    return cache.firstWhere((e) => e.pubHex == pubHex);
-  }
+  // if (cache.any((element) => element.pubHex == pubHex)) {
+  //   return cache.firstWhere((e) => e.pubHex == pubHex);
+  // }
   final pool = await ref.watch(connectionPoolProvider.future);
+  if (cache.any((element) => element.pubHex == pubHex)) {
+    //return cache.lastWhere((e) => e.pubHex == pubHex);
+    return pool.profiles.lastWhere((e) => e.pubHex == pubHex);
+  }
   return fetchProfile(pool, pubHex);
 }
 

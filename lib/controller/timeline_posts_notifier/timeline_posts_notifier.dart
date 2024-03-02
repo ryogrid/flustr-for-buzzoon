@@ -14,6 +14,7 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
   Future<List<Event>> build() async {
     final followeePubHexList = await ref.watch(followListProvider.future);
     final pool = await ref.watch(connectionPoolProvider.future);
+    // always get empty list now
     final posts = await pool.getStoredEvent(
       [
         Filter(
@@ -25,7 +26,6 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
       // fixme: タイムアウトはもっと考えたほうが良さそう
       timeout: const Duration(seconds: 3),
     );
-    // TODO: need to get events with REST API with timer or etc? (TimeLinePostsNotifier::build)
 
     final aggregator = pool.getEventStreamAfterEose(
       [
@@ -43,7 +43,7 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
       };
     });
     ref.onDispose(() {
-      aggregator.dispose();
+      // aggregator.dispose();
     });
     return posts
         .sortedBy<num>((element) => element.createdAt)
@@ -53,46 +53,47 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
 
   bool _loading = false;
 
-  Future<void> loadOlderPosts() async {
-    if (_loading) return;
-    _loading = true;
-    final pool = await ref.read(connectionPoolProvider.future);
-    final currentPosts = switch (state) {
-      AsyncData(:final value) => value,
-      _ => null,
-    };
-    if (currentPosts == null) {
-      return;
-    }
-
-    final followees = await ref.read(followListProvider.future);
-
-    final last = currentPosts.last;
-    final oldEvents = await pool.getStoredEvent(
-      [
-        Filter(
-          authors: followees,
-          kinds: [1],
-          limit: 30,
-          until: last.createdAt + 1,
-        )
-      ],
-      timeout: const Duration(seconds: 3),
-    );
-
-    final newEventsWithDups = [...currentPosts, ...oldEvents];
-
-    final seen = <String>{};
-    final newEvents = <Event>[];
-    for (final event in newEventsWithDups) {
-      if (seen.contains(event.id)) {
-        continue;
-      }
-      seen.add(event.id);
-      newEvents.add(event);
-    }
-
-    state = AsyncData(newEvents);
-    _loading = false;
-  }
+  // Future<void> loadOlderPosts() async {
+  //   if (_loading) return;
+  //   _loading = true;
+  //   final pool = await ref.read(connectionPoolProvider.future);
+  //   final currentPosts = switch (state) {
+  //     AsyncData(:final value) => value,
+  //     _ => null,
+  //   };
+  //   if (currentPosts == null) {
+  //     return;
+  //   }
+  //
+  //   final followees = await ref.read(followListProvider.future);
+  //
+  //   final last = currentPosts.last;
+  //   // always get empty list now
+  //   final oldEvents = await pool.getStoredEvent(
+  //     [
+  //       Filter(
+  //         authors: followees,
+  //         kinds: [1],
+  //         limit: 30,
+  //         until: last.createdAt + 1,
+  //       )
+  //     ],
+  //     timeout: const Duration(seconds: 3),
+  //   );
+  //
+  //   final newEventsWithDups = [...currentPosts, ...oldEvents];
+  //
+  //   final seen = <String>{};
+  //   final newEvents = <Event>[];
+  //   for (final event in newEventsWithDups) {
+  //     if (seen.contains(event.id)) {
+  //       continue;
+  //     }
+  //     seen.add(event.id);
+  //     newEvents.add(event);
+  //   }
+  //
+  //   state = AsyncData(newEvents);
+  //   _loading = false;
+  // }
 }

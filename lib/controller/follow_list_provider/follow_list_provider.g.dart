@@ -6,7 +6,7 @@ part of 'follow_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$followListHash() => r'a7d5a0480598256941c562e526a593fff02a7103';
+String _$followListHash() => r'04424a5c021c0ad9cace1052f43fe1ec3bd1c085';
 
 /// See also [followList].
 @ProviderFor(followList)
