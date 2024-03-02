@@ -25,13 +25,13 @@ class BuzzonAPI {
     // TODO: need to implement BuzzonAPI::gatherData
   }
 
+  static String serverAddr = '192.168.0.2:20001'; //'localhost:20001';
+
+
   static Future<List<Event>> getEvents(int since, int until) async {
-    //var resp = await BuzzonAPI._request('http://192.168.0.2:20001/getEvents', {"Since": since, "Until": until});
-    var resp = await BuzzonAPI._request('http://localhost:20001/getEvents', {"Since": since, "Until": until});
+    var resp = await BuzzonAPI._request('http://' + BuzzonAPI.serverAddr +  '/getEvents', {"Since": since, "Until": until});
     print(resp);
     return (resp["Events"] as List).map((e) => BuzzonAPI.jsonToEvent(e)).toList();
-
-    //return [Event("0", "0", 0, 0, [["hoge"]], "content", "sig")];
   }
 
   static Future<Map<String, dynamic>> _request(String destUrl, Object params) async {

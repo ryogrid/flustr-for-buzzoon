@@ -112,7 +112,6 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: RefreshIndicator(
-        //onRefresh: () async => ref.invalidate(timelinePostsNotifierProvider),
         onRefresh: () async => ref.invalidate(timelinePostsNotifierProvider),
         child: ListView(
           children: switch (timelinePosts) {
@@ -122,7 +121,7 @@ class HomeScreen extends ConsumerWidget {
                 Text(stackTrace.toString()),
               ],
             AsyncData(value: final posts) =>
-              posts.map((e) => EventView(event: e)).toList(),
+                posts.map((e) => EventView(event: e)).toList(),
             _ => [const Text('Oops! something went wrong!')],
           },
         ),

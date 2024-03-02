@@ -41,9 +41,15 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
         AsyncData(:final value) => AsyncData([e, ...value]),
         _ => state,
       };
+      // switch (state) {
+      //   case AsyncData(:final value):
+      //     state = AsyncData([e, ...value]);
+      //   case _:
+      //     state = state;
+      // }
     });
     ref.onDispose(() {
-      // aggregator.dispose();
+      //aggregator.dispose();
     });
     return posts
         .sortedBy<num>((element) => element.createdAt)

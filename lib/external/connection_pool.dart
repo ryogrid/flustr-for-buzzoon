@@ -39,6 +39,7 @@ class ConnectionPool {
               pubHex: e.pubkey,
             );
             this.profiles.add(profile);
+            this.profileMap[profile.pubHex] = profile;
           } else {
             await this.addEvent(e);
           }
@@ -63,6 +64,7 @@ class ConnectionPool {
 
   List<Event> _events = <Event>[];
   List<ProfileData> profiles = <ProfileData>[];
+  Map<String, ProfileData> profileMap = <String, ProfileData>{};
   bool _isAggregatorGenerated = false;
   StreamAggregator _lastGeneratedAggregator = new StreamAggregator();
 
@@ -77,10 +79,12 @@ class ConnectionPool {
     this._lastGeneratedAggregator.addEvent(e);
   }
 
-  Future<ProfileData> fetchProfile(String pubHex) async {
+  ProfileData fetchProfile(String pubHex) {
     BuzzonAPI.getProfile(pubHex);
 
-    return this.profiles.first;
+    print(pubHex);
+    //return this.profiles.first;
+    return this.profileMap[pubHex]!;
   }
 
   // ATTENTION: always returns empty list

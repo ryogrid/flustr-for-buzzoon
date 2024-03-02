@@ -51,12 +51,14 @@ FutureOr<ProfileData> profile(ProfileRef ref, String pubHex) async {
   final pool = await ref.watch(connectionPoolProvider.future);
   if (cache.any((element) => element.pubHex == pubHex)) {
     //return cache.lastWhere((e) => e.pubHex == pubHex);
-    return pool.profiles.lastWhere((e) => e.pubHex == pubHex);
+    var ret = pool.profiles.lastWhere((e) => e.pubHex == pubHex);
+    print(ret);
+    return ret;
   }
   return fetchProfile(pool, pubHex);
 }
 
-Future<ProfileData> fetchProfile(ConnectionPool pool, String pubHex) async {
+ProfileData fetchProfile(ConnectionPool pool, String pubHex) {
   // TODO: need to modify for buzzoon (fetchProfile at profile_provider.dart)
   // final events = await pool.getStoredEvent(
   //   [
