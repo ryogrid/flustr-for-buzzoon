@@ -1,8 +1,8 @@
-import 'package:buzzoon/controller/connection_pool_provider/connection_pool_provider.dart';
-import 'package:buzzoon/controller/follow_list_provider/follow_list_provider.dart';
-import 'package:buzzoon/controller/profile_provider/profile_provider.dart';
-import 'package:buzzoon/controller/timeline_posts_notifier/timeline_posts_notifier.dart';
-import 'package:buzzoon/controller/user_posts_notifier/user_posts_notifier.dart';
+import 'package:nostrp2p/controller/connection_pool_provider/connection_pool_provider.dart';
+import 'package:nostrp2p/controller/follow_list_provider/follow_list_provider.dart';
+import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
+import 'package:nostrp2p/controller/timeline_posts_notifier/timeline_posts_notifier.dart';
+import 'package:nostrp2p/controller/user_posts_notifier/user_posts_notifier.dart';
 import 'package:nostr/nostr.dart';
 import 'package:riverpod/src/framework.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

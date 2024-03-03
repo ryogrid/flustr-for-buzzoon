@@ -1,37 +1,38 @@
-import 'package:buzzoon/controller/profile_provider/profile_provider.dart';
+import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
 import 'package:nostr/nostr.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../http_client_factory.dart'
     if (dart.library.js_interop) '../http_client_factory_web.dart';
 
-class BuzzonAPI {
+class Np2pAPI {
   static postEvent(String content) async {
-    // TODO: need to implement BuzzonAPI::postEvent
+    // TODO: need to implement Np2pAPI::postEvent
   }
 
   static updateProfile(String name, String about, String picture) async {
-    // TODO: need to implement BuzzonAPI::updateProfile
+    // TODO: need to implement Np2pAPI::updateProfile
   }
 
   static Future<ProfileData> getProfile(String pubHex) async {
     //BigInt shortPkey
-    // TODO: need to implement BuzzonAPI::getProfile
+    // TODO: need to implement Np2pAPI::getProfile
     return ProfileData(name: 'name', picture: 'picture', about: 'about', pubHex: 'pubHex');
   }
 
   // TEMPORAL API
   static gatherData() async {
-    // TODO: need to implement BuzzonAPI::gatherData
+    // TODO: need to implement Np2pAPI::gatherData
   }
 
   static String serverAddr = '192.168.0.2:20001'; //'localhost:20001';
 
 
   static Future<List<Event>> getEvents(int since, int until) async {
-    var resp = await BuzzonAPI._request('http://' + BuzzonAPI.serverAddr +  '/getEvents', {"Since": since, "Until": until});
+    // TODO: need to modify according to I/F change of nostrp2p (getEvents at np2p_api.dart)
+    var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/getEvents', {"Since": since, "Until": until});
     print(resp);
-    return (resp["Events"] as List).map((e) => BuzzonAPI.jsonToEvent(e)).toList();
+    return (resp["Events"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
   }
 
   static Future<Map<String, dynamic>> _request(String destUrl, Object params) async {

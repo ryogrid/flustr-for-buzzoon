@@ -1,5 +1,5 @@
-import 'package:buzzoon/controller/current_pubhex_provider/current_pubhex_provider.dart';
-import 'package:buzzoon/external/connection_pool.dart';
+import 'package:nostrp2p/controller/current_pubhex_provider/current_pubhex_provider.dart';
+import 'package:nostrp2p/external/connection_pool.dart';
 import 'package:nostr/nostr.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

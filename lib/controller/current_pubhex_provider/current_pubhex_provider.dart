@@ -1,4 +1,4 @@
-import 'package:buzzoon/controller/setting_provider/setting_provider.dart';
+import 'package:nostrp2p/controller/setting_provider/setting_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'current_pubhex_provider.g.dart';

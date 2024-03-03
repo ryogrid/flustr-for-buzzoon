@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'package:web_socket_channel/status.dart' as status;
 
-import 'package:buzzoon/controller/profile_provider/profile_provider.dart';
-import 'package:buzzoon/external/stream_wrapper.dart';
+import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
+import 'package:nostrp2p/external/stream_wrapper.dart';
 import 'package:nostr/nostr.dart';
-import 'package:buzzoon/external/buzzoon_api.dart';
+import 'package:nostrp2p/external/np2p_api.dart';
 
 class ConnectionPool {
   //List<WebSocketChannel> webSockets = <WebSocketChannel>[];
@@ -26,7 +26,7 @@ class ConnectionPool {
           lastEvtReceived = nowUnix;
         }
 
-        var events = await BuzzonAPI.getEvents(since, nowUnix);
+        var events = await Np2pAPI.getEvents(since, nowUnix);
         print(events);
         for (var e in events) {
           if (e.kind == 0) {
@@ -80,7 +80,7 @@ class ConnectionPool {
   }
 
   ProfileData fetchProfile(String pubHex) {
-    BuzzonAPI.getProfile(pubHex);
+    Np2pAPI.getProfile(pubHex);
 
     print(pubHex);
     //return this.profiles.first;

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:buzzoon/controller/connection_pool_provider/connection_pool_provider.dart';
-import 'package:buzzoon/controller/profile_cache_provider/profile_cache_provider.dart';
-import 'package:buzzoon/external/connection_pool.dart';
+import 'package:nostrp2p/controller/connection_pool_provider/connection_pool_provider.dart';
+import 'package:nostrp2p/controller/profile_cache_provider/profile_cache_provider.dart';
+import 'package:nostrp2p/external/connection_pool.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nostr/nostr.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -59,7 +59,7 @@ FutureOr<ProfileData> profile(ProfileRef ref, String pubHex) async {
 }
 
 ProfileData fetchProfile(ConnectionPool pool, String pubHex) {
-  // TODO: need to modify for buzzoon (fetchProfile at profile_provider.dart)
+  // TODO: need to modify for nostrp2p (fetchProfile at profile_provider.dart)
   // final events = await pool.getStoredEvent(
   //   [
   //     Filter(authors: [pubHex], kinds: [0], limit: 1),
