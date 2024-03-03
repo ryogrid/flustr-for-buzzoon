@@ -1,7 +1,7 @@
-import 'package:flustr/controller/profile_provider/profile_provider.dart';
-import 'package:flustr/controller/user_posts_notifier/user_posts_notifier.dart';
-import 'package:flustr/view/component/copyable_pubkey.dart';
-import 'package:flustr/view/component/event_view.dart';
+import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
+import 'package:nostrp2p/controller/user_posts_notifier/user_posts_notifier.dart';
+import 'package:nostrp2p/view/component/copyable_pubkey.dart';
+import 'package:nostrp2p/view/component/event_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

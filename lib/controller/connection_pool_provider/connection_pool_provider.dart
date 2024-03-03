@@ -1,5 +1,5 @@
-import 'package:flustr/controller/relay_url_provider.dart/relay_url_provider.dart';
-import 'package:flustr/external/connection_pool.dart';
+import 'package:nostrp2p/controller/relay_url_provider.dart/relay_url_provider.dart';
+import 'package:nostrp2p/external/connection_pool.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'connection_pool_provider.g.dart';

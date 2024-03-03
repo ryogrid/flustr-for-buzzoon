@@ -1,4 +1,6 @@
-This is a fork of flustr for buzzoon
+This is a fork of flustr for NostrP2P
+
+[server side](https://github.com/ryogrid/nostrp2p)
 
 ---
 
