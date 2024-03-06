@@ -7,7 +7,17 @@ import '../http_client_factory.dart'
 
 class Np2pAPI {
   static postEvent(String content) async {
-    // TODO: need to implement Np2pAPI::postEvent
+    var params = {
+      "Id": "",
+      "Pubkey": "",
+      "Created_at": 0,
+      "Kind": 1,
+      "Tags": [],
+      "Content": content,
+      "Sig": ""
+    };
+    var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/sendEvent', params);
+    print(resp);
   }
 
   static updateProfile(String name, String about, String picture) async {
@@ -29,7 +39,6 @@ class Np2pAPI {
 
 
   static Future<List<Event>> getEvents(int since, int until) async {
-    // TODO: need to modify according to I/F change of nostrp2p (getEvents at np2p_api.dart)
     var params = {
       "Id": "",
       "Pubkey": "",
