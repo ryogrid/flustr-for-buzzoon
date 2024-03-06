@@ -30,7 +30,16 @@ class Np2pAPI {
 
   static Future<List<Event>> getEvents(int since, int until) async {
     // TODO: need to modify according to I/F change of nostrp2p (getEvents at np2p_api.dart)
-    var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/getEvents', {"Since": since, "Until": until});
+    var params = {
+      "Id": "",
+      "Pubkey": "",
+      "Created_at": 0,
+      "Kind": 0,
+      "Tags": [["since", since.toString()],[ "until", until.toString()]],
+      "Content": "getEvents",
+      "Sig": ""
+    };
+    var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/req', params);
     print(resp);
     return (resp["Events"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
   }
