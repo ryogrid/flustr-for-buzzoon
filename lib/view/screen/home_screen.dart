@@ -3,7 +3,7 @@ import 'package:nostrp2p/controller/current_pubhex_provider/current_pubhex_provi
 import 'package:nostrp2p/controller/current_sechex_provider/current_sechex_provider.dart';
 import 'package:nostrp2p/controller/is_seckey_available_provider/is_seckey_available_provider.dart';
 import 'package:nostrp2p/controller/timeline_posts_notifier/timeline_posts_notifier.dart';
-import 'package:nostrp2p/external/connection_pool.dart';
+import 'package:nostrp2p/controller/servaddr_provider/servaddr_provider.dart';
 import 'package:nostrp2p/external/np2p_api.dart';
 import 'package:nostrp2p/view/component/event_view.dart';
 import 'package:nostrp2p/view/screen/profile_screen.dart';
@@ -22,7 +22,7 @@ class HomeScreen extends ConsumerWidget {
     final secHex = ref.watch(currentSecHexProvider);
     final timelinePosts = ref.watch(timelinePostsNotifierProvider);
     final isSeckeyAvailable = ref.watch(isSeckeyAvailableProvider);
-    final pool = ref.watch(connectionPoolProvider);
+    final servAddr = ref.watch(servAddrSettingNotifierProvider);
 
     return Scaffold(
       // 投稿ボタン
@@ -48,9 +48,8 @@ class HomeScreen extends ConsumerWidget {
                               if (secHex == null) {
                                 return;
                               }
-                              // TODO: need to modify posting Text event code (HomeScreen::onPressed)
-                              final _ = switch (pool) {
-                                AsyncData(value: final pool) => Np2pAPI.postEvent(_textToSend),
+                              final _ = switch (servAddr) {
+                                AsyncData(value: final servAddr) => Np2pAPI.postEvent(servAddr.getServAddr!, _textToSend),
                                   //pool.addEvent(
                                     //buildTextEvent(_textToSend, secHex),
                                   //),

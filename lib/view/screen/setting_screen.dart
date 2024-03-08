@@ -1,4 +1,6 @@
 import 'package:nostrp2p/controller/setting_provider/setting_provider.dart';
+import 'package:nostrp2p/controller/servaddr_provider/servaddr_provider.dart';
+
 import 'package:nostrp2p/view/component/section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +14,9 @@ class SettingScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final rawSettings = ref.watch(settingNotifierProvider);
+    final rawAddrSettings = ref.watch(servAddrSettingNotifierProvider);
     final settingsController = ref.watch(settingNotifierProvider.notifier);
+    final addrController = ref.watch(servAddrSettingNotifierProvider.notifier);
 
     // keyがあれば入れる。なければnull
     final currentKey = switch (rawSettings) {
@@ -21,6 +25,14 @@ class SettingScreen extends ConsumerWidget {
           NsecAppSetting(:final nsec1) => nsec1,
           _ => null
         },
+      _ => null
+    };
+
+    final servAddr = switch (rawAddrSettings) {
+      AsyncData(:final value) => switch (value) {
+        ImplServAddrSetting(:final servAddr) => servAddr,
+        _ => null
+      },
       _ => null
     };
 
@@ -92,6 +104,35 @@ class SettingScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
+
+                // current address setting display (if stored）
+                if (servAddr != null) _CurrentAddress(currentAddr: servAddr),
+
+                // server address input
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Section(
+                    title: 'server address',
+                    content: [
+                      TextField(
+                        onChanged: (value) {
+                          _textFieldContent = value;
+                          debugPrint(value);
+                        },
+                      ),
+                      const SizedBox(width: 50),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            final trimmed = _textFieldContent.trim();
+                            addrController.saveAddr(trimmed);
+                          },
+                          child: const Text('save'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -145,6 +186,38 @@ class _CurrentKey extends ConsumerWidget {
                     },
                     icon: Icon(
                       isKeyVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 30),
+      ],
+    );
+  }
+}
+
+class _CurrentAddress extends ConsumerWidget {
+  const _CurrentAddress({Key? key, required this.currentAddr}) : super(key: key);
+
+  final String currentAddr;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Section(
+            title: 'current server address',
+            content: [
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      currentAddr,
                     ),
                   ),
                 ],

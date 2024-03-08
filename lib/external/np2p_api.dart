@@ -6,7 +6,7 @@ import '../http_client_factory.dart'
     if (dart.library.js_interop) '../http_client_factory_web.dart';
 
 class Np2pAPI {
-  static postEvent(String content) async {
+  static postEvent(String url, String content) async {
     var params = {
       "Id": "",
       "Pubkey": "",
@@ -16,7 +16,8 @@ class Np2pAPI {
       "Content": content,
       "Sig": ""
     };
-    var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/sendEvent', params);
+    //var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/sendEvent', params);
+    var resp = await Np2pAPI._request(url + '/sendEvent', params);
     print(resp);
   }
 
@@ -35,10 +36,10 @@ class Np2pAPI {
     // TODO: need to implement Np2pAPI::gatherData
   }
 
-  static String serverAddr = '192.168.0.2:20001'; //'localhost:20001';
+  //static String serverAddr = '192.168.0.2:20001'; //'localhost:20001';
 
 
-  static Future<List<Event>> getEvents(int since, int until) async {
+  static Future<List<Event>> getEvents(String url, int since, int until) async {
     var params = {
       "Id": "",
       "Pubkey": "",
@@ -48,7 +49,8 @@ class Np2pAPI {
       "Content": "getEvents",
       "Sig": ""
     };
-    var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/req', params);
+    //var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/req', params);
+    var resp = await Np2pAPI._request(url + '/req', params);
     print(resp);
     return (resp["Events"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
   }

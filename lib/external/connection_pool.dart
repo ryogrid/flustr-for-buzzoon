@@ -11,7 +11,7 @@ class ConnectionPool {
   //List<WebSocketChannel> webSockets = <WebSocketChannel>[];
   int lastEvtReceived = -1;
 
-  ConnectionPool(_urls) {
+  ConnectionPool(_url) {
     Timer.periodic(Duration(seconds: 10), (timer) async {
       print(timer.tick);
       if (this._isAggregatorGenerated) {
@@ -26,7 +26,7 @@ class ConnectionPool {
           lastEvtReceived = nowUnix;
         }
 
-        var events = await Np2pAPI.getEvents(since, nowUnix);
+        var events = await Np2pAPI.getEvents(_url, since, nowUnix);
         print(events);
         for (var e in events) {
           if (e.kind == 0) {

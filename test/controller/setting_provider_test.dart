@@ -1,4 +1,4 @@
-import 'package:flustr/controller/setting_provider/setting_provider.dart';
+import 'package:flustr/controller/setting_provider/servaddr_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _ValidateKeyTestInput {
