@@ -57,7 +57,12 @@ class Np2pAPI {
 
   static Future<Map<String, dynamic>> _request(String destUrl, Object params) async {
     Uri url = Uri.parse(destUrl);
-    Map<String, String> headers = {'content-type': 'application/json', "accept": "application/json"};
+    Map<String, String> headers = {
+      'content-type': 'application/json',
+      "accept": "application/json",
+      "Access-Control-Request-Method": "POST",
+      "Access-Control-Request-Private-Network": "true",
+    };
     String body = json.encode(params);
     print(body);
     var client = httpClient();
