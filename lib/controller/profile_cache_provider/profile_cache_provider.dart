@@ -12,20 +12,20 @@ part 'profile_cache_provider.g.dart';
 @Riverpod(keepAlive: true)
 Future<List<ProfileData>> profileCache(ProfileCacheRef ref) async {
   // final followees = await ref.watch(followListProvider.future);
-  final pool = await ref.watch(connectionPoolProvider.future);
-  final posts = await ref.read(timelinePostsNotifierProvider.notifier);
+  // final pool = await ref.watch(connectionPoolProvider.future);
+  // final posts = await ref.read(timelinePostsNotifierProvider.notifier);
 
   // for trigger refresh
 
-  var postDatas = posts.state.asData;
+  // var postDatas = posts.state.asData;
   var retProfs = <ProfileData>[];
-  if (postDatas != null) {
-    for (var postData in postDatas.value) {
-      if (pool.profileMap[postData.pubkey] != null) {
-        retProfs.add(pool.profileMap[postData.pubkey]!);
-      }
-    }
-  }
+  // if (postDatas != null) {
+  //   for (var postData in postDatas.value) {
+  //     if (pool.profileMap[postData.pubkey] != null) {
+  //       retProfs.add(pool.profileMap[postData.pubkey]!);
+  //     }
+  //   }
+  // }
 
   // final result = await pool.getStoredEvent(
   //   [

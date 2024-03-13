@@ -2,6 +2,7 @@ import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostr/nostr.dart';
+import 'package:intl/intl.dart';
 
 class EventView extends ConsumerWidget {
   const EventView({Key? key, required this.event}) : super(key: key);
@@ -40,13 +41,22 @@ class EventView extends ConsumerWidget {
                     switch (author) {
                       AsyncData(value: final authorProf) => authorProf.name,
                       AsyncLoading() => 'loading',
-                      AsyncError(:final error) =>
-                        error.toString(),
-                        _ => "aaa",
+                      AsyncError(:final error) => error.toString(),
+                      _ => "aaa",
                     },
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(event.content),
+                  Align(
+                    child: Text(event.pubkey.substring(0, 9) + "..."),
+                    alignment: Alignment.centerRight,
+                  ),
+                  Align(
+                    child: Text(DateFormat.Md().add_jm().format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                            event.createdAt * 1000))),
+                    alignment: Alignment.centerRight,
+                  ),
                 ],
               ),
             ),
