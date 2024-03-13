@@ -18,10 +18,10 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider(pubHex));
-    final rawPosts = ref.watch(UserPostsNotifierProvider(pubHex));
-    final rawPostsController =
-        ref.watch(UserPostsNotifierProvider(pubHex).notifier);
-    final loadingOld = ref.watch(_loadButtonLoadingProvider);
+    // final rawPosts = ref.watch(UserPostsNotifierProvider(pubHex));
+    // final rawPostsController =
+    //     ref.watch(UserPostsNotifierProvider(pubHex).notifier);
+    // final loadingOld = ref.watch(_loadButtonLoadingProvider);
 
     return Scaffold(
       appBar: AppBar(),
@@ -34,32 +34,32 @@ class ProfileScreen extends ConsumerWidget {
                   // app bar周り
                   ProfileHeader(profile: profile),
 
-                  // 投稿を出すところ
-                  ...switch (rawPosts) {
-                    AsyncData(value: final posts) =>
-                      posts.map((e) => EventView(event: e)),
-                    AsyncError(:final error, :final stackTrace) => [
-                        Text(error.toString()),
-                        Text(stackTrace.toString()),
-                      ],
-                    AsyncLoading() => [const LinearProgressIndicator()],
-                    _ => [],
-                  },
-
-                  TextButton(
-                    onPressed: loadingOld
-                        ? null
-                        : () async {
-                            ref
-                                .read(_loadButtonLoadingProvider.notifier)
-                                .state = true;
-                            await rawPostsController.loadOlderPosts();
-                            ref
-                                .read(_loadButtonLoadingProvider.notifier)
-                                .state = false;
-                          },
-                    child: const Text('load more'),
-                  ),
+                  // // 投稿を出すところ
+                  // ...switch (rawPosts) {
+                  //   AsyncData(value: final posts) =>
+                  //     posts.map((e) => EventView(event: e)),
+                  //   AsyncError(:final error, :final stackTrace) => [
+                  //       Text(error.toString()),
+                  //       Text(stackTrace.toString()),
+                  //     ],
+                  //   AsyncLoading() => [const LinearProgressIndicator()],
+                  //   _ => [],
+                  // },
+                  //
+                  // TextButton(
+                  //   onPressed: loadingOld
+                  //       ? null
+                  //       : () async {
+                  //           ref
+                  //               .read(_loadButtonLoadingProvider.notifier)
+                  //               .state = true;
+                  //           await rawPostsController.loadOlderPosts();
+                  //           ref
+                  //               .read(_loadButtonLoadingProvider.notifier)
+                  //               .state = false;
+                  //         },
+                  //   child: const Text('load more'),
+                  // ),
                 ],
               ),
 

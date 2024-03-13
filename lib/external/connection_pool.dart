@@ -12,6 +12,7 @@ class ConnectionPool {
   int lastEvtReceived = -1;
 
   ConnectionPool(_url) {
+    print("ConnectionPool: " + _url);
     Timer.periodic(Duration(seconds: 10), (timer) async {
       print(timer.tick);
       if (this._isAggregatorGenerated) {
@@ -124,6 +125,7 @@ class ConnectionPool {
   StreamAggregator getEventStreamAfterEose(
     List<Filter> filters,
   ) {
+    print('getEventStreamAfterEose');
     final aggregator = StreamAggregator();
     this._lastGeneratedAggregator = aggregator;
     this._isAggregatorGenerated = true;
