@@ -21,8 +21,19 @@ class Np2pAPI {
     print(resp);
   }
 
-  static updateProfile(String name, String about, String picture) async {
-    // TODO: need to implement Np2pAPI::updateProfile
+  static updateProfile(String url, String pubhex, String name, String about, String picture) async {
+    var params = {
+      "Id": "",
+      "Pubkey": "",
+      "Created_at": 0,
+      "Kind": 0,
+      "Tags": [["name", name], ["about", about], ["picture", picture]],
+      "Content": "",
+      "Sig": "updateProfile"
+    };
+
+    var resp = await Np2pAPI._request(url + '/sendEvent', params);
+    print(resp);
   }
 
   static Future<ProfileData> getProfile(String pubHex) async {

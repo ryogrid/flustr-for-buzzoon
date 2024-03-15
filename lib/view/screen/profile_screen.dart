@@ -5,7 +5,11 @@ import 'package:nostrp2p/view/component/event_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final _loadButtonLoadingProvider = StateProvider((ref) => false);
+import '../../controller/servaddr_provider/servaddr_provider.dart';
+import '../../external/np2p_api.dart';
+import '../component/section.dart';
+
+// final _loadButtonLoadingProvider = StateProvider((ref) => false);
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({
@@ -22,6 +26,7 @@ class ProfileScreen extends ConsumerWidget {
     // final rawPostsController =
     //     ref.watch(UserPostsNotifierProvider(pubHex).notifier);
     // final loadingOld = ref.watch(_loadButtonLoadingProvider);
+    final urls = ref.watch(servAddrSettingNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(),
@@ -67,18 +72,26 @@ class ProfileScreen extends ConsumerWidget {
             AsyncLoading() => const Center(
                 child: CircularProgressIndicator(),
               ),
-            AsyncError(error: final error, stackTrace: final _) => Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('Oops! something went wrong'),
-                    Text(error.toString()),
-                  ],
-                ),
-              ),
-            AsyncValue() => const Center(
-                child: Text('Oops! something went wrong'),
-              ),
+            // AsyncError(error: final error, stackTrace: final _) => Center(
+            //     child: Column(
+            //       mainAxisSize: MainAxisSize.min,
+            //       children: [
+            //         const Text('Oops! something went wrong'),
+            //         Text(error.toString()),
+            //       ],
+            //     ),
+            //   ),
+            // AsyncValue() => const Center(
+            //     child: Text('Oops! something went wrong'),
+            //   ),
+            AsyncError(error: final error, stackTrace: final _) => switch (urls) {
+              AsyncData(value: final urladdr) => ProfileSetting(url: urladdr.getServAddr!, pubHex: pubHex, name: "", about: "", picture: ""),
+              AsyncValue() => Text('Oops! something went wrong'),
+            },
+            AsyncValue() => switch (urls) {
+              AsyncData(value: final urladdr) => ProfileSetting(url: urladdr.getServAddr!, pubHex: pubHex, name: "", about: "", picture: ""),
+              AsyncValue() => Text('Oops! something went wrong'),
+            },
           },
         ),
       ),
@@ -137,6 +150,104 @@ class ProfileHeader extends StatelessWidget {
               // about
               Text(profile.about),
             ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+class ProfileSetting extends ConsumerWidget {
+  ProfileSetting({Key? key, required this.url, required this.pubHex, required this.name, required this.about, required this.picture}) : super(key: key);
+
+  String url;
+  String pubHex;
+  String name;
+  String about;
+  String picture;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        Center(
+            child: const Section(
+               title: 'Profile Setting',
+               content: [
+               ],
+            ),
+        ),
+        const SizedBox(height: 60),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Section(
+            title: 'name',
+            content: [
+              Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      onChanged: (value) {
+                        this.name = value;
+                      },
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 30),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Section(
+            title: 'about',
+            content: [
+              Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      onChanged: (value) {
+                        this.about = value;
+                      },
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 30),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Section(
+            title: 'picture (url)',
+            content: [
+              Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      onChanged: (value) {
+                        this.picture = value;
+                      },
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        Center(
+          child: ElevatedButton(
+            onPressed: () {
+              final trimmedName = this.name.trim();
+              final trimmedAbout = this.about.trim();
+              final trimmedPicture = this.picture.trim();
+              Np2pAPI.updateProfile(this.url, this.pubHex,  trimmedName, trimmedAbout, trimmedPicture);
+              //addrController.saveAddr(trimmed);
+            },
+            child: const Text('save'),
           ),
         ),
       ],
