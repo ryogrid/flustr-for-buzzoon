@@ -24,6 +24,8 @@ class HomeScreen extends ConsumerWidget {
     final isSeckeyAvailable = ref.watch(isSeckeyAvailableProvider);
     final servAddr = ref.watch(servAddrSettingNotifierProvider);
 
+
+
     return Scaffold(
       // 投稿ボタン
       floatingActionButton: isSeckeyAvailable
