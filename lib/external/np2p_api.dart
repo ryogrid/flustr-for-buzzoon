@@ -8,31 +8,31 @@ import '../http_client_factory.dart'
 class Np2pAPI {
   static postEvent(String url, String content) async {
     var params = {
-      "Id": "",
-      "Pubkey": "",
-      "Created_at": 0,
-      "Kind": 1,
-      "Tags": [],
-      "Content": content,
-      "Sig": ""
+      "id": "",
+      "pubkey": "",
+      "created_at": 0,
+      "kind": 1,
+      "tags": [],
+      "content": content,
+      "sig": ""
     };
     //var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/sendEvent', params);
-    var resp = await Np2pAPI._request(url + '/sendEvent', params);
+    var resp = await Np2pAPI._request(url + '/publish', params);
     print(resp);
   }
 
   static updateProfile(String url, String pubhex, String name, String about, String picture) async {
     var params = {
-      "Id": "",
-      "Pubkey": "",
-      "Created_at": 0,
-      "Kind": 0,
-      "Tags": [["name", name], ["about", about], ["picture", picture]],
-      "Content": "",
-      "Sig": "updateProfile"
+      "id": "",
+      "pubkey": "",
+      "created_at": 0,
+      "kind": 0,
+      "tags": [["name", name], ["about", about], ["picture", picture]],
+      "content": "",
+      "sig": ""
     };
 
-    var resp = await Np2pAPI._request(url + '/sendEvent', params);
+    var resp = await Np2pAPI._request(url + '/publish', params);
     print(resp);
   }
 
@@ -47,22 +47,9 @@ class Np2pAPI {
     // TODO: need to implement Np2pAPI::gatherData
   }
 
-  //static String serverAddr = '192.168.0.2:20001'; //'localhost:20001';
-
-
   static Future<List<Event>> getEvents(String url, int since, int until) async {
-    var params = {
-      "Id": "",
-      "Pubkey": "",
-      "Created_at": 0,
-      "Kind": 0,
-      "Tags": [["since", since.toString()],[ "until", until.toString()]],
-      "Content": "getEvents",
-      "Sig": ""
-    };
-    //var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/req', params);
-    var resp = await Np2pAPI._request(url + '/req', params);
-    print(resp);
+    var filter = Filter(kinds: [40000], since: since, until: until);
+    var resp = await Np2pAPI._request(url + '/req', filter.toJson());
     return (resp["Events"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
   }
 
@@ -88,17 +75,17 @@ class Np2pAPI {
   }
 
   static Event jsonToEvent(Map<String, dynamic> json) {
-    var tags = (json['Tags'] as List<dynamic>)
+    var tags = (json['tags'] as List<dynamic>)
         .map((e) => (e as List<dynamic>).map((e) => e as String).toList())
         .toList();
     return Event(
-      json['Id'],
-      json['Pubkey'],
-      json['Created_at'],
-      json['Kind'],
+      json['id'],
+      json['pubkey'],
+      json['created_at'],
+      json['kind'],
       tags,
-      json['Content'],
-      json['Sig'],
+      json['content'],
+      json['sig'],
       verify: false,
     );
   }
