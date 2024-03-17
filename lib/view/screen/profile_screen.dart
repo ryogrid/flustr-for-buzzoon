@@ -27,6 +27,7 @@ class ProfileScreen extends ConsumerWidget {
     //     ref.watch(UserPostsNotifierProvider(pubHex).notifier);
     // final loadingOld = ref.watch(_loadButtonLoadingProvider);
     final urls = ref.watch(servAddrSettingNotifierProvider);
+    final isProfileEditable = ref.watch(_profileEditableProvider);
 
     return Scaffold(
       appBar: AppBar(),
@@ -34,39 +35,56 @@ class ProfileScreen extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: switch (profile) {
-            AsyncData(value: final profile) => ListView(
-                children: [
-                  // app bar周り
-                  ProfileHeader(profile: profile),
+            AsyncData(value: final profile) => isProfileEditable // when "edit profile" button is pressed
+                ? switch (urls) {
+                    AsyncData(value: final urladdr) => ProfileSetting(
+                        url: urladdr.getServAddr!,
+                        pubHex: pubHex,
+                        name: profile.name,
+                        about: profile.about,
+                        picture: profile.picture),
+                    AsyncValue() => Text('Oops! something went wrong'),
+                  }
+                : ListView(
+                    children: [
+                      // app bar周り
+                      ProfileHeader(profile: profile),
+                      TextButton(
+                        onPressed: () async {
+                          ref.read(_profileEditableProvider.notifier).state =
+                              true;
+                        },
+                        child: const Text('edit profile'),
+                      ),
 
-                  // // 投稿を出すところ
-                  // ...switch (rawPosts) {
-                  //   AsyncData(value: final posts) =>
-                  //     posts.map((e) => EventView(event: e)),
-                  //   AsyncError(:final error, :final stackTrace) => [
-                  //       Text(error.toString()),
-                  //       Text(stackTrace.toString()),
-                  //     ],
-                  //   AsyncLoading() => [const LinearProgressIndicator()],
-                  //   _ => [],
-                  // },
-                  //
-                  // TextButton(
-                  //   onPressed: loadingOld
-                  //       ? null
-                  //       : () async {
-                  //           ref
-                  //               .read(_loadButtonLoadingProvider.notifier)
-                  //               .state = true;
-                  //           await rawPostsController.loadOlderPosts();
-                  //           ref
-                  //               .read(_loadButtonLoadingProvider.notifier)
-                  //               .state = false;
-                  //         },
-                  //   child: const Text('load more'),
-                  // ),
-                ],
-              ),
+                      // // 投稿を出すところ
+                      // ...switch (rawPosts) {
+                      //   AsyncData(value: final posts) =>
+                      //     posts.map((e) => EventView(event: e)),
+                      //   AsyncError(:final error, :final stackTrace) => [
+                      //       Text(error.toString()),
+                      //       Text(stackTrace.toString()),
+                      //     ],
+                      //   AsyncLoading() => [const LinearProgressIndicator()],
+                      //   _ => [],
+                      // },
+                      //
+                      // TextButton(
+                      //   onPressed: loadingOld
+                      //       ? null
+                      //       : () async {
+                      //           ref
+                      //               .read(_loadButtonLoadingProvider.notifier)
+                      //               .state = true;
+                      //           await rawPostsController.loadOlderPosts();
+                      //           ref
+                      //               .read(_loadButtonLoadingProvider.notifier)
+                      //               .state = false;
+                      //         },
+                      //   child: const Text('load more'),
+                      // ),
+                    ],
+                  ),
 
             // 読み込み中
             AsyncLoading() => const Center(
@@ -84,14 +102,25 @@ class ProfileScreen extends ConsumerWidget {
             // AsyncValue() => const Center(
             //     child: Text('Oops! something went wrong'),
             //   ),
-            AsyncError(error: final error, stackTrace: final _) => switch (urls) {
-              AsyncData(value: final urladdr) => ProfileSetting(url: urladdr.getServAddr!, pubHex: pubHex, name: "", about: "", picture: ""),
-              AsyncValue() => Text('Oops! something went wrong'),
-            },
+            AsyncError(error: final error, stackTrace: final _) => switch (
+                  urls) {
+                AsyncData(value: final urladdr) => ProfileSetting(
+                    url: urladdr.getServAddr!,
+                    pubHex: pubHex,
+                    name: "",
+                    about: "",
+                    picture: ""),
+                AsyncValue() => Text('Oops! something went wrong'),
+              },
             AsyncValue() => switch (urls) {
-              AsyncData(value: final urladdr) => ProfileSetting(url: urladdr.getServAddr!, pubHex: pubHex, name: "", about: "", picture: ""),
-              AsyncValue() => Text('Oops! something went wrong'),
-            },
+                AsyncData(value: final urladdr) => ProfileSetting(
+                    url: urladdr.getServAddr!,
+                    pubHex: pubHex,
+                    name: "",
+                    about: "",
+                    picture: ""),
+                AsyncValue() => Text('Oops! something went wrong'),
+              },
           },
         ),
       ),
@@ -157,9 +186,20 @@ class ProfileHeader extends StatelessWidget {
   }
 }
 
+// for profile editing
+final _profileEditableProvider = StateProvider.autoDispose<bool>((ref) {
+  return false;
+});
 
 class ProfileSetting extends ConsumerWidget {
-  ProfileSetting({Key? key, required this.url, required this.pubHex, required this.name, required this.about, required this.picture}) : super(key: key);
+  ProfileSetting(
+      {Key? key,
+      required this.url,
+      required this.pubHex,
+      required this.name,
+      required this.about,
+      required this.picture})
+      : super(key: key);
 
   String url;
   String pubHex;
@@ -172,11 +212,10 @@ class ProfileSetting extends ConsumerWidget {
     return Column(
       children: [
         Center(
-            child: const Section(
-               title: 'Profile Setting',
-               content: [
-               ],
-            ),
+          child: const Section(
+            title: 'Profile Setting',
+            content: [],
+          ),
         ),
         const SizedBox(height: 60),
         Align(
@@ -187,7 +226,8 @@ class ProfileSetting extends ConsumerWidget {
               Row(
                 children: [
                   Flexible(
-                    child: TextField(
+                    child: TextFormField(
+                      initialValue: this.name,
                       onChanged: (value) {
                         this.name = value;
                       },
@@ -207,7 +247,8 @@ class ProfileSetting extends ConsumerWidget {
               Row(
                 children: [
                   Flexible(
-                    child: TextField(
+                    child: TextFormField(
+                      initialValue: this.about,
                       onChanged: (value) {
                         this.about = value;
                       },
@@ -227,7 +268,8 @@ class ProfileSetting extends ConsumerWidget {
               Row(
                 children: [
                   Flexible(
-                    child: TextField(
+                    child: TextFormField(
+                      initialValue: this.picture,
                       onChanged: (value) {
                         this.picture = value;
                       },
@@ -244,7 +286,8 @@ class ProfileSetting extends ConsumerWidget {
               final trimmedName = this.name.trim();
               final trimmedAbout = this.about.trim();
               final trimmedPicture = this.picture.trim();
-              Np2pAPI.updateProfile(this.url, this.pubHex,  trimmedName, trimmedAbout, trimmedPicture);
+              Np2pAPI.updateProfile(this.url, this.pubHex, trimmedName,
+                  trimmedAbout, trimmedPicture);
               //addrController.saveAddr(trimmed);
             },
             child: const Text('save'),
