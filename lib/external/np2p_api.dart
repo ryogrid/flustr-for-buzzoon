@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
 import 'package:nostr/nostr.dart';
 import 'dart:convert';
@@ -6,15 +8,24 @@ import '../http_client_factory.dart'
     if (dart.library.js_interop) '../http_client_factory_web.dart';
 
 class Np2pAPI {
-  static postEvent(String url, String content) async {
+  static String genRandomHexString([int length = 32]) {
+    const String charset = '0123456789abcdef';
+    final Random random = Random.secure();
+    final String randomStr =  List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+    return randomStr;
+  }
+
+  static postEvent(String pubHex, String url, String content) async {
+    final now = DateTime.now();
+    final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
     var params = {
-      "id": "",
-      "pubkey": "",
-      "created_at": 0,
+      "id": Np2pAPI.genRandomHexString(64),
+      "pubkey": pubHex,
+      "created_at": nowUnix,
       "kind": 1,
       "tags": [],
       "content": content,
-      "sig": ""
+      "sig": "3d1ef6ecee9a732e06385ab4e8a05b1c60d2da1665465ce8c72bcc4dea767cf2"
     };
     //var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/sendEvent', params);
     var resp = await Np2pAPI._request(url + '/publish', params);
@@ -22,14 +33,17 @@ class Np2pAPI {
   }
 
   static updateProfile(String url, String pubhex, String name, String about, String picture) async {
+    final now = DateTime.now();
+    final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
+
     var params = {
-      "id": "",
-      "pubkey": "",
-      "created_at": 0,
+      "id": Np2pAPI.genRandomHexString(64),
+      "pubkey": pubhex,
+      "created_at": nowUnix,
       "kind": 0,
       "tags": [["name", name], ["about", about], ["picture", picture]],
       "content": "",
-      "sig": ""
+      "sig": pubhex
     };
 
     var resp = await Np2pAPI._request(url + '/publish', params);
