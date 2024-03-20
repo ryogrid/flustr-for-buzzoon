@@ -5,6 +5,7 @@ import 'package:nostrp2p/view/component/event_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../controller/current_sechex_provider/current_sechex_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
 import '../../external/np2p_api.dart';
 import '../component/section.dart';
@@ -28,6 +29,7 @@ class ProfileScreen extends ConsumerWidget {
     // final loadingOld = ref.watch(_loadButtonLoadingProvider);
     final urls = ref.watch(servAddrSettingNotifierProvider);
     final isProfileEditable = ref.watch(_profileEditableProvider);
+    final secHex = ref.watch(currentSecHexProvider);
 
     return Scaffold(
       appBar: AppBar(),
@@ -40,6 +42,7 @@ class ProfileScreen extends ConsumerWidget {
                     AsyncData(value: final urladdr) => ProfileSetting(
                         url: urladdr.getServAddr!,
                         pubHex: pubHex,
+                        secHex: secHex!,
                         name: profile.name,
                         about: profile.about,
                         picture: profile.picture),
@@ -107,6 +110,7 @@ class ProfileScreen extends ConsumerWidget {
                 AsyncData(value: final urladdr) => ProfileSetting(
                     url: urladdr.getServAddr!,
                     pubHex: pubHex,
+                    secHex: secHex!,
                     name: "",
                     about: "",
                     picture: ""),
@@ -116,6 +120,7 @@ class ProfileScreen extends ConsumerWidget {
                 AsyncData(value: final urladdr) => ProfileSetting(
                     url: urladdr.getServAddr!,
                     pubHex: pubHex,
+                    secHex: secHex!,
                     name: "",
                     about: "",
                     picture: ""),
@@ -196,6 +201,7 @@ class ProfileSetting extends ConsumerWidget {
       {Key? key,
       required this.url,
       required this.pubHex,
+      required this.secHex,
       required this.name,
       required this.about,
       required this.picture})
@@ -203,6 +209,7 @@ class ProfileSetting extends ConsumerWidget {
 
   String url;
   String pubHex;
+  String secHex;
   String name;
   String about;
   String picture;
@@ -286,7 +293,7 @@ class ProfileSetting extends ConsumerWidget {
               final trimmedName = this.name.trim();
               final trimmedAbout = this.about.trim();
               final trimmedPicture = this.picture.trim();
-              Np2pAPI.updateProfile(this.url, this.pubHex, trimmedName,
+              Np2pAPI.updateProfile(this.url, this.pubHex, this.secHex, trimmedName,
                   trimmedAbout, trimmedPicture);
               //addrController.saveAddr(trimmed);
             },

@@ -24,8 +24,6 @@ class HomeScreen extends ConsumerWidget {
     final isSeckeyAvailable = ref.watch(isSeckeyAvailableProvider);
     final servAddr = ref.watch(servAddrSettingNotifierProvider);
 
-
-
     return Scaffold(
       // 投稿ボタン
       floatingActionButton: isSeckeyAvailable
@@ -51,7 +49,7 @@ class HomeScreen extends ConsumerWidget {
                                 return;
                               }
                               final _ = switch (servAddr) {
-                                AsyncData(value: final servAddr) => Np2pAPI.postEvent(pubHex!, servAddr.getServAddr!, _textToSend),
+                                AsyncData(value: final servAddr) => Np2pAPI.postEvent(secHex!, pubHex!, servAddr.getServAddr!, _textToSend),
                                   //pool.addEvent(
                                     //buildTextEvent(_textToSend, secHex),
                                   //),

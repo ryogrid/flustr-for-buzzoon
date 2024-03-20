@@ -15,38 +15,63 @@ class Np2pAPI {
     return randomStr;
   }
 
-  static postEvent(String pubHex, String url, String content) async {
+  static postEvent(String secHex, String pubHex, String url, String content) async {
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
-    var params = {
-      "id": Np2pAPI.genRandomHexString(64),
-      "pubkey": pubHex,
-      "created_at": nowUnix,
-      "kind": 1,
-      "tags": [],
-      "content": content,
-      "sig": "3d1ef6ecee9a732e06385ab4e8a05b1c60d2da1665465ce8c72bcc4dea767cf2"
-    };
+    var partialEvent = Event.partial();
+    partialEvent.kind = 1;
+    partialEvent.createdAt = nowUnix;
+    partialEvent.pubkey = pubHex;
+    partialEvent.content = content;
+    partialEvent.tags = [];
+    partialEvent.id = partialEvent.getEventId();
+    partialEvent.sig = partialEvent.getSignature(secHex);
+
+    // var params = {
+    //   "id": Np2pAPI.genRandomHexString(64),
+    //   "pubkey": pubHex,
+    //   "created_at": nowUnix,
+    //   "kind": 1,
+    //   "tags": [],
+    //   "content": content,
+    //   "sig": "3d1ef6ecee9a732e06385ab4e8a05b1c60d2da1665465ce8c72bcc4dea767cf2"
+    // };
     //var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/sendEvent', params);
-    var resp = await Np2pAPI._request(url + '/publish', params);
+    var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
     print(resp);
   }
 
-  static updateProfile(String url, String pubhex, String name, String about, String picture) async {
+  static updateProfile(String url, String pubHex, String secHex, String name, String about, String picture) async {
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
 
-    var params = {
-      "id": Np2pAPI.genRandomHexString(64),
-      "pubkey": pubhex,
-      "created_at": nowUnix,
-      "kind": 0,
-      "tags": [["name", name], ["about", about], ["picture", picture]],
-      "content": "",
-      "sig": pubhex
+    var profileHash = {
+      "name": name,
+      "about": about,
+      "picture": picture
     };
+    var content = json.encode(profileHash);
 
-    var resp = await Np2pAPI._request(url + '/publish', params);
+    var partialEvent = Event.partial();
+    partialEvent.kind = 0;
+    partialEvent.createdAt = nowUnix;
+    partialEvent.pubkey = pubHex;
+    partialEvent.content = content;
+    partialEvent.tags = [];
+    partialEvent.id = partialEvent.getEventId();
+    partialEvent.sig = partialEvent.getSignature(secHex);
+
+    // var params = {
+    //   "id": Np2pAPI.genRandomHexString(64),
+    //   "pubkey": pubhex,
+    //   "created_at": nowUnix,
+    //   "kind": 0,
+    //   "tags": [["name", name], ["about", about], ["picture", picture]],
+    //   "content": "",
+    //   "sig": pubhex
+    // };
+
+    var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
     print(resp);
   }
 
@@ -64,7 +89,7 @@ class Np2pAPI {
   static Future<List<Event>> getEvents(String url, int since, int until) async {
     var filter = Filter(kinds: [40000], since: since, until: until);
     var resp = await Np2pAPI._request(url + '/req', filter.toJson());
-    return (resp["Events"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
+    return (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
   }
 
   static Future<Map<String, dynamic>> _request(String destUrl, Object params) async {
