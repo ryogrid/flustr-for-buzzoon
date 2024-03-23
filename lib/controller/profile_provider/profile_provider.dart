@@ -1,15 +1,11 @@
 import 'dart:convert';
 
-import 'package:nostrp2p/controller/connection_pool_provider/connection_pool_provider.dart';
 import 'package:nostrp2p/controller/profile_cache_provider/profile_cache_notifier.dart';
-import 'package:nostrp2p/external/connection_pool.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nostr/nostr.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../current_sechex_provider/current_sechex_provider.dart';
 
 part 'profile_provider.freezed.dart';
 part 'profile_provider.g.dart';
@@ -44,19 +40,11 @@ class ProfileData with _$ProfileData {
   }
 }
 
-
-
 @Riverpod(keepAlive: true)
 FutureOr<ProfileData> profile(ProfileRef ref, String pubHex) async {
   final cache = ref.read(profileCacheNotifierProvider);
-  // if (cache.any((element) => element.pubHex == pubHex)) {
-  //   return cache.firstWhere((e) => e.pubHex == pubHex);
-  // }
-  //final pool = await ref.watch(connectionPoolProvider.future);
   if (cache.profiles.any((element) => element.pubHex == pubHex)) {
-    //return cache.lastWhere((e) => e.pubHex == pubHex);
     var ret = cache.profiles.lastWhere((e) => e.pubHex == pubHex);
-    print("found profile: " + ret.toString());
     return ret;
   }
 

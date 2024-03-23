@@ -1,25 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'connection_pool_provider.dart';
+part of 'event_data_getting_timer_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$connectionPoolHash() => r'31a634a9c63333b7ac254ccabddc712c8e9dc16c';
+String _$eventDataGettingTimerHash() =>
+    r'52f7e971bdc5634c09e568fc2bf9f5d1854fac66';
 
-/// See also [connectionPool].
-@ProviderFor(connectionPool)
-final connectionPoolProvider = FutureProvider<ConnectionPool>.internal(
-  connectionPool,
-  name: r'connectionPoolProvider',
+/// See also [eventDataGettingTimer].
+@ProviderFor(eventDataGettingTimer)
+final eventDataGettingTimerProvider = FutureProvider<bool>.internal(
+  eventDataGettingTimer,
+  name: r'eventDataGettingTimerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$connectionPoolHash,
+      : _$eventDataGettingTimerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef ConnectionPoolRef = FutureProviderRef<ConnectionPool>;
+typedef EventDataGettingTimerRef = FutureProviderRef<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -1,4 +1,4 @@
-import 'package:nostrp2p/controller/connection_pool_provider/connection_pool_provider.dart';
+import 'package:nostrp2p/controller/event_data_getting_timer_provider/event_data_getting_timer_provider.dart';
 import 'package:nostrp2p/controller/current_pubhex_provider/current_pubhex_provider.dart';
 import 'package:nostrp2p/controller/current_sechex_provider/current_sechex_provider.dart';
 import 'package:nostrp2p/controller/is_seckey_available_provider/is_seckey_available_provider.dart';
@@ -23,6 +23,10 @@ class HomeScreen extends ConsumerWidget {
     final timelinePosts = ref.watch(timelinePostsNotifierProvider);
     final isSeckeyAvailable = ref.watch(isSeckeyAvailableProvider);
     final servAddr = ref.watch(servAddrSettingNotifierProvider);
+    final evtTimer = ref.watch(eventDataGettingTimerProvider);
+
+    // this print is for generation of eventDataGettingTimerProvider object
+    print('home screen rebuilded: ' + evtTimer.toString());
 
     return Scaffold(
       // button for posting
@@ -110,7 +114,7 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () async => ref.invalidate(connectionPoolProvider),
+        onRefresh: () async => ref.invalidate(eventDataGettingTimerProvider),
         child: ListView(
           children: switch (timelinePosts) {
             AsyncLoading() => [const LinearProgressIndicator()],

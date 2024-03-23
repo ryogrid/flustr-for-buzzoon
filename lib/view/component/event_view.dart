@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostr/nostr.dart';
 import 'package:intl/intl.dart';
 
+import '../../const.dart';
+
 class EventView extends ConsumerWidget {
   const EventView({Key? key, required this.event}) : super(key: key);
 
@@ -38,7 +40,7 @@ class EventView extends ConsumerWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Image.network(
-                  'https://image.nostr.build/fc9f5d58c897b303f468ec5e608a297a1068d3acf250a68c0b2b2d64933f1ab4.jpg',
+                  PrefKeys.noProfileUserPictureURL,
                 ),
               ),
               _ => const SizedBox(),
