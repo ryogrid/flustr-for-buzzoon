@@ -30,6 +30,17 @@ class EventView extends ConsumerWidget {
                     authorProf.picture,
                   ),
                 ),
+              AsyncError(value: final authorProf) => Container(
+                clipBehavior: Clip.antiAlias,
+                width: 40,
+                height: 40,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: Image.network(
+                  'https://image.nostr.build/fc9f5d58c897b303f468ec5e608a297a1068d3acf250a68c0b2b2d64933f1ab4.jpg',
+                ),
+              ),
               _ => const SizedBox(),
             },
             const SizedBox(width: 8),
@@ -41,8 +52,8 @@ class EventView extends ConsumerWidget {
                     switch (author) {
                       AsyncData(value: final authorProf) => authorProf.name,
                       AsyncLoading() => 'loading',
-                      AsyncError(:final error) => error.toString(),
-                      _ => "aaa",
+                      AsyncError(:final error) => 'unknown',//error.toString(),
+                      _ => "unkown",
                     },
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
