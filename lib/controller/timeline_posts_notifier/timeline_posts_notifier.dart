@@ -9,23 +9,10 @@ part 'timeline_posts_notifier.g.dart';
 @riverpod
 class TimelinePostsNotifier extends _$TimelinePostsNotifier {
 
-  // TODO: need to modify for nostrp2p TimelinePostsNotifier::build
   @override
   Future<List<Event>> build() async {
     final followeePubHexList = await ref.watch(followListProvider.future);
     final pool = await ref.watch(connectionPoolProvider.future);
-    // always get empty list now
-    final posts = await pool.getStoredEvent(
-      [
-        Filter(
-          authors: followeePubHexList,
-          kinds: [1],
-          limit: 30,
-        ),
-      ],
-      // fixme: タイムアウトはもっと考えたほうが良さそう
-      timeout: const Duration(seconds: 3),
-    );
 
     final aggregator = pool.getEventStreamAfterEose(
       [
@@ -41,65 +28,10 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
         AsyncData(:final value) => AsyncData([e, ...value]),
         _ => state,
       };
-      // switch (state) {
-      //   case AsyncData(:final value):
-      //     state = AsyncData([e, ...value]);
-      //   case _:
-      //     state = state;
-      // }
     });
     ref.onDispose(() {
       //aggregator.dispose();
     });
-    return posts
-        .sortedBy<num>((element) => element.createdAt)
-        .reversed
-        .toList();
+    return [];
   }
-
-  bool _loading = false;
-
-  // Future<void> loadOlderPosts() async {
-  //   if (_loading) return;
-  //   _loading = true;
-  //   final pool = await ref.read(connectionPoolProvider.future);
-  //   final currentPosts = switch (state) {
-  //     AsyncData(:final value) => value,
-  //     _ => null,
-  //   };
-  //   if (currentPosts == null) {
-  //     return;
-  //   }
-  //
-  //   final followees = await ref.read(followListProvider.future);
-  //
-  //   final last = currentPosts.last;
-  //   // always get empty list now
-  //   final oldEvents = await pool.getStoredEvent(
-  //     [
-  //       Filter(
-  //         authors: followees,
-  //         kinds: [1],
-  //         limit: 30,
-  //         until: last.createdAt + 1,
-  //       )
-  //     ],
-  //     timeout: const Duration(seconds: 3),
-  //   );
-  //
-  //   final newEventsWithDups = [...currentPosts, ...oldEvents];
-  //
-  //   final seen = <String>{};
-  //   final newEvents = <Event>[];
-  //   for (final event in newEventsWithDups) {
-  //     if (seen.contains(event.id)) {
-  //       continue;
-  //     }
-  //     seen.add(event.id);
-  //     newEvents.add(event);
-  //   }
-  //
-  //   state = AsyncData(newEvents);
-  //   _loading = false;
-  // }
 }

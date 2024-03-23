@@ -61,16 +61,6 @@ class Np2pAPI {
     partialEvent.id = partialEvent.getEventId();
     partialEvent.sig = partialEvent.getSignature(secHex);
 
-    // var params = {
-    //   "id": Np2pAPI.genRandomHexString(64),
-    //   "pubkey": pubhex,
-    //   "created_at": nowUnix,
-    //   "kind": 0,
-    //   "tags": [["name", name], ["about", about], ["picture", picture]],
-    //   "content": "",
-    //   "sig": pubhex
-    // };
-
     var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
     print(resp);
   }

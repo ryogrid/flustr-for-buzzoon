@@ -8,7 +8,6 @@ import 'package:nostr/nostr.dart';
 import 'package:nostrp2p/external/np2p_api.dart';
 
 class ConnectionPool {
-  //List<WebSocketChannel> webSockets = <WebSocketChannel>[];
   int lastEvtReceived = -1;
 
   ConnectionPool(_url) {
@@ -32,14 +31,6 @@ class ConnectionPool {
 
     print(pubHex);
     return this.profileMap[pubHex]!;
-  }
-
-  // ATTENTION: always returns empty list
-  Future<List<Event>> getStoredEvent(
-    List<Filter> filters, {
-    Duration timeout = const Duration(milliseconds: 500),
-  }) async {
-    return Future(() => <Event>[]);
   }
 
   // eose後の,複数relayからのstreamをよしなにまとめるStreamを返す
