@@ -30,7 +30,7 @@ class EventView extends ConsumerWidget {
                     authorProf.picture,
                   ),
                 ),
-              AsyncError(value: final authorProf) => Container(
+              AsyncError(:final error, :final stackTrace) => Container(
                 clipBehavior: Clip.antiAlias,
                 width: 40,
                 height: 40,

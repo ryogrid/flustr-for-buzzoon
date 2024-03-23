@@ -26,7 +26,7 @@ Map<String, dynamic> _$$ProfileDataImplToJson(_$ProfileDataImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$profileHash() => r'1902d4947b05e111ec28582dc21fcab0a5844121';
+String _$profileHash() => r'a5791c979bb2a72b2111455146141aa2e3819e6c';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'timeline_posts_notifier.dart';
+part of 'profile_cache_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$timelinePostsNotifierHash() =>
-    r'8d07ba5e80fb175fdc5e775e7c97e0ca7c727762';
+String _$profileCacheNotifierHash() =>
+    r'cf04cb5315a5d03f1269b938bb551cd1e3995564';
 
-/// See also [TimelinePostsNotifier].
-@ProviderFor(TimelinePostsNotifier)
-final timelinePostsNotifierProvider = AutoDisposeAsyncNotifierProvider<
-    TimelinePostsNotifier, List<Event>>.internal(
-  TimelinePostsNotifier.new,
-  name: r'timelinePostsNotifierProvider',
+/// See also [ProfileCacheNotifier].
+@ProviderFor(ProfileCacheNotifier)
+final profileCacheNotifierProvider = AutoDisposeNotifierProvider<
+    ProfileCacheNotifier, ProfileDataRepository>.internal(
+  ProfileCacheNotifier.new,
+  name: r'profileCacheNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$timelinePostsNotifierHash,
+      : _$profileCacheNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$TimelinePostsNotifier = AutoDisposeAsyncNotifier<List<Event>>;
+typedef _$ProfileCacheNotifier = AutoDisposeNotifier<ProfileDataRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

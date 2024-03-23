@@ -8,7 +8,7 @@ import 'package:nostr/nostr.dart';
 import 'package:nostrp2p/external/np2p_api.dart';
 
 class ConnectionPool {
-  int lastEvtReceived = -1;
+  // int lastEvtReceived = -1;
 
   ConnectionPool(_url) {
     print("ConnectionPool: " + _url);
@@ -17,35 +17,26 @@ class ConnectionPool {
   void dispose() {
   }
 
-  List<ProfileData> profiles = <ProfileData>[];
-  Map<String, ProfileData> profileMap = <String, ProfileData>{};
-  bool isAggregatorGenerated = false;
-  StreamAggregator _lastGeneratedAggregator = new StreamAggregator();
+  // bool isAggregatorGenerated = false;
+  // StreamAggregator _lastGeneratedAggregator = new StreamAggregator();
 
-  Future<void> addEvent(Event e) async {
-    this._lastGeneratedAggregator.addEvent(e);
-  }
+  // Future<void> addEvent(Event e) async {
+  //   this._lastGeneratedAggregator.addEvent(e);
+  // }
 
-  ProfileData fetchProfile(String pubHex) {
-    Np2pAPI.getProfile(pubHex);
 
-    print(pubHex);
-    return this.profileMap[pubHex]!;
-  }
-
-  // eose後の,複数relayからのstreamをよしなにまとめるStreamを返す
   StreamAggregator getEventStreamAfterEose(
     List<Filter> filters,
   ) {
     print('getEventStreamAfterEose');
     final aggregator = StreamAggregator();
-    this._lastGeneratedAggregator = aggregator;
-    this.isAggregatorGenerated = true;
+    // this._lastGeneratedAggregator = aggregator;
+    // this.isAggregatorGenerated = true;
 
     return aggregator;
   }
 }
 
-Event buildTextEvent(String content, String secHex) {
-  return Event.from(kind: 1, content: content, privkey: secHex);
-}
+// Event buildTextEvent(String content, String secHex) {
+//   return Event.from(kind: 1, content: content, privkey: secHex);
+// }
