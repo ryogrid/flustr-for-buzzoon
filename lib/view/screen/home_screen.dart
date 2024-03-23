@@ -50,9 +50,6 @@ class HomeScreen extends ConsumerWidget {
                               }
                               final _ = switch (servAddr) {
                                 AsyncData(value: final servAddr) => Np2pAPI.postEvent(secHex!, pubHex!, servAddr.getServAddr!, _textToSend),
-                                  //pool.addEvent(
-                                    //buildTextEvent(_textToSend, secHex),
-                                  //),
                                 _ => null,
                               };
                               Navigator.of(ctx).pop();
@@ -113,7 +110,7 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () async => ref.invalidate(timelinePostsNotifierProvider),
+        onRefresh: () async => ref.invalidate(connectionPoolProvider),
         child: ListView(
           children: switch (timelinePosts) {
             AsyncLoading() => [const LinearProgressIndicator()],

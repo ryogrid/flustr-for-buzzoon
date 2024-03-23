@@ -11,12 +11,17 @@ import '../profile_provider/profile_provider.dart';
 
 part 'connection_pool_provider.g.dart';
 
+Timer? t = null;
+
 @Riverpod(keepAlive: true)
 Future<ConnectionPool> connectionPool(ConnectionPoolRef ref) async {
   final urls = await ref.watch(servAddrSettingNotifierProvider.future);
   var retPool = ConnectionPool(urls.getServAddr!);
 
-  Timer.periodic(Duration(seconds: 10), (timer) async {
+  if (t != null) {
+    t!.cancel();
+  }
+  t = Timer.periodic(Duration(seconds: 10), (timer) async {
     print(timer.tick);
     var isExistProfile = false;
     if (retPool.isAggregatorGenerated) {
