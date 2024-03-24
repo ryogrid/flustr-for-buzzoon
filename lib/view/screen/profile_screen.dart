@@ -281,7 +281,7 @@ class ProfileSetting extends ConsumerWidget {
               final trimmedName = this.name.trim();
               final trimmedAbout = this.about.trim();
               final trimmedPicture = this.picture.trim();
-              Np2pAPI.updateProfile(this.url, this.pubHex, this.secHex, trimmedName,
+              Np2pAPI.publishProfile(this.url, this.pubHex, this.secHex, trimmedName,
                   trimmedAbout, trimmedPicture);
             },
             child: const Text('save'),

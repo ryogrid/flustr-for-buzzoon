@@ -42,7 +42,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
       lastEvtReceived = nowUnix;
     }
 
-    var events = await Np2pAPI.getEvents(urls.getServAddr!, since, nowUnix);
+    var events = await Np2pAPI.reqEvents(urls.getServAddr!, since, nowUnix);
     for (var e in events) {
       if (e.kind == 0) {
         try{

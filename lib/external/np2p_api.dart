@@ -15,7 +15,7 @@ class Np2pAPI {
     return randomStr;
   }
 
-  static postEvent(String secHex, String pubHex, String url, String content) async {
+  static publishPost(String secHex, String pubHex, String url, String content) async {
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
     var partialEvent = Event.partial();
@@ -31,7 +31,7 @@ class Np2pAPI {
     print(resp);
   }
 
-  static updateProfile(String url, String pubHex, String secHex, String name, String about, String picture) async {
+  static publishProfile(String url, String pubHex, String secHex, String name, String about, String picture) async {
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
 
@@ -55,6 +55,22 @@ class Np2pAPI {
     print(resp);
   }
 
+  static publishReaction(String secHex, String pubHex, String url, String tgtEvtId, String tgtEvtPubHex, String content) async {
+    final now = DateTime.now();
+    final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
+    var partialEvent = Event.partial();
+    partialEvent.kind = 7;
+    partialEvent.createdAt = nowUnix;
+    partialEvent.pubkey = pubHex;
+    partialEvent.content = "+";
+    partialEvent.tags = [["e", tgtEvtId], ["p", tgtEvtPubHex]];
+    partialEvent.id = partialEvent.getEventId();
+    partialEvent.sig = partialEvent.getSignature(secHex);
+
+    var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
+    print(resp);
+  }
+
   static Future<ProfileData> getProfile(String pubHex) async {
     //BigInt shortPkey
     // TODO: need to implement Np2pAPI::getProfile
@@ -66,7 +82,8 @@ class Np2pAPI {
     // TODO: need to implement Np2pAPI::gatherData
   }
 
-  static Future<List<Event>> getEvents(String url, int since, int until) async {
+  // use NostP2P specific kind 40000
+  static Future<List<Event>> reqEvents(String url, int since, int until) async {
     var filter = Filter(kinds: [40000], since: since, until: until);
     var resp = await Np2pAPI._request(url + '/req', filter.toJson());
     return (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();

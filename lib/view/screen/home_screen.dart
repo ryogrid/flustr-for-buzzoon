@@ -53,7 +53,7 @@ class HomeScreen extends ConsumerWidget {
                                 return;
                               }
                               final _ = switch (servAddr) {
-                                AsyncData(value: final servAddr) => Np2pAPI.postEvent(secHex!, pubHex!, servAddr.getServAddr!, _textToSend),
+                                AsyncData(value: final servAddr) => Np2pAPI.publishPost(secHex!, pubHex!, servAddr.getServAddr!, _textToSend),
                                 _ => null,
                               };
                               Navigator.of(ctx).pop();

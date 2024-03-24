@@ -3,17 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostr/nostr.dart';
 import 'package:intl/intl.dart';
+import 'package:nostrp2p/controller/reaction_cache_provider/reaction_cache_notifier.dart';
+import 'package:nostrp2p/external/np2p_api.dart';
 
 import '../../const.dart';
+import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
+import '../../controller/current_sechex_provider/current_sechex_provider.dart';
+import '../../controller/servaddr_provider/servaddr_provider.dart';
 
 class EventView extends ConsumerWidget {
   const EventView({Key? key, required this.event}) : super(key: key);
 
   final Event event;
 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final author = ref.watch(profileProvider(event.pubkey));
+    final pubHex = ref.watch(currentPubHexProvider);
+    final secHex = ref.watch(currentSecHexProvider);
+    final urls = ref.watch(servAddrSettingNotifierProvider.future);
+    final reactions = ref.watch(reactionCacheNotifierProvider);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -75,13 +86,17 @@ class EventView extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            var servAddrSettting = await urls;
+                            var url = servAddrSettting.getServAddr!;
+                            Np2pAPI.publishReaction(secHex!, pubHex!, url, event.id, event.pubkey, "+");
+                          },
                           icon: Icon(
                             Icons.favorite_border,
-                            color: Colors.grey,
+                            color: reactions.reactionDataMap[event.id] == null ? Colors.grey : Colors.pinkAccent,
                           ),
                         ),
-                        Text("0" + " "),
+                        Text(reactions.reactionDataMap[event.id] == null ? " " : reactions.reactionDataMap[event.id]!.pubHexs.length.toString() + " "),
                       ],
                   ),
                 ],
