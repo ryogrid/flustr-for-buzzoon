@@ -9,6 +9,7 @@ import 'package:nostrp2p/external/np2p_api.dart';
 import '../../const.dart';
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/current_sechex_provider/current_sechex_provider.dart';
+import '../../controller/reaction_provider/reaction_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
 
 class EventView extends ConsumerWidget {
@@ -16,14 +17,13 @@ class EventView extends ConsumerWidget {
 
   final Event event;
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final author = ref.watch(profileProvider(event.pubkey));
     final pubHex = ref.watch(currentPubHexProvider);
     final secHex = ref.watch(currentSecHexProvider);
     final urls = ref.watch(servAddrSettingNotifierProvider.future);
-    final reactions = ref.watch(reactionCacheNotifierProvider);
+    final reaction = ref.watch(reactionProvider(event.id).future);
 
     return Card(
       child: Padding(
@@ -82,22 +82,39 @@ class EventView extends ConsumerWidget {
                     alignment: Alignment.centerRight,
                   ),
                   Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () async {
-                            var servAddrSettting = await urls;
-                            var url = servAddrSettting.getServAddr!;
-                            Np2pAPI.publishReaction(secHex!, pubHex!, url, event.id, event.pubkey, "+");
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          var servAddrSettting = await urls;
+                          var url = servAddrSettting.getServAddr!;
+                          Np2pAPI.publishReaction(secHex!, pubHex!, url,
+                              event.id, event.pubkey, "+");
+                        },
+                        icon: Icon(
+                          Icons.favorite_border,
+                          color: switch (reaction) {
+                            AsyncData(value: final reactionVal) =>
+                              reactionVal.pubKeys.length > 0
+                                  ? Colors.pinkAccent
+                                  : Colors.grey,
+                            AsyncLoading() => Colors.grey,
+                            AsyncError(:final error) => Colors.grey,
+                            _ => Colors.grey,
                           },
-                          icon: Icon(
-                            Icons.favorite_border,
-                            color: reactions.reactionDataMap[event.id] == null ? Colors.grey : Colors.pinkAccent,
-                          ),
                         ),
-                        Text(reactions.reactionDataMap[event.id] == null ? " " : reactions.reactionDataMap[event.id]!.pubHexs.length.toString() + " "),
-                      ],
+                      ),
+                      Text(switch (reaction) {
+                        AsyncData(value: final reactionVal) =>
+                          reactionVal.pubKeys.length > 0
+                              ? reactionVal.pubKeys.length.toString() + " "
+                              : "  ",
+                        AsyncLoading() => "  ",
+                        AsyncError(:final error) => "  ",
+                        _ => "  ",
+                      }),
+                    ],
                   ),
                 ],
               ),

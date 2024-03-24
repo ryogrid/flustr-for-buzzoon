@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:nostrp2p/const.dart';
+import 'package:nostrp2p/controller/reaction_cache_provider/reaction_cache_notifier.dart';
+import 'package:nostrp2p/controller/reaction_provider/reaction_provider.dart';
 import 'package:nostrp2p/controller/servaddr_provider/servaddr_provider.dart';
 import 'package:nostrp2p/controller/timeline_posts_notifier/timeline_posts_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -28,8 +30,10 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
   }
 
   var lastEvtReceived = -1;
-  t = Timer.periodic(Duration(seconds: PrefKeys.eventDataGettingIntervalSec), (timer) async {
+  t = Timer.periodic(Duration(seconds: PrefKeys.eventDataGettingIntervalSec),
+      (timer) async {
     var isExistProfile = false;
+    var isExistReaction = false;
 
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
@@ -44,36 +48,53 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
 
     var events = await Np2pAPI.reqEvents(urls.getServAddr!, since, nowUnix);
     for (var e in events) {
-      if (e.kind == 0) {
-        try{
-          var profileMap = jsonDecode(e.content);
-          var profile = ProfileData(
-            name: profileMap['name'],
-            about: profileMap['about'],
-            picture: profileMap['picture'],
-            pubHex: e.pubkey,
-          );
-          profiles.profiles.add(profile);
-          var check = profiles.profileMap[profile.pubHex];
-          if (check == null) {
-            isExistProfile = true;
-          }else{
-            if (check.name != profile.name || check.about != profile.about || check.picture != profile.picture) {
+      switch (e.kind) {
+        case 0: // profile
+          try {
+            var profileMap = jsonDecode(e.content);
+            var profile = ProfileData(
+              name: profileMap['name'],
+              about: profileMap['about'],
+              picture: profileMap['picture'],
+              pubHex: e.pubkey,
+            );
+            profiles.profiles.add(profile);
+            var check = profiles.profileMap[profile.pubHex];
+            if (check == null) {
               isExistProfile = true;
+            } else {
+              if (check.name != profile.name ||
+                  check.about != profile.about ||
+                  check.picture != profile.picture) {
+                isExistProfile = true;
+              }
             }
-          }
 
-          profiles.profileMap[profile.pubHex] = profile;
-        } catch (e) {
-          print(e);
-        }
-      } else {
-        ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
+            profiles.profileMap[profile.pubHex] = profile;
+          } catch (e) {
+            print(e);
+          }
+          break;
+        case 1: // text note
+          ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
+          break;
+        case 7: //reaction
+          ref
+              .read(reactionCacheNotifierProvider.notifier)
+              .reactionRepo
+              .notifyReactionEvent(e);
+          isExistReaction = true;
+          break;
+        default:
+          print('unexpected event kind');
       }
     }
 
     if (isExistProfile) {
       ref.invalidate(profileProvider);
+    }
+    if (isExistReaction) {
+      ref.invalidate(reactionProvider);
     }
   });
 
