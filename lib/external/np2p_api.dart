@@ -27,16 +27,6 @@ class Np2pAPI {
     partialEvent.id = partialEvent.getEventId();
     partialEvent.sig = partialEvent.getSignature(secHex);
 
-    // var params = {
-    //   "id": Np2pAPI.genRandomHexString(64),
-    //   "pubkey": pubHex,
-    //   "created_at": nowUnix,
-    //   "kind": 1,
-    //   "tags": [],
-    //   "content": content,
-    //   "sig": "3d1ef6ecee9a732e06385ab4e8a05b1c60d2da1665465ce8c72bcc4dea767cf2"
-    // };
-    //var resp = await Np2pAPI._request('http://' + Np2pAPI.serverAddr +  '/sendEvent', params);
     var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
     print(resp);
   }
@@ -93,11 +83,12 @@ class Np2pAPI {
     String body = json.encode(params);
     print(body);
     var client = httpClient();
-    //http.Response resp = await http.post(url, headers: headers, body: body);
     http.Response resp = await client.post(url, headers: headers, body: body);
-    print(resp);
     if (resp.statusCode == 200) {
-      return json.decode(resp.body);
+      var retJson = json.decode(resp.body);
+      print("receied responses (deserialized)");
+      print(retJson);
+      return retJson;
     } else {
       return new Future(() => {});
     }

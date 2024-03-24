@@ -1,8 +1,5 @@
 import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../external/np2p_api.dart';
-
 part 'profile_cache_notifier.g.dart';
 
 class ProfileDataRepository {
@@ -23,12 +20,5 @@ class ProfileCacheNotifier extends _$ProfileCacheNotifier {
   @override
   ProfileDataRepository build() {
     return this.profileRepo;
-  }
-
-  ProfileData fetchProfile(String pubHex) {
-    Np2pAPI.getProfile(pubHex);
-
-    print(pubHex);
-    return this.profileRepo.profileMap[pubHex]!;
   }
 }

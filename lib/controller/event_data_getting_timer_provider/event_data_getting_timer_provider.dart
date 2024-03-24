@@ -40,7 +40,6 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     }
 
     var events = await Np2pAPI.getEvents(urls.getServAddr!, since, nowUnix);
-    print(events);
     for (var e in events) {
       if (e.kind == 0) {
         try{
@@ -71,7 +70,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     }
 
     if (isExistProfile) {
-      ref.invalidate(profileCacheNotifierProvider);
+      ref.invalidate(profileProvider);
     }
   });
 

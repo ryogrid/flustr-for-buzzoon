@@ -50,7 +50,7 @@ class ProfileScreen extends ConsumerWidget {
                   }
                 : ListView(
                     children: [
-                      // app bar周り
+                      // app bar
                       ProfileHeader(profile: profile),
                       TextButton(
                         onPressed: () async {
@@ -89,22 +89,10 @@ class ProfileScreen extends ConsumerWidget {
                     ],
                   ),
 
-            // 読み込み中
+            // loading indicator
             AsyncLoading() => const Center(
                 child: CircularProgressIndicator(),
               ),
-            // AsyncError(error: final error, stackTrace: final _) => Center(
-            //     child: Column(
-            //       mainAxisSize: MainAxisSize.min,
-            //       children: [
-            //         const Text('Oops! something went wrong'),
-            //         Text(error.toString()),
-            //       ],
-            //     ),
-            //   ),
-            // AsyncValue() => const Center(
-            //     child: Text('Oops! something went wrong'),
-            //   ),
             AsyncError(error: final error, stackTrace: final _) => switch (
                   urls) {
                 AsyncData(value: final urladdr) => ProfileSetting(
@@ -133,7 +121,7 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-// アイコン、ユーザ名、pubkeyを出すウィジェット
+// widget displays icon, user name and pubkey
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key, required this.profile});
 
@@ -148,7 +136,7 @@ class ProfileHeader extends StatelessWidget {
       children: [
         const SizedBox(height: 10),
 
-        // ユーザアイコン
+        // user icon
         Container(
           clipBehavior: Clip.antiAlias,
           width: 150,
@@ -161,14 +149,14 @@ class ProfileHeader extends StatelessWidget {
           ),
         ),
 
-        // アイコンの下の文字
+        // text under icon
         Container(
           margin: const EdgeInsets.all(20),
           decoration: BoxDecoration(color: theme.colorScheme.background),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // ユーザ名
+              // unser name
               Text(
                 profile.name,
                 style: const TextStyle(
@@ -178,7 +166,7 @@ class ProfileHeader extends StatelessWidget {
                 ),
               ),
 
-              // コピー機能付きpubkey
+              // pubkey with copy button
               CopyablePubkey(pubkey: profile.pubHex),
 
               // about
@@ -295,7 +283,6 @@ class ProfileSetting extends ConsumerWidget {
               final trimmedPicture = this.picture.trim();
               Np2pAPI.updateProfile(this.url, this.pubHex, this.secHex, trimmedName,
                   trimmedAbout, trimmedPicture);
-              //addrController.saveAddr(trimmed);
             },
             child: const Text('save'),
           ),
