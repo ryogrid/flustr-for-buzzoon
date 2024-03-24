@@ -14,6 +14,9 @@ part 'event_data_getting_timer_provider.g.dart';
 
 Timer? t = null;
 
+// this provider is used to get event data from the server periodically
+// and update the profile data and timeline posts with Timer.periodic
+// No widget and other providers needs state of this provider but it needs to be kept alive
 @Riverpod(keepAlive: true)
 Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
   final urls = await ref.watch(servAddrSettingNotifierProvider.future);

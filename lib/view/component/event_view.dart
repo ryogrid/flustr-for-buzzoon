@@ -33,16 +33,16 @@ class EventView extends ConsumerWidget {
                   ),
                 ),
               AsyncError(:final error, :final stackTrace) => Container(
-                clipBehavior: Clip.antiAlias,
-                width: 40,
-                height: 40,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
+                  clipBehavior: Clip.antiAlias,
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.network(
+                    PrefKeys.noProfileUserPictureURL,
+                  ),
                 ),
-                child: Image.network(
-                  PrefKeys.noProfileUserPictureURL,
-                ),
-              ),
               _ => const SizedBox(),
             },
             const SizedBox(width: 8),
@@ -54,7 +54,7 @@ class EventView extends ConsumerWidget {
                     switch (author) {
                       AsyncData(value: final authorProf) => authorProf.name,
                       AsyncLoading() => 'loading',
-                      AsyncError(:final error) => 'unknown',//error.toString(),
+                      AsyncError(:final error) => 'unknown', //error.toString(),
                       _ => "unkown",
                     },
                     style: const TextStyle(fontWeight: FontWeight.bold),
@@ -69,6 +69,20 @@ class EventView extends ConsumerWidget {
                         DateTime.fromMillisecondsSinceEpoch(
                             event.createdAt * 1000))),
                     alignment: Alignment.centerRight,
+                  ),
+                  Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.favorite_border,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text("0" + " "),
+                      ],
                   ),
                 ],
               ),
