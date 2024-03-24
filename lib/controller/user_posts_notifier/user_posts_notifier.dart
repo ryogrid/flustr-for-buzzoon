@@ -9,7 +9,7 @@ part 'user_posts_notifier.g.dart';
 class UserPostsNotifier extends _$UserPostsNotifier {
   @override
   Future<List<Event>> build(String pubHex) async {
-    final aggregator = StreamAggregator();
+    final aggregator = StreamWrapper();
     aggregator.eventStream.listen((e) {
       state = switch (state) {
         AsyncData(:final value) => AsyncData([e, ...value]),

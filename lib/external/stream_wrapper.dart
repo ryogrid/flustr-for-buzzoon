@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:nostr/nostr.dart';
 
-class StreamAggregator {
-  StreamAggregator({
+class StreamWrapper {
+  StreamWrapper({
     Duration rotateBy = const Duration(minutes: 1),
   }) {
     _events = StreamController<Event>();
