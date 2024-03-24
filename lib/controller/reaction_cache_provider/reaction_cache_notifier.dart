@@ -21,7 +21,7 @@ class ReactionDataRepository {
       var reactionData = this.reactionDataMap[tgtEvtId]!;
       if (!reactionData.pubHexs.contains(reactionEvent.pubkey)) {
         reactionData.pubHexs.add(reactionEvent.pubkey);
-        this.reactionDataMap[reactionEvent.id] = reactionData;
+        this.reactionDataMap[tgtEvtId] = reactionData;
       }
     }
   }

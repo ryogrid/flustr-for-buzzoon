@@ -23,7 +23,7 @@ class EventView extends ConsumerWidget {
     final pubHex = ref.watch(currentPubHexProvider);
     final secHex = ref.watch(currentSecHexProvider);
     final urls = ref.watch(servAddrSettingNotifierProvider.future);
-    final reaction = ref.watch(reactionProvider(event.id).future);
+    final reaction = ref.watch(reactionProvider(event.id));
 
     return Card(
       child: Padding(
@@ -96,23 +96,19 @@ class EventView extends ConsumerWidget {
                           Icons.favorite_border,
                           color: switch (reaction) {
                             AsyncData(value: final reactionVal) =>
-                              reactionVal.pubKeys.length > 0
+                              reactionVal.pubHexs.length > 0
                                   ? Colors.pinkAccent
                                   : Colors.grey,
-                            AsyncLoading() => Colors.grey,
-                            AsyncError(:final error) => Colors.grey,
-                            _ => Colors.grey,
+                            AsyncValue() => Colors.grey,
                           },
                         ),
                       ),
                       Text(switch (reaction) {
                         AsyncData(value: final reactionVal) =>
-                          reactionVal.pubKeys.length > 0
-                              ? reactionVal.pubKeys.length.toString() + " "
+                          reactionVal.pubHexs.length > 0
+                              ? reactionVal.pubHexs.length.toString() + " "
                               : "  ",
-                        AsyncLoading() => "  ",
-                        AsyncError(:final error) => "  ",
-                        _ => "  ",
+                        AsyncValue() => "  ",
                       }),
                     ],
                   ),

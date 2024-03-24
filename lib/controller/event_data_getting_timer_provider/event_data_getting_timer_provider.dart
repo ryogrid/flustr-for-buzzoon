@@ -79,6 +79,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
           ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
           break;
         case 7: //reaction
+          print('reaction event handle');
           ref
               .read(reactionCacheNotifierProvider.notifier)
               .reactionRepo
