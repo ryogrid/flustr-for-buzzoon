@@ -89,8 +89,15 @@ class EventView extends ConsumerWidget {
                         onPressed: () async {
                           var servAddrSettting = await urls;
                           var url = servAddrSettting.getServAddr!;
-                          Np2pAPI.publishReaction(secHex!, pubHex!, url,
-                              event.id, event.pubkey, "+");
+                          var _ = switch (reaction) {
+                            AsyncData(value: final reactionVal) =>
+                              // if already reacted, don't send reaction
+                              !reactionVal.pubHexs.contains(pubHex!)
+                                  ? Np2pAPI.publishReaction(secHex!, pubHex!,
+                                      url, event.id, event.pubkey, "+")
+                                  : null,
+                            AsyncValue() => null,
+                          };
                         },
                         icon: Icon(
                           Icons.favorite_border,

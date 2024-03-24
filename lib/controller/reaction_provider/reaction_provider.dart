@@ -25,15 +25,10 @@ class ReactionData with _$ReactionData {
 FutureOr<ReactionData> reaction(ReactionRef ref, String eventId) async {
   final cache = ref.read(reactionCacheNotifierProvider);
 
-  print("reaction");
-  print("eventId: " + eventId);
-  print(cache.reactionDataMap);
   if (cache.reactionDataMap[eventId] != null) {
     var retProf = cache.reactionDataMap[eventId]!;
-    print(retProf);
     return retProf;
   }else{
-    print("reaction: not found");
     return ReactionData(eventId: eventId, pubHexs: []);
   }
 
