@@ -14,14 +14,15 @@ class ReactionDataRepository {
   Map<String, ReactionData> reactionDataMap = <String, ReactionData>{};
 
   void notifyReactionEvent(Event reactionEvent){
-    if (this.reactionDataMap[reactionEvent.id] == null) {
-      this.reactionDataMap[reactionEvent.id] = ReactionData(eventId: reactionEvent.id, pubHexs: [reactionEvent.pubkey]);
+    var tgtEvtId = reactionEvent.tags.firstWhere((element) => element[0] == "e")![1];
+    if (this.reactionDataMap[tgtEvtId] == null) {
+      this.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId , pubHexs: [reactionEvent.pubkey]);
     }else{
-      var reactionData = this.reactionDataMap[reactionEvent.id]!;
+      var reactionData = this.reactionDataMap[tgtEvtId]!;
       if (!reactionData.pubHexs.contains(reactionEvent.pubkey)) {
         reactionData.pubHexs.add(reactionEvent.pubkey);
+        this.reactionDataMap[reactionEvent.id] = reactionData;
       }
-      this.reactionDataMap[reactionEvent.id] = reactionData;
     }
   }
 }
