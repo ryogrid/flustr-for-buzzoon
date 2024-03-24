@@ -52,7 +52,7 @@ FutureOr<ProfileData> profile(ProfileRef ref, String pubHex) async {
 }
 
 ProfileData? fetchProfile(ProfileDataRepository prepo, String pubHex) {
-  // TODO: call REST API (fetchProfile at profile_provider.dart)
+  // TODO: call REST API (fetchProfile at reaction_provider.dart)
   return null;
 }
 

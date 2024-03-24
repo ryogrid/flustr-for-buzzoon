@@ -7,7 +7,7 @@ part of 'profile_cache_notifier.dart';
 // **************************************************************************
 
 String _$profileCacheNotifierHash() =>
-    r'cf04cb5315a5d03f1269b938bb551cd1e3995564';
+    r'3b1e631f75542928427e5fbc7e82578498a80434';
 
 /// See also [ProfileCacheNotifier].
 @ProviderFor(ProfileCacheNotifier)
