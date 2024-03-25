@@ -92,6 +92,8 @@ class EventView extends ConsumerWidget {
                           var _ = switch (reaction) {
                             AsyncData(value: final reactionVal) =>
                               // if already reacted, don't send reaction
+                            // Np2pAPI.publishReaction(secHex!, pubHex!,
+                            //     url, event.id, event.pubkey, "+"),
                               !reactionVal.pubHexs.contains(pubHex!)
                                   ? Np2pAPI.publishReaction(secHex!, pubHex!,
                                       url, event.id, event.pubkey, "+")

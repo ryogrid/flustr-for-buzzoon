@@ -13,18 +13,18 @@ class ReactionDataRepository {
 
   Map<String, ReactionData> reactionDataMap = <String, ReactionData>{};
 
-  void notifyReactionEvent(Event reactionEvent){
-    var tgtEvtId = reactionEvent.tags.firstWhere((element) => element[0] == "e")![1];
-    if (this.reactionDataMap[tgtEvtId] == null) {
-      this.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId , pubHexs: [reactionEvent.pubkey]);
-    }else{
-      var reactionData = this.reactionDataMap[tgtEvtId]!;
-      if (!reactionData.pubHexs.contains(reactionEvent.pubkey)) {
-        reactionData.pubHexs.add(reactionEvent.pubkey);
-        this.reactionDataMap[tgtEvtId] = reactionData;
-      }
-    }
-  }
+  // void notifyReactionEvent(Event reactionEvent){
+  //   var tgtEvtId = reactionEvent.tags.firstWhere((element) => element[0] == "e")![1];
+  //   if (this.reactionDataMap[tgtEvtId] == null) {
+  //     this.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId , pubHexs: [reactionEvent.pubkey]);
+  //   }else{
+  //     var reactionData = this.reactionDataMap[tgtEvtId]!;
+  //     //if (!reactionData.pubHexs.contains(reactionEvent.pubkey)) {
+  //     this.reactionDataMap[tgtEvtId]!.pubHexs.add(reactionEvent.pubkey);
+  //     this.reactionDataMap[tgtEvtId] = reactionData;
+  //     //}
+  //   }
+  // }
 }
 
 @riverpod
@@ -35,4 +35,6 @@ class ReactionCacheNotifier extends _$ReactionCacheNotifier {
   ReactionDataRepository build() {
     return this.reactionRepo;
   }
+
+
 }

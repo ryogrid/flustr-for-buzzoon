@@ -24,6 +24,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
   final urls = await ref.watch(servAddrSettingNotifierProvider.future);
 
   final profiles = ref.read(profileCacheNotifierProvider);
+  final reactions = ref.read(reactionCacheNotifierProvider);
 
   if (t != null) {
     t!.cancel();
@@ -79,10 +80,19 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
           ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
           break;
         case 7: //reaction
-          ref
-              .read(reactionCacheNotifierProvider.notifier)
-              .reactionRepo
-              .notifyReactionEvent(e);
+          // reactions.notifyReactionEvent(e);
+          var tgtEvtId = e.tags.firstWhere((element) => element[0] == "e")![1];
+          if (reactions.reactionDataMap[tgtEvtId] == null) {
+            reactions.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId , pubHexs: [e.pubkey]);
+          }else{
+            var reactionData = reactions.reactionDataMap[tgtEvtId]!;
+            if (!reactionData.pubHexs.contains(e.pubkey)) {
+              // create new ReactionData for update immutable state
+              var newPubHexList = reactionData.pubHexs.toSet().toList();
+              newPubHexList.add(e.pubkey);
+              reactions.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId, pubHexs: newPubHexList);
+            }
+          }
           isExistReaction = true;
           break;
         default:
