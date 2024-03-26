@@ -92,8 +92,8 @@ class EventView extends ConsumerWidget {
                           var _ = switch (reaction) {
                             AsyncData(value: final reactionVal) =>
                               // if already reacted, don't send reaction
-                            // Np2pAPI.publishReaction(secHex!, pubHex!,
-                            //     url, event.id, event.pubkey, "+"),
+                              // Np2pAPI.publishReaction(secHex!, pubHex!,
+                              //     url, event.id, event.pubkey, "+"),
                               !reactionVal.pubHexs.contains(pubHex!)
                                   ? Np2pAPI.publishReaction(secHex!, pubHex!,
                                       url, event.id, event.pubkey, "+")
@@ -120,6 +120,24 @@ class EventView extends ConsumerWidget {
                         AsyncValue() => "  ",
                       }),
                     ],
+                  ),
+                  Column(
+                    children: switch (reaction) {
+                      AsyncData(value: final reactionVal) => reactionVal.pubHexs
+                          .map((e) => Align(
+                                child: Text(
+                                    switch (ref.watch(profileProvider(e))) {
+                                      AsyncData(value: final authorProf) =>
+                                        authorProf.name + " ",
+                                      _ => e.substring(0, 9) + "..."
+                                    },
+                                    style: const TextStyle(
+                                        color: Colors.pinkAccent)),
+                                alignment: Alignment.centerRight,
+                              ))
+                          .toList(),
+                      _ => [],
+                    },
                   ),
                 ],
               ),
