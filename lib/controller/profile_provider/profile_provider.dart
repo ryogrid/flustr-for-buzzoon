@@ -53,7 +53,12 @@ FutureOr<ProfileData?> profile(ProfileRef ref, String pubHex) async {
   }
 
   final url = await ref.watch(servAddrSettingNotifierProvider.future);
-  return await fetchProfile(url.getServAddr!, pubHex);
+  var retVal =  await fetchProfile(url.getServAddr!, pubHex);
+  if (retVal != null) {
+    ref.read(profileCacheNotifierProvider.notifier).profileRepo.profiles.add(retVal);
+    ref.read(profileCacheNotifierProvider.notifier).profileRepo.profileMap[retVal.pubHex] = retVal;
+  }
+  return retVal;
 }
 
 Future<ProfileData?> fetchProfile(String url, String pubHex) async {
