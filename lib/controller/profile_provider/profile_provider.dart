@@ -7,6 +7,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../external/np2p_api.dart';
+import '../current_sechex_provider/current_sechex_provider.dart';
+import '../servaddr_provider/servaddr_provider.dart';
+
 part 'profile_provider.freezed.dart';
 part 'profile_provider.g.dart';
 
@@ -41,18 +45,18 @@ class ProfileData with _$ProfileData {
 }
 
 @Riverpod(keepAlive: true)
-FutureOr<ProfileData> profile(ProfileRef ref, String pubHex) async {
+FutureOr<ProfileData?> profile(ProfileRef ref, String pubHex) async {
   final cache = ref.read(profileCacheNotifierProvider);
   if (cache.profiles.any((element) => element.pubHex == pubHex)) {
     var ret = cache.profiles.lastWhere((e) => e.pubHex == pubHex);
     return ret;
   }
 
-  return fetchProfile(cache, pubHex)!;
+  final url = await ref.watch(servAddrSettingNotifierProvider.future);
+  return await fetchProfile(url.getServAddr!, pubHex);
 }
 
-ProfileData? fetchProfile(ProfileDataRepository prepo, String pubHex) {
-  // TODO: call REST API (fetchProfile at reaction_provider.dart)
-  return null;
+Future<ProfileData?> fetchProfile(String url, String pubHex) async {
+  return await Np2pAPI.fetchProfile(url, pubHex);
 }
 

@@ -40,7 +40,7 @@ class EventView extends ConsumerWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Image.network(
-                    authorProf.picture,
+                    authorProf == null ? PrefKeys.noProfileUserPictureURL : authorProf.picture,
                   ),
                 ),
               AsyncError(:final error, :final stackTrace) => Container(
@@ -63,7 +63,7 @@ class EventView extends ConsumerWidget {
                 children: [
                   Text(
                     switch (author) {
-                      AsyncData(value: final authorProf) => authorProf.name,
+                      AsyncData(value: final authorProf) => authorProf == null ? "unkown" : authorProf.name,
                       AsyncLoading() => 'loading',
                       AsyncError(:final error) => 'unknown', //error.toString(),
                       _ => "unkown",
@@ -92,8 +92,6 @@ class EventView extends ConsumerWidget {
                           var _ = switch (reaction) {
                             AsyncData(value: final reactionVal) =>
                               // if already reacted, don't send reaction
-                              // Np2pAPI.publishReaction(secHex!, pubHex!,
-                              //     url, event.id, event.pubkey, "+"),
                               !reactionVal.pubHexs.contains(pubHex!)
                                   ? Np2pAPI.publishReaction(secHex!, pubHex!,
                                       url, event.id, event.pubkey, "+")
@@ -128,7 +126,7 @@ class EventView extends ConsumerWidget {
                                 child: Text(
                                     switch (ref.watch(profileProvider(e))) {
                                       AsyncData(value: final authorProf) =>
-                                        authorProf.name + " ",
+                                        authorProf == null ? e.substring(0, 9) + "..." : authorProf.name + " ",
                                       _ => e.substring(0, 9) + "..."
                                     },
                                     style: const TextStyle(

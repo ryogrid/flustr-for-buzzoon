@@ -37,15 +37,15 @@ class ProfileScreen extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: switch (profile) {
-            AsyncData(value: final profile) => isProfileEditable // when "edit profile" button is pressed
+            AsyncData(value: final profile) => isProfileEditable || profile == null // when "edit profile" button is pressed
                 ? switch (urls) {
                     AsyncData(value: final urladdr) => ProfileSetting(
                         url: urladdr.getServAddr!,
                         pubHex: pubHex,
                         secHex: secHex!,
-                        name: profile.name,
-                        about: profile.about,
-                        picture: profile.picture),
+                        name: profile == null ? "" : profile.name,
+                        about: profile == null ? "" : profile.about,
+                        picture: profile == null ? "" : profile.picture),
                     AsyncValue() => Text('Oops! something went wrong'),
                   }
                 : ListView(

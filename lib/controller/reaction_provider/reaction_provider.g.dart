@@ -6,7 +6,7 @@ part of 'reaction_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$reactionHash() => r'528d69b1602e829d374c61e234a249a41bfef5fa';
+String _$reactionHash() => r'95dc9ba294b49d60302a9033693cfa5b0db2a091';
 
 /// Copied from Dart SDK
 class _SystemHash {

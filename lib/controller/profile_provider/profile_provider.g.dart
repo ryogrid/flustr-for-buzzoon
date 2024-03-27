@@ -26,7 +26,7 @@ Map<String, dynamic> _$$ProfileDataImplToJson(_$ProfileDataImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$profileHash() => r'4a452f71ef61b1afb970f9aa59018ed673154c08';
+String _$profileHash() => r'8f3b04deef4c875b026d6e912aef5da8d4fd2aa5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -54,7 +54,7 @@ class _SystemHash {
 const profileProvider = ProfileFamily();
 
 /// See also [profile].
-class ProfileFamily extends Family<AsyncValue<ProfileData>> {
+class ProfileFamily extends Family<AsyncValue<ProfileData?>> {
   /// See also [profile].
   const ProfileFamily();
 
@@ -92,7 +92,7 @@ class ProfileFamily extends Family<AsyncValue<ProfileData>> {
 }
 
 /// See also [profile].
-class ProfileProvider extends FutureProvider<ProfileData> {
+class ProfileProvider extends FutureProvider<ProfileData?> {
   /// See also [profile].
   ProfileProvider(
     String pubHex,
@@ -126,7 +126,7 @@ class ProfileProvider extends FutureProvider<ProfileData> {
 
   @override
   Override overrideWith(
-    FutureOr<ProfileData> Function(ProfileRef provider) create,
+    FutureOr<ProfileData?> Function(ProfileRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -143,7 +143,7 @@ class ProfileProvider extends FutureProvider<ProfileData> {
   }
 
   @override
-  FutureProviderElement<ProfileData> createElement() {
+  FutureProviderElement<ProfileData?> createElement() {
     return _ProfileProviderElement(this);
   }
 
@@ -161,12 +161,12 @@ class ProfileProvider extends FutureProvider<ProfileData> {
   }
 }
 
-mixin ProfileRef on FutureProviderRef<ProfileData> {
+mixin ProfileRef on FutureProviderRef<ProfileData?> {
   /// The parameter `pubHex` of this provider.
   String get pubHex;
 }
 
-class _ProfileProviderElement extends FutureProviderElement<ProfileData>
+class _ProfileProviderElement extends FutureProviderElement<ProfileData?>
     with ProfileRef {
   _ProfileProviderElement(super.provider);
 

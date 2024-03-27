@@ -71,10 +71,15 @@ class Np2pAPI {
     print(resp);
   }
 
-  static Future<ProfileData> getProfile(String pubHex) async {
-    //BigInt shortPkey
-    // TODO: need to implement Np2pAPI::getProfile
-    return ProfileData(name: 'name', picture: 'picture', about: 'about', pubHex: 'pubHex');
+  static Future<ProfileData?> fetchProfile(String url, String pubHex) async {
+    var filter = Filter(kinds: [0], authors: [pubHex]);
+    var resp = await Np2pAPI._request(url + '/req', filter.toJson());
+    var profList = (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
+    if (profList.length > 0) {
+      return ProfileData.fromEvent(profList[0]);
+    }else{
+      return null;
+    }
   }
 
   // TEMPORAL API
