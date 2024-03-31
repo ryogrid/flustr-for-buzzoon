@@ -9,7 +9,7 @@ class FollowListDataRepository {
   FollowListDataRepository._internal();
 
   // key: pubHex, value: following User's pubHexes of a user identified by key pubHex
-  Map<String, List<String>> followListMap = <String, List<String>>{};
+  Map<String, List<List<String>>> followListMap = <String, List<List<String>>>{};
 }
 
 @riverpod
@@ -21,7 +21,7 @@ class FollowListCacheNotifier extends _$FollowListCacheNotifier {
     return this.followListRepo;
   }
 
-  setOrUpdateFollowList(String pubHex, List<String> followingPubHexes){
+  setOrUpdateFollowList(String pubHex, List<List<String>> followingPubHexes){
     this.followListRepo.followListMap[pubHex] = followingPubHexes;
   }
 }

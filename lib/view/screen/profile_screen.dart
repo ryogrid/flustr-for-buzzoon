@@ -64,7 +64,7 @@ class ProfileScreen extends ConsumerWidget {
                                     .read(_profileEditableProvider.notifier)
                                     .state = true;
                               },
-                              child: const Text('edit profile'),
+                              child: const Text('Edit profile'),
                             )
                           : const SizedBox(),
                       // // 投稿を出すところ

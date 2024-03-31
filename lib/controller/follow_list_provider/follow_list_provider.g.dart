@@ -6,7 +6,7 @@ part of 'follow_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$followListHash() => r'53dd63aaa766a7b6c90be330dd92dc77c252ecbe';
+String _$followListHash() => r'2c402e5a31379037d426799b4c44877477f30a2c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -34,7 +34,7 @@ class _SystemHash {
 const followListProvider = FollowListFamily();
 
 /// See also [followList].
-class FollowListFamily extends Family<List<String>> {
+class FollowListFamily extends Family<List<List<String>>> {
   /// See also [followList].
   const FollowListFamily();
 
@@ -72,7 +72,7 @@ class FollowListFamily extends Family<List<String>> {
 }
 
 /// See also [followList].
-class FollowListProvider extends Provider<List<String>> {
+class FollowListProvider extends Provider<List<List<String>>> {
   /// See also [followList].
   FollowListProvider(
     String pubHex,
@@ -107,7 +107,7 @@ class FollowListProvider extends Provider<List<String>> {
 
   @override
   Override overrideWith(
-    List<String> Function(FollowListRef provider) create,
+    List<List<String>> Function(FollowListRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -124,7 +124,7 @@ class FollowListProvider extends Provider<List<String>> {
   }
 
   @override
-  ProviderElement<List<String>> createElement() {
+  ProviderElement<List<List<String>>> createElement() {
     return _FollowListProviderElement(this);
   }
 
@@ -142,12 +142,12 @@ class FollowListProvider extends Provider<List<String>> {
   }
 }
 
-mixin FollowListRef on ProviderRef<List<String>> {
+mixin FollowListRef on ProviderRef<List<List<String>>> {
   /// The parameter `pubHex` of this provider.
   String get pubHex;
 }
 
-class _FollowListProviderElement extends ProviderElement<List<String>>
+class _FollowListProviderElement extends ProviderElement<List<List<String>>>
     with FollowListRef {
   _FollowListProviderElement(super.provider);
 

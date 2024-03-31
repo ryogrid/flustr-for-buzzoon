@@ -31,6 +31,22 @@ class Np2pAPI {
     print(resp);
   }
 
+  static publishFollowList(String secHex, String pubHex, String url, List<List<String>> followIDs) async {
+    final now = DateTime.now();
+    final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
+    var partialEvent = Event.partial();
+    partialEvent.kind = 3;
+    partialEvent.createdAt = nowUnix;
+    partialEvent.pubkey = pubHex;
+    partialEvent.content = "";
+    partialEvent.tags = followIDs;
+    partialEvent.id = partialEvent.getEventId();
+    partialEvent.sig = partialEvent.getSignature(secHex);
+
+    var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
+    print(resp);
+  }
+
   static publishProfile(String url, String pubHex, String secHex, String name, String about, String picture) async {
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();

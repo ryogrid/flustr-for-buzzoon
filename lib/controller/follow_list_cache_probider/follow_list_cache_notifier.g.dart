@@ -7,7 +7,7 @@ part of 'follow_list_cache_notifier.dart';
 // **************************************************************************
 
 String _$followListCacheNotifierHash() =>
-    r'76ec18a97352e49a46501c3e24880e4f9e47c416';
+    r'5bdd48c6d0a190b26218f4f057fe3e925d6d63a7';
 
 /// See also [FollowListCacheNotifier].
 @ProviderFor(FollowListCacheNotifier)

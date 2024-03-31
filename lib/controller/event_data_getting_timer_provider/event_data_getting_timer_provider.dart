@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:nostrp2p/const.dart';
+import 'package:nostrp2p/controller/follow_list_cache_probider/follow_list_cache_notifier.dart';
 import 'package:nostrp2p/controller/reaction_cache_provider/reaction_cache_notifier.dart';
 import 'package:nostrp2p/controller/reaction_provider/reaction_provider.dart';
 import 'package:nostrp2p/controller/servaddr_provider/servaddr_provider.dart';
@@ -9,6 +10,7 @@ import 'package:nostrp2p/controller/timeline_posts_notifier/timeline_posts_notif
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../external/np2p_api.dart';
+import '../follow_list_provider/follow_list_provider.dart';
 import '../profile_cache_provider/profile_cache_notifier.dart';
 import '../profile_provider/profile_provider.dart';
 
@@ -34,6 +36,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
   t = Timer.periodic(Duration(seconds: PrefKeys.eventDataGettingIntervalSec),
       (timer) async {
     var isExistProfile = false;
+    var isExistFollowList = false;
     var isExistReaction = false;
 
     final now = DateTime.now();
@@ -79,6 +82,9 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
         case 1: // text note
           ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
           break;
+        case 3: // follow
+            ref.read(followListCacheNotifierProvider.notifier).setOrUpdateFollowList(e.pubkey, e.tags);
+            isExistFollowList = true;
         case 7: //reaction
           // reactions.notifyReactionEvent(e);
           ref.read(reactionCacheNotifierProvider.notifier).addReaction(e);
@@ -91,6 +97,9 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
 
     if (isExistProfile) {
       ref.invalidate(profileProvider);
+    }
+    if (isExistFollowList) {
+      ref.invalidate(followListProvider);
     }
     if (isExistReaction) {
       ref.invalidate(reactionProvider);

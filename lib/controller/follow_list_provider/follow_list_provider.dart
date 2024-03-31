@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'follow_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-List<String> followList(FollowListRef ref, String pubHex) {
+List<List<String>> followList(FollowListRef ref, String pubHex) {
     // needed for checking at app launch???
     final pubHex = ref.watch(currentPubHexProvider);
     if (pubHex == null) {
@@ -15,7 +15,7 @@ List<String> followList(FollowListRef ref, String pubHex) {
     final usersPubHex = ref.read(followListCacheNotifierProvider);
 
     if (usersPubHex.followListMap[pubHex] == null) {
-      return <String>[];
+      return [];
     }else{
       return usersPubHex.followListMap[pubHex]!;
     }
