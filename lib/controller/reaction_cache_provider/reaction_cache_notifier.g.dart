@@ -7,7 +7,7 @@ part of 'reaction_cache_notifier.dart';
 // **************************************************************************
 
 String _$reactionCacheNotifierHash() =>
-    r'755a0823213c1eef6603fb7464f08ace2e207a18';
+    r'49c1e773ad08cac09843d15e0eea416f7f4ec0de';
 
 /// See also [ReactionCacheNotifier].
 @ProviderFor(ReactionCacheNotifier)

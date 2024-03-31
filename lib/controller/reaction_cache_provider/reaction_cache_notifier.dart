@@ -12,19 +12,6 @@ class ReactionDataRepository {
   ReactionDataRepository._internal();
 
   Map<String, ReactionData> reactionDataMap = <String, ReactionData>{};
-
-  // void notifyReactionEvent(Event reactionEvent){
-  //   var tgtEvtId = reactionEvent.tags.firstWhere((element) => element[0] == "e")![1];
-  //   if (this.reactionDataMap[tgtEvtId] == null) {
-  //     this.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId , pubHexs: [reactionEvent.pubkey]);
-  //   }else{
-  //     var reactionData = this.reactionDataMap[tgtEvtId]!;
-  //     //if (!reactionData.pubHexs.contains(reactionEvent.pubkey)) {
-  //     this.reactionDataMap[tgtEvtId]!.pubHexs.add(reactionEvent.pubkey);
-  //     this.reactionDataMap[tgtEvtId] = reactionData;
-  //     //}
-  //   }
-  // }
 }
 
 @riverpod
@@ -36,5 +23,19 @@ class ReactionCacheNotifier extends _$ReactionCacheNotifier {
     return this.reactionRepo;
   }
 
+  void addReaction(Event reactionEvent){
+    var tgtEvtId = reactionEvent.tags.firstWhere((element) => element[0] == "e")![1];
 
+    if (this.reactionRepo.reactionDataMap[tgtEvtId] == null) {
+      this.reactionRepo.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId , pubHexs: [reactionEvent.pubkey]);
+    }else{
+      var reactionData = this.reactionRepo.reactionDataMap[tgtEvtId]!;
+      if (!reactionData.pubHexs.contains(reactionEvent.pubkey)) {
+        // create new ReactionData for update immutable state
+        var newPubHexList = reactionData.pubHexs.toSet().toList();
+        newPubHexList.add(reactionEvent.pubkey);
+        this.reactionRepo.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId, pubHexs: newPubHexList);
+      }
+    }
+  }
 }

@@ -81,18 +81,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
           break;
         case 7: //reaction
           // reactions.notifyReactionEvent(e);
-          var tgtEvtId = e.tags.firstWhere((element) => element[0] == "e")![1];
-          if (reactions.reactionDataMap[tgtEvtId] == null) {
-            reactions.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId , pubHexs: [e.pubkey]);
-          }else{
-            var reactionData = reactions.reactionDataMap[tgtEvtId]!;
-            if (!reactionData.pubHexs.contains(e.pubkey)) {
-              // create new ReactionData for update immutable state
-              var newPubHexList = reactionData.pubHexs.toSet().toList();
-              newPubHexList.add(e.pubkey);
-              reactions.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId, pubHexs: newPubHexList);
-            }
-          }
+          ref.read(reactionCacheNotifierProvider.notifier).addReaction(e);
           isExistReaction = true;
           break;
         default:
