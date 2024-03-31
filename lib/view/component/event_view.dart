@@ -11,6 +11,7 @@ import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/current_sechex_provider/current_sechex_provider.dart';
 import '../../controller/reaction_provider/reaction_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
+import '../screen/profile_screen.dart';
 
 class EventView extends ConsumerWidget {
   const EventView({Key? key, required this.event}) : super(key: key);
@@ -39,8 +40,19 @@ class EventView extends ConsumerWidget {
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
-                  child: Image.network(
-                    authorProf == null ? PrefKeys.noProfileUserPictureURL : authorProf.picture,
+                  child: GridTile(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => ProfileScreen(pubHex: event.pubkey),
+                          ),
+                        );
+                      },
+                      child: Image.network(
+                        authorProf == null ? PrefKeys.noProfileUserPictureURL : authorProf.picture,
+                      ),
+                    ),
                   ),
                 ),
               AsyncError(:final error, :final stackTrace) => Container(

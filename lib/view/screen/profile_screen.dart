@@ -2,6 +2,7 @@ import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/current_sechex_provider/current_sechex_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
 import '../component/profile_header.dart';
@@ -24,7 +25,7 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profile = ref.watch(profileProvider(pubHex));
+    final profile = ref.watch(profileProvider(this.pubHex));
     // final rawPosts = ref.watch(UserPostsNotifierProvider(pubHex));
     // final rawPostsController =
     //     ref.watch(UserPostsNotifierProvider(pubHex).notifier);
@@ -32,6 +33,7 @@ class ProfileScreen extends ConsumerWidget {
     final urls = ref.watch(servAddrSettingNotifierProvider);
     final isProfileEditable = ref.watch(_profileEditableProvider);
     final secHex = ref.watch(currentSecHexProvider);
+    final selfPubHex = ref.watch(currentPubHexProvider);
 
     return Scaffold(
       appBar: AppBar(),
@@ -39,11 +41,12 @@ class ProfileScreen extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: switch (profile) {
-            AsyncData(value: final profile) => isProfileEditable || profile == null // when "edit profile" button is pressed
+            AsyncData(value: final profile) => isProfileEditable ||
+                    profile == null // when "edit profile" button is pressed
                 ? switch (urls) {
                     AsyncData(value: final urladdr) => ProfileSetting(
                         url: urladdr.getServAddr!,
-                        pubHex: pubHex,
+                        pubHex: this.pubHex,
                         secHex: secHex!,
                         name: profile == null ? "" : profile.name,
                         about: profile == null ? "" : profile.about,
@@ -54,14 +57,16 @@ class ProfileScreen extends ConsumerWidget {
                     children: [
                       // app bar
                       ProfileHeader(profile: profile),
-                      TextButton(
-                        onPressed: () async {
-                          ref.read(_profileEditableProvider.notifier).state =
-                              true;
-                        },
-                        child: const Text('edit profile'),
-                      ),
-
+                      this.pubHex == selfPubHex!
+                          ? TextButton(
+                              onPressed: () async {
+                                ref
+                                    .read(_profileEditableProvider.notifier)
+                                    .state = true;
+                              },
+                              child: const Text('edit profile'),
+                            )
+                          : const SizedBox(),
                       // // 投稿を出すところ
                       // ...switch (rawPosts) {
                       //   AsyncData(value: final posts) =>
@@ -122,4 +127,3 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 }
-
