@@ -98,6 +98,17 @@ class Np2pAPI {
     }
   }
 
+  static Future<Event?> fetchFolloList(String url, String pubHex) async {
+    var filter = Filter(kinds: [0], authors: [pubHex]);
+    var resp = await Np2pAPI._request(url + '/req', filter.toJson());
+    var profEvtList = (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
+    if (profEvtList.length > 0) {
+      return profEvtList[0];
+    }else{
+      return null;
+    }
+  }
+
   // TEMPORAL API
   static gatherData() async {
     // TODO: need to implement Np2pAPI::gatherData

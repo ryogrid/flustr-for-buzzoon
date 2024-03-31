@@ -64,18 +64,20 @@ class ProfileHeader extends ConsumerWidget {
               // about
               Text(profile.about),
               TextButton(
-                onPressed: followList.where((element) => element[0] == profile.pubHex).length > 0 ?
+                onPressed: followList.where((element) => element[1] == profile.pubHex).length > 0 ?
                     () {
-                      final newList = followList.toList().toList();
+                      final newList = followList.toSet().toList();
                       newList.removeWhere((element) => element[1] == profile.pubHex);
+                      print(newList);
                       final _ = switch (url) {
                         AsyncData(value: final servAddr) => Np2pAPI.publishFollowList(secHex!, pubHex!, servAddr.getServAddr!, newList),
                         _ => null,
                       };
                     } :
                     () {
-                      final newList = followList.toList().toList();
+                      final newList = followList.toSet().toList();
                       newList.add(["p", profile.pubHex, "", ""]);
+                      print(newList);
                       final _ = switch (url) {
                         AsyncData(value: final servAddr) => Np2pAPI.publishFollowList(secHex!, pubHex!, servAddr.getServAddr!, newList),
                         _ => null,

@@ -10,6 +10,7 @@ import 'package:nostrp2p/controller/timeline_posts_notifier/timeline_posts_notif
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../external/np2p_api.dart';
+import '../current_pubhex_provider/current_pubhex_provider.dart';
 import '../follow_list_provider/follow_list_provider.dart';
 import '../profile_cache_provider/profile_cache_notifier.dart';
 import '../profile_provider/profile_provider.dart';
@@ -24,12 +25,20 @@ Timer? t = null;
 @Riverpod(keepAlive: true)
 Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
   final urls = await ref.watch(servAddrSettingNotifierProvider.future);
+  final pubHex = ref.watch(currentPubHexProvider);
 
   final profiles = ref.read(profileCacheNotifierProvider);
-  final reactions = ref.read(reactionCacheNotifierProvider);
 
   if (t != null) {
     t!.cancel();
+  }
+
+  // setup self follow list
+  if (pubHex != null) {
+    final followListEvt = await Np2pAPI.fetchFolloList(urls.getServAddr!, pubHex!);
+    if (followListEvt != null) {
+      ref.read(followListCacheNotifierProvider.notifier).setOrUpdateFollowList(pubHex, followListEvt.tags);
+    }
   }
 
   var lastEvtReceived = -1;
