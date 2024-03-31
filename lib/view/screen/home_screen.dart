@@ -11,6 +11,8 @@ import 'package:nostrp2p/view/screen/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../component/top_bar.dart';
+
 var _textToSend = '';
 
 class HomeScreen extends ConsumerWidget {
@@ -56,6 +58,7 @@ class HomeScreen extends ConsumerWidget {
                                 AsyncData(value: final servAddr) => Np2pAPI.publishPost(secHex!, pubHex!, servAddr.getServAddr!, _textToSend),
                                 _ => null,
                               };
+                              _textToSend = '';
                               Navigator.of(ctx).pop();
                             },
                             child: const Text('send!'),
@@ -73,46 +76,7 @@ class HomeScreen extends ConsumerWidget {
               child: const Icon(Icons.add),
             )
           : null,
-
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        leading: IconButton(
-          // navigate to my profile
-          onPressed: () {
-            if (pubHex != null) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => ProfileScreen(pubHex: pubHex),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('provide your key in settings'),
-                ),
-              );
-            }
-          },
-          icon: Icon(
-            Icons.person,
-            color: Theme.of(context).primaryIconTheme.color,
-          ),
-        ),
-        actions: [
-          IconButton(
-            // navigate to setting page
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const SettingScreen()),
-              );
-            },
-            icon: Icon(
-              Icons.settings,
-              color: Theme.of(context).primaryIconTheme.color,
-            ),
-          ),
-        ],
-      ),
+      appBar: TopBar(),
       body: RefreshIndicator(
         onRefresh: () async => ref.invalidate(eventDataGettingTimerProvider),
         child: ListView(
