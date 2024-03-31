@@ -20,4 +20,8 @@ class FollowListCacheNotifier extends _$FollowListCacheNotifier {
   FollowListDataRepository build() {
     return this.followListRepo;
   }
+
+  setOrUpdateFollowList(String pubHex, List<String> followingPubHexes){
+    this.followListRepo.followListMap[pubHex] = followingPubHexes;
+  }
 }
