@@ -4,6 +4,8 @@ import 'package:nostrp2p/view/screen/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../controller/is_following_only_tl_provider/is_following_only_tl_provider.dart';
+
 class TopBar extends ConsumerWidget implements PreferredSizeWidget {
   const TopBar({Key? key}) : super(key: key);
 
@@ -13,6 +15,7 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pubHex = ref.watch(currentPubHexProvider);
+    final isFollowingOnlyTl = ref.watch(isFollowingOnlyTlProvider);
     // final secHex = ref.watch(currentSecHexProvider);
     // final timelinePosts = ref.watch(timelinePostsNotifierProvider);
     // final isSeckeyAvailable = ref.watch(isSeckeyAvailableProvider);
@@ -44,6 +47,16 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
+        IconButton(
+          // toggle timeline folowing <-> global
+          onPressed: () {
+            ref.read(isFollowingOnlyTlProvider.notifier).state = !isFollowingOnlyTl;
+          },
+          icon: Icon(
+            isFollowingOnlyTl ? Icons.language : Icons.spatial_audio,
+            color: Theme.of(context).primaryIconTheme.color,
+          ),
+        ),
         IconButton(
           // navigate to setting page
           onPressed: () {
