@@ -7,7 +7,7 @@ part of 'event_data_getting_timer_provider.dart';
 // **************************************************************************
 
 String _$eventDataGettingTimerHash() =>
-    r'fe106c487ac8243a2884f767cc80e636ca50a8e4';
+    r'20a716cf9838862124f7acad6adfa6a1d002f1e6';
 
 /// See also [eventDataGettingTimer].
 @ProviderFor(eventDataGettingTimer)

@@ -21,6 +21,7 @@ class FollowListCacheNotifier extends _$FollowListCacheNotifier {
     return this.followListRepo;
   }
 
+  // value is PubHex only list
   setOrUpdateFollowList(String pubHex, List<List<String>> followingPubHexes){
     this.followListRepo.followListMap[pubHex] = followingPubHexes;
   }
