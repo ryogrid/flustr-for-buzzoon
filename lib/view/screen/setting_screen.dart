@@ -5,6 +5,8 @@ import 'package:nostrp2p/view/component/section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../component/top_bar.dart';
+
 // テキストフィールドの内容を保持しておく
 String _textFieldContent = '';
 

@@ -50,7 +50,8 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
         IconButton(
           // toggle timeline folowing <-> global
           onPressed: () {
-            ref.read(isFollowingOnlyTlProvider.notifier).state = !isFollowingOnlyTl;
+            ref.read(isFollowingOnlyTlProvider.notifier).state =
+                !isFollowingOnlyTl;
           },
           icon: Icon(
             isFollowingOnlyTl ? Icons.language : Icons.spatial_audio,

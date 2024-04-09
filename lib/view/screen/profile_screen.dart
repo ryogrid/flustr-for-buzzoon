@@ -7,6 +7,7 @@ import '../../controller/current_sechex_provider/current_sechex_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
 import '../component/profile_header.dart';
 import '../component/profile_setting.dart';
+import '../component/top_bar.dart';
 
 // final _loadButtonLoadingProvider = StateProvider((ref) => false);
 
