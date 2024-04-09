@@ -13,8 +13,8 @@ import '../../controller/reaction_provider/reaction_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
 import '../screen/profile_screen.dart';
 
-class EventView extends ConsumerWidget {
-  const EventView({Key? key, required this.event}) : super(key: key);
+class ThreadView extends ConsumerWidget {
+  const ThreadView({Key? key, required this.event}) : super(key: key);
 
   final Event event;
 
@@ -26,7 +26,10 @@ class EventView extends ConsumerWidget {
     final urls = ref.watch(servAddrSettingNotifierProvider.future);
     final reaction = ref.watch(reactionProvider(event.id));
 
-    // TODO: need to implement reply button on each card (EventView::build)
+    // TODO: need to implemnt getting refered event view mechanism (ThreadView::build)
+    //       for this, need to implement event getting API with specify event ID and pubHex
+    // TODO: need to implement (ThreadView::build)
+    //       making list of EventView with special option?
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8),

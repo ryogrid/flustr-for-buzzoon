@@ -13,8 +13,8 @@ import '../../controller/reaction_provider/reaction_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
 import '../screen/profile_screen.dart';
 
-class EventView extends ConsumerWidget {
-  const EventView({Key? key, required this.event}) : super(key: key);
+class NotificationView extends ConsumerWidget {
+  const NotificationView({Key? key, required this.event}) : super(key: key);
 
   final Event event;
 
@@ -26,8 +26,7 @@ class EventView extends ConsumerWidget {
     final urls = ref.watch(servAddrSettingNotifierProvider.future);
     final reaction = ref.watch(reactionProvider(event.id));
 
-    // TODO: need to implement reply button on each card (EventView::build)
-    return Card(
+    return Card( // TODO: need to implement (NotificationView::build)
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(
