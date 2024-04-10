@@ -35,22 +35,23 @@ class NotificationScreen extends ConsumerWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async => ref.invalidate(eventDataGettingTimerProvider),
-        child: ListView( // TODO: need to implement (NotificationScreen::build)
-          children: switch (timelinePosts) {
-            AsyncLoading() => [const LinearProgressIndicator()],
-            AsyncError(:final error, :final stackTrace) => [
-                Text(error.toString()),
-                Text(stackTrace.toString()),
-              ],
-            AsyncData(value: final posts) => isFollowingOnlyTl
-                ? posts
-                    .where((e) => followListPubHexes.contains(e.pubkey))
-                    .map((e) => EventView(event: e))
-                    .toList()
-                : posts.map((e) => EventView(event: e)).toList(),
-            _ => [const Text('Oops! something went wrong!')],
-          },
-        ),
+        child: Text("comming soon")
+        // child: ListView( // TODO: need to implement (NotificationScreen::build)
+        //   children: switch (timelinePosts) {
+        //     AsyncLoading() => [const LinearProgressIndicator()],
+        //     AsyncError(:final error, :final stackTrace) => [
+        //         Text(error.toString()),
+        //         Text(stackTrace.toString()),
+        //       ],
+        //     AsyncData(value: final posts) => isFollowingOnlyTl
+        //         ? posts
+        //             .where((e) => followListPubHexes.contains(e.pubkey))
+        //             .map((e) => EventView(event: e))
+        //             .toList()
+        //         : posts.map((e) => EventView(event: e)).toList(),
+        //     _ => [const Text('Oops! something went wrong!')],
+        //   },
+        // ),
       ),
     );
   }

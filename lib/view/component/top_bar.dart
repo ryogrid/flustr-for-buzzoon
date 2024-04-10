@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controller/is_following_only_tl_provider/is_following_only_tl_provider.dart';
+import '../screen/notification_screen.dart';
 
 class TopBar extends ConsumerWidget implements PreferredSizeWidget {
   const TopBar({Key? key}) : super(key: key);
@@ -55,6 +56,18 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
           },
           icon: Icon(
             isFollowingOnlyTl ? Icons.language : Icons.spatial_audio,
+            color: Theme.of(context).primaryIconTheme.color,
+          ),
+        ),
+        IconButton(
+          // navigate to notification page
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const NotificationScreen()),
+            );
+          },
+          icon: Icon(
+            isFollowingOnlyTl ? Icons.language : Icons.notifications,
             color: Theme.of(context).primaryIconTheme.color,
           ),
         ),
