@@ -23,8 +23,10 @@ class NotificationCacheNotifier extends _$NotificationCacheNotifier {
     return this.notificationRepo;
   }
 
-  // TODO: need to implement (NotificationCacheNotifier::addNotification)
   void addNotification(Event notificationEvent){
+    this.notificationRepo.notificationDataList.add(notificationEvent);
+    this.notificationRepo.eventDataMap[notificationEvent.id] = notificationEvent;
+
     // var tgtEvtId = reactionEvent.tags.firstWhere((element) => element[0] == "e")![1];
     //
     // if (this.reactionRepo.reactionDataMap[tgtEvtId] == null) {

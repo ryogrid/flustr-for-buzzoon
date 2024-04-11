@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:nostrp2p/const.dart';
 import 'package:nostrp2p/controller/follow_list_cache_probider/follow_list_cache_notifier.dart';
+import 'package:nostrp2p/controller/notification_cache_notifier/notification_cache_notifier.dart';
 import 'package:nostrp2p/controller/reaction_cache_provider/reaction_cache_notifier.dart';
 import 'package:nostrp2p/controller/reaction_provider/reaction_provider.dart';
 import 'package:nostrp2p/controller/servaddr_provider/servaddr_provider.dart';
@@ -101,8 +102,11 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
           break;
         default:
           print('unexpected event kind');
+          return;
       }
+      ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
     }
+
 
     if (isExistProfile) {
       ref.invalidate(profileProvider);
