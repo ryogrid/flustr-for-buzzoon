@@ -76,7 +76,7 @@ class EventView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    extractAsyncValue(author, (authorProf) => authorProf!.name, "unkown","unkown", "unkown", "unkown"),
+                    extractAsyncValue(author, (authorProf) => authorProf!.name, "unkown"),
                     // switch (author) {
                     //   AsyncData(value: final authorProf) => authorProf == null ? "unkown" : authorProf.name,
                     //   AsyncLoading() => 'loading',
