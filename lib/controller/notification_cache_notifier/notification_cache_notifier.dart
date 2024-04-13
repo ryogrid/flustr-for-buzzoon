@@ -24,7 +24,10 @@ class NotificationCacheNotifier extends _$NotificationCacheNotifier {
   }
 
   void addNotification(Event notificationEvent){
-    this.notificationRepo.notificationDataList.add(notificationEvent);
+    // TODO: add other notification needed events also
+    if (notificationEvent.kind == 7) {
+      this.notificationRepo.notificationDataList.add(notificationEvent);
+    }
     this.notificationRepo.eventDataMap[notificationEvent.id] = notificationEvent;
 
     // var tgtEvtId = reactionEvent.tags.firstWhere((element) => element[0] == "e")![1];
