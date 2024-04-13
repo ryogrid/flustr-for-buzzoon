@@ -101,10 +101,7 @@ class ReactionView extends ConsumerWidget {
                         icon: Icon(
                           Icons.favorite_border,
                           color: switch (reaction) {
-                            AsyncData(value: final reactionVal) =>
-                              reactionVal.pubHexs.length > 0
-                                  ? Colors.pinkAccent
-                                  : Colors.grey,
+                            AsyncData(value: final reactionVal) => Colors.pinkAccent,
                             AsyncValue() => Colors.grey,
                           },
                         ),
