@@ -11,6 +11,7 @@ import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/current_sechex_provider/current_sechex_provider.dart';
 import '../../controller/reaction_provider/reaction_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
+import '../../controller/notification_cache_notifier/notification_cache_notifier.dart';
 import '../screen/profile_screen.dart';
 
 class ReactionView extends ConsumerWidget {
@@ -25,6 +26,7 @@ class ReactionView extends ConsumerWidget {
     final secHex = ref.watch(currentSecHexProvider);
     final urls = ref.watch(servAddrSettingNotifierProvider.future);
     final reaction = ref.watch(reactionProvider(event.id));
+    final notifications = ref.watch(notificationCacheNotifierProvider);
 
     return Card( // TODO: need to implement (NotificationView::build)
       child: Padding(
@@ -108,30 +110,12 @@ class ReactionView extends ConsumerWidget {
                       ),
                       Text(switch (reaction) {
                         AsyncData(value: final reactionVal) =>
-                          reactionVal.pubHexs.length > 0
-                              ? reactionVal.pubHexs.length.toString() + " "
+                          notifications.eventDataMap[reactionVal.eventId] != null
+                              ? notifications.eventDataMap[reactionVal.eventId]!.content + "  "
                               : "  ",
                         AsyncValue() => "  ",
                       }),
                     ],
-                  ),
-                  Column(
-                    children: switch (reaction) {
-                      AsyncData(value: final reactionVal) => reactionVal.pubHexs
-                          .map((e) => Align(
-                                child: Text(
-                                    switch (ref.watch(profileProvider(e))) {
-                                      AsyncData(value: final authorProf) =>
-                                        authorProf == null ? e.substring(0, 9) + "..." : authorProf.name + " ",
-                                      _ => e.substring(0, 9) + "..."
-                                    },
-                                    style: const TextStyle(
-                                        color: Colors.pinkAccent)),
-                                alignment: Alignment.centerRight,
-                              ))
-                          .toList(),
-                      _ => [],
-                    },
                   ),
                 ],
               ),
