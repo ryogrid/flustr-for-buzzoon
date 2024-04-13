@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
 import 'package:nostr/nostr.dart';
 import 'dart:convert';
@@ -15,7 +16,7 @@ class Np2pAPI {
     return randomStr;
   }
 
-  static publishPost(String secHex, String pubHex, String url, String content) async {
+  static publishPost(String secHex, String pubHex, String url, String content, [List<List<String>>? tags]) async {
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
     var partialEvent = Event.partial();
@@ -23,7 +24,7 @@ class Np2pAPI {
     partialEvent.createdAt = nowUnix;
     partialEvent.pubkey = pubHex;
     partialEvent.content = content;
-    partialEvent.tags = [];
+    partialEvent.tags = tags != null ? tags : [];
     partialEvent.id = partialEvent.getEventId();
     partialEvent.sig = partialEvent.getSignature(secHex);
 
@@ -158,4 +159,9 @@ class Np2pAPI {
       verify: false,
     );
   }
+}
+
+List<List<String>> constructReplyTags(WidgetRef ref, Event destEvt) {
+  // TODO: implement constructReplyTags
+  return [];
 }

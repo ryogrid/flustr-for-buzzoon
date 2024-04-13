@@ -27,7 +27,6 @@ class EventView extends ConsumerWidget {
     final urls = ref.watch(servAddrSettingNotifierProvider.future);
     final reaction = ref.watch(reactionProvider(event.id));
 
-    // TODO: need to implement reply button on each card (EventView::build)
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -77,12 +76,6 @@ class EventView extends ConsumerWidget {
                 children: [
                   Text(
                     extractAsyncValue(author, (authorProf) => authorProf!.name, "unkown"),
-                    // switch (author) {
-                    //   AsyncData(value: final authorProf) => authorProf == null ? "unkown" : authorProf.name,
-                    //   AsyncLoading() => 'loading',
-                    //   AsyncError(:final error) => 'unknown', //error.toString(),
-                    //   _ => "unkown",
-                    // },
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(event.content),
@@ -100,6 +93,32 @@ class EventView extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      IconButton( // reply button
+                        onPressed: () async {
+                          // TODO: need to implement reply post popup
+                          showPostDialog(ref, context, (ref, ctx, sendText)
+                          {
+                            final secHex = ref.watch(currentSecHexProvider);
+                            final pubHex = ref.watch(currentPubHexProvider);
+                            final servAddr = ref.watch(
+                                servAddrSettingNotifierProvider);
+
+                            final _ = switch (servAddr) {
+                              AsyncData(value: final servAddr) =>
+                                  Np2pAPI.publishPost(
+                                      secHex!, pubHex!, servAddr.getServAddr!,
+                                      sendText,
+                                      constructReplyTags(ref, this.event)),
+                              _ => null,
+                            };
+                            Navigator.of(ctx).pop();
+                          });
+                        },
+                        icon: Icon(
+                          Icons.reply,
+                          color: Colors.grey,
+                        ),
+                      ),
                       IconButton(
                         onPressed: () async {
                           var servAddrSettting = await urls;
@@ -161,3 +180,5 @@ class EventView extends ConsumerWidget {
     );
   }
 }
+
+
