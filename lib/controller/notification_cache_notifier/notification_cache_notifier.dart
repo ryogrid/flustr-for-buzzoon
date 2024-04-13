@@ -23,12 +23,8 @@ class NotificationCacheNotifier extends _$NotificationCacheNotifier {
     return this.notificationRepo;
   }
 
-  void addNotification(Event notificationEvent){
-    // TODO: add other notification needed events also
-    if (notificationEvent.kind == 7 && this.notificationRepo.eventDataMap[notificationEvent.id] == null) {
-      this.notificationRepo.notificationDataList.add(notificationEvent);
-    }
-    this.notificationRepo.eventDataMap[notificationEvent.id] = notificationEvent;
+  void addEvent(Event evt){
+    this.notificationRepo.eventDataMap[evt.id] = evt;
 
     // var tgtEvtId = reactionEvent.tags.firstWhere((element) => element[0] == "e")![1];
     //
@@ -43,5 +39,11 @@ class NotificationCacheNotifier extends _$NotificationCacheNotifier {
     //     this.reactionRepo.reactionDataMap[tgtEvtId] = ReactionData(eventId: tgtEvtId, pubHexs: newPubHexList);
     //   }
     // }
+  }
+
+  void addNotification(Event notificationEvent){
+    if (this.notificationRepo.eventDataMap[notificationEvent.id] == null) {
+      this.notificationRepo.notificationDataList.add(notificationEvent);
+    }
   }
 }

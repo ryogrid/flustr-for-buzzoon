@@ -98,13 +98,15 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
         case 7: //reaction
           // reactions.notifyReactionEvent(e);
           ref.read(reactionCacheNotifierProvider.notifier).addReaction(e);
+          ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
           isExistReaction = true;
           break;
         default:
           print('unexpected event kind');
           return;
       }
-      ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
+      // this provider stores all events on Map...
+      ref.read(notificationCacheNotifierProvider.notifier).addEvent(e);
     }
 
 

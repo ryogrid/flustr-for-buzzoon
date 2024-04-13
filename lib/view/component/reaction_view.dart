@@ -10,6 +10,7 @@ import '../../controller/current_sechex_provider/current_sechex_provider.dart';
 import '../../controller/reaction_provider/reaction_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
 import '../../controller/notification_cache_notifier/notification_cache_notifier.dart';
+import '../../external/np2p_util.dart';
 import '../screen/profile_screen.dart';
 
 class ReactionView extends ConsumerWidget {
@@ -20,13 +21,9 @@ class ReactionView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final author = ref.watch(profileProvider(event.pubkey));
-    final pubHex = ref.watch(currentPubHexProvider);
-    final secHex = ref.watch(currentSecHexProvider);
-    final urls = ref.watch(servAddrSettingNotifierProvider.future);
-    //final reaction = ref.watch(reactionProvider(event.id));
     final notifications = ref.watch(notificationCacheNotifierProvider);
 
-    return Card( // TODO: need to implement (NotificationView::build)
+    return Card(
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(
@@ -74,21 +71,9 @@ class ReactionView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    switch (author) {
-                      AsyncData(value: final authorProf) => authorProf == null ? "unkown" : authorProf.name,
-                      AsyncLoading() => 'loading',
-                      AsyncError(:final error) => 'unknown', //error.toString(),
-                      _ => "unkown",
-                    },
+                    extractAsyncValue(author, (ProfileData? val) => val!.name, "unknown", "loading", "unknown", "unknown"),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  // Text(switch (reaction) {
-                  //   AsyncData(value: final reactionVal) =>
-                  //   notifications.eventDataMap[reactionVal.eventId] != null
-                  //       ? notifications.eventDataMap[reactionVal.eventId]!.content + "  "
-                  //       : "  ",
-                  //   AsyncValue() => "  ",
-                  // }),
                   Text(notifications.eventDataMap[event.tags[0][1]] != null
                         ? notifications.eventDataMap[event.tags[0][1]]!.content
                         : "",
