@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostr/nostr.dart';
 import 'package:intl/intl.dart';
-import 'package:nostrp2p/controller/reaction_cache_provider/reaction_cache_notifier.dart';
-import 'package:nostrp2p/external/np2p_api.dart';
 
 import '../../const.dart';
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
