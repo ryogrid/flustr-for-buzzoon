@@ -99,14 +99,12 @@ class ReactionView extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      IconButton(
-                        icon: Icon(
+                      Icon(
                           Icons.favorite_border,
                           color: switch (reaction) {
                             AsyncData(value: final reactionVal) => Colors.pinkAccent,
                             AsyncValue() => Colors.grey,
                           },
-                        ),
                       ),
                       Text(switch (reaction) {
                         AsyncData(value: final reactionVal) =>
