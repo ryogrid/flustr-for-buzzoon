@@ -23,7 +23,7 @@ class ReactionView extends ConsumerWidget {
     final pubHex = ref.watch(currentPubHexProvider);
     final secHex = ref.watch(currentSecHexProvider);
     final urls = ref.watch(servAddrSettingNotifierProvider.future);
-    final reaction = ref.watch(reactionProvider(event.id));
+    //final reaction = ref.watch(reactionProvider(event.id));
     final notifications = ref.watch(notificationCacheNotifierProvider);
 
     return Card( // TODO: need to implement (NotificationView::build)
@@ -82,7 +82,17 @@ class ReactionView extends ConsumerWidget {
                     },
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(event.content),
+                  // Text(switch (reaction) {
+                  //   AsyncData(value: final reactionVal) =>
+                  //   notifications.eventDataMap[reactionVal.eventId] != null
+                  //       ? notifications.eventDataMap[reactionVal.eventId]!.content + "  "
+                  //       : "  ",
+                  //   AsyncValue() => "  ",
+                  // }),
+                  Text(notifications.eventDataMap[event.tags[0][1]] != null
+                        ? notifications.eventDataMap[event.tags[0][1]]!.content
+                        : "",
+                  ),
                   Align(
                     child: Text(event.pubkey.substring(0, 9) + "..."),
                     alignment: Alignment.centerRight,
@@ -99,18 +109,8 @@ class ReactionView extends ConsumerWidget {
                     children: [
                       Icon(
                           Icons.favorite_border,
-                          color: switch (reaction) {
-                            AsyncData(value: final reactionVal) => Colors.pinkAccent,
-                            AsyncValue() => Colors.grey,
-                          },
+                          color: Colors.pinkAccent,
                       ),
-                      Text(switch (reaction) {
-                        AsyncData(value: final reactionVal) =>
-                          notifications.eventDataMap[reactionVal.eventId] != null
-                              ? notifications.eventDataMap[reactionVal.eventId]!.content + "  "
-                              : "  ",
-                        AsyncValue() => "  ",
-                      }),
                     ],
                   ),
                 ],

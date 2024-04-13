@@ -10,6 +10,7 @@ import 'package:nostrp2p/view/component/reaction_view.dart';
 import '../../const.dart';
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/current_sechex_provider/current_sechex_provider.dart';
+import '../../controller/notification_cache_notifier/notification_cache_notifier.dart';
 import '../../controller/reaction_provider/reaction_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
 import '../screen/profile_screen.dart';
@@ -21,8 +22,11 @@ class NotificationView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final notifications = ref.watch(notificationCacheNotifierProvider);
+    final pubHex = ref.watch(currentPubHexProvider);
 
-    if (this.event.kind == 7) { // reaction
+    if (this.event.kind == 7 && notifications.eventDataMap[this.event.tags[0][1]] != null && notifications.eventDataMap[this.event.tags[0][1]]!.pubkey == pubHex) {
+      // reaction to my post
       return ReactionView(event: this.event);
     }else{
       return Container(); // display nothing

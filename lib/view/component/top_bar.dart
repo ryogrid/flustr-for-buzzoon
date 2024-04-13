@@ -67,7 +67,7 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
             );
           },
           icon: Icon(
-            isFollowingOnlyTl ? Icons.language : Icons.notifications,
+            Icons.notifications,
             color: Theme.of(context).primaryIconTheme.color,
           ),
         ),

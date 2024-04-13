@@ -42,18 +42,25 @@ class NotificationScreen extends ConsumerWidget {
         onRefresh: () async => ref.invalidate(eventDataGettingTimerProvider),
         //child: Text("comming soon")
         child: ListView(
-            children:
-                notifications.map((e) => NotificationView(event: e)).toList()),
-        // child: ListView( // TODO: need to implement (NotificationScreen::build)
-        //   children: switch (notifications) {
-        //     AsyncLoading() => [const LinearProgressIndicator()],
-        //     AsyncError(:final error, :final stackTrace) => [
-        //         Text(error.toString()),
-        //         Text(stackTrace.toString()),
-        //       ],
-        //     AsyncData(value: final posts) => posts.map((e) => NotificationView(event: e)).toList(),
-        //     _ => [const Text('Oops! something went wrong! at NotificationScreen::build')],
-        //   },
+          children: notifications
+              .map((e) => NotificationView(event: e))
+              .toList()
+              .reversed
+              .toList()
+              .toSet() // for dedupulication
+              .toList()
+          ,
+          // child: ListView( // TODO: need to implement (NotificationScreen::build)
+          //   children: switch (notifications) {
+          //     AsyncLoading() => [const LinearProgressIndicator()],
+          //     AsyncError(:final error, :final stackTrace) => [
+          //         Text(error.toString()),
+          //         Text(stackTrace.toString()),
+          //       ],
+          //     AsyncData(value: final posts) => posts.map((e) => NotificationView(event: e)).toList(),
+          //     _ => [const Text('Oops! something went wrong! at NotificationScreen::build')],
+          //   },
+        ),
       ),
     );
   }

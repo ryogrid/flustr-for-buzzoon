@@ -25,7 +25,7 @@ class NotificationCacheNotifier extends _$NotificationCacheNotifier {
 
   void addNotification(Event notificationEvent){
     // TODO: add other notification needed events also
-    if (notificationEvent.kind == 7) {
+    if (notificationEvent.kind == 7 && this.notificationRepo.eventDataMap[notificationEvent.id] == null) {
       this.notificationRepo.notificationDataList.add(notificationEvent);
     }
     this.notificationRepo.eventDataMap[notificationEvent.id] = notificationEvent;
