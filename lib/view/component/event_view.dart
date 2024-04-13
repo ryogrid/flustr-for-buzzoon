@@ -11,6 +11,7 @@ import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/current_sechex_provider/current_sechex_provider.dart';
 import '../../controller/reaction_provider/reaction_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
+import '../../external/np2p_util.dart';
 import '../screen/profile_screen.dart';
 
 class EventView extends ConsumerWidget {
@@ -75,12 +76,13 @@ class EventView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    switch (author) {
-                      AsyncData(value: final authorProf) => authorProf == null ? "unkown" : authorProf.name,
-                      AsyncLoading() => 'loading',
-                      AsyncError(:final error) => 'unknown', //error.toString(),
-                      _ => "unkown",
-                    },
+                    extractAsyncValue(author, (authorProf) => authorProf!.name, "unkown","unkown", "unkown", "unkown"),
+                    // switch (author) {
+                    //   AsyncData(value: final authorProf) => authorProf == null ? "unkown" : authorProf.name,
+                    //   AsyncLoading() => 'loading',
+                    //   AsyncError(:final error) => 'unknown', //error.toString(),
+                    //   _ => "unkown",
+                    // },
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(event.content),

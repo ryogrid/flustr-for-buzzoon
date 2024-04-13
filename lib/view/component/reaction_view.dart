@@ -71,7 +71,7 @@ class ReactionView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    extractAsyncValue(author, (ProfileData? val) => val!.name, "unknown", "loading", "unknown", "unknown"),
+                    extractAsyncValue(author, (authorProf) => authorProf!.name, "unknown", "loading", "unknown", "unknown"),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(notifications.eventDataMap[event.tags[0][1]] != null
