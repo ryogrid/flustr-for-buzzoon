@@ -116,6 +116,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     }
     if (isExistReaction) {
       ref.invalidate(reactionProvider);
+      ref.invalidate(notificationCacheNotifierProvider);
     }
   });
 
