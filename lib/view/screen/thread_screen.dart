@@ -10,7 +10,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/follow_list_provider/follow_list_provider.dart';
 import '../../controller/is_following_only_tl_provider/is_following_only_tl_provider.dart';
+import '../../controller/notification_cache_notifier/notification_cache_notifier.dart';
+import '../../external/np2p_util.dart';
 import '../component/posting_button.dart';
+import '../component/thread_view.dart';
 import '../component/top_bar.dart';
 
 class ThreadScreen extends ConsumerWidget {
@@ -20,41 +23,37 @@ class ThreadScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timelinePosts = ref.watch(timelinePostsNotifierProvider);
-    final isSeckeyAvailable = ref.watch(isSeckeyAvailableProvider);
-    final evtTimer = ref.watch(eventDataGettingTimerProvider);
-    final pubHex = ref.watch(currentPubHexProvider);
-    final followList = ref.watch(followListProvider(pubHex!));
-    final isFollowingOnlyTl = ref.watch(isFollowingOnlyTlProvider);
-
-    // this print is for generation of eventDataGettingTimerProvider object
-    print('thread screen rebuilded: ' + evtTimer.toString());
-
-    var followListPubHexes = followList.map((e) => e[1]);
-
     return Scaffold(
-      // button for posting
-      floatingActionButton: isSeckeyAvailable ? PostingButton() : null,
-      appBar: TopBar(),
+      appBar: AppBar(
+        title: const Text('Reply thread'),
+      ),
       body: RefreshIndicator(
         onRefresh: () async => ref.invalidate(eventDataGettingTimerProvider),
-        child: ListView( // TODO: need to implement (ThreadScreen::build)
-          children: switch (timelinePosts) {
-            AsyncLoading() => [const LinearProgressIndicator()],
-            AsyncError(:final error, :final stackTrace) => [
-                Text(error.toString()),
-                Text(stackTrace.toString()),
-              ],
-            AsyncData(value: final posts) => isFollowingOnlyTl
-                ? posts
-                    .where((e) => followListPubHexes.contains(e.pubkey))
-                    .map((e) => EventView(event: e))
-                    .toList()
-                : posts.map((e) => EventView(event: e)).toList(),
-            _ => [const Text('Oops! something went wrong!')],
-          },
+        child: ListView(
+          children: constructTheadViewList(ref, this.event),
         ),
       ),
     );
+  }
+
+  List<Widget> constructTheadViewList(WidgetRef ref, Event event) {
+    var retList = <Widget>[];
+
+    final notifications = ref.watch(notificationCacheNotifierProvider);
+
+    // traverse the parent post events
+    var parentEvent = notifications.eventDataMap[extractEAndPtags(event.tags)["e"]!.last[1]];
+    while (parentEvent != null) {
+      retList.add(ThreadView(event: parentEvent));
+      if (extractEAndPtags(parentEvent.tags)["e"]!.length > 0){
+        parentEvent = notifications.eventDataMap[extractEAndPtags(parentEvent.tags)["e"]!.last[1]];
+      }else{
+        parentEvent = null;
+      }
+    }
+
+    retList = retList.reversed.toList();
+    retList.add(ThreadView(event: event));
+    return retList;
   }
 }

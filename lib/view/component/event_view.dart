@@ -9,6 +9,7 @@ import 'package:nostrp2p/external/np2p_api.dart';
 import '../../const.dart';
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/current_sechex_provider/current_sechex_provider.dart';
+import '../../controller/notification_cache_notifier/notification_cache_notifier.dart';
 import '../../controller/reaction_provider/reaction_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
 import '../../external/np2p_util.dart';
@@ -16,9 +17,11 @@ import '../screen/profile_screen.dart';
 import '../screen/thread_screen.dart';
 
 class EventView extends ConsumerWidget {
-  const EventView({Key? key, required this.event}) : super(key: key);
+  const EventView({Key? key, required this.event, required this.parentScreen})
+      : super(key: key);
 
   final Event event;
+  final String parentScreen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,6 +30,7 @@ class EventView extends ConsumerWidget {
     final secHex = ref.watch(currentSecHexProvider);
     final urls = ref.watch(servAddrSettingNotifierProvider.future);
     final reaction = ref.watch(reactionProvider(event.id));
+    final notifications = ref.watch(notificationCacheNotifierProvider);
 
     return Card(
       child: Padding(
@@ -34,26 +38,33 @@ class EventView extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            classifyPostKind(this.event.tags) != POST_KIND.REPLY ?
-            Container() :
-            TextButton(
-              child: Text(
-                  "Reply to " + extractAsyncValue<ProfileData?, String>(
-                      ref.watch(profileProvider(extractEAndPtags(this.event.tags)["p"]!.last[1])),
-                          (prof) => prof!.name, "unknown") + "'s post",
-                  style: const TextStyle(color: Colors.blue),
-              ),
-              onPressed: () => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => ThreadScreen(event: this.event),
+            classifyPostKind(this.event.tags) != POST_KIND.REPLY
+                ? Container()
+                : TextButton(
+                    child: Text(
+                      this.parentScreen == "notification"
+                          ? "Go to reply thread"
+                          : "Reply to " +
+                              extractAsyncValue<ProfileData?, String>(
+                                  ref.watch(profileProvider(
+                                      extractEAndPtags(this.event.tags)["p"]!
+                                          .last[1])),
+                                  (prof) => prof!.name,
+                                  "unknown") +
+                              "'s post",
+                      style: const TextStyle(color: Colors.blue),
+                    ),
+                    onPressed: () => {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ThreadScreen(event: this.event),
+                        ),
+                      ),
+                    },
                   ),
-                ),
-              },
-            ),
-            classifyPostKind(this.event.tags) != POST_KIND.REPLY ?
-            Container() :
-            const SizedBox(height: 4),
+            classifyPostKind(this.event.tags) != POST_KIND.REPLY
+                ? Container()
+                : const SizedBox(height: 4),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

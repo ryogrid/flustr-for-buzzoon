@@ -49,6 +49,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     var isExistProfile = false;
     var isExistFollowList = false;
     var isExistReaction = false;
+    var isExistReply = false;
 
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
@@ -94,6 +95,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
           ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
           if (classifyPostKind(e.tags) == POST_KIND.REPLY) {
             ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
+            isExistReply = true;
           }
           break;
         case 3: // follow
@@ -122,6 +124,9 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     }
     if (isExistReaction) {
       ref.invalidate(reactionProvider);
+      ref.invalidate(notificationCacheNotifierProvider);
+    }
+    if (isExistReply) {
       ref.invalidate(notificationCacheNotifierProvider);
     }
   });
