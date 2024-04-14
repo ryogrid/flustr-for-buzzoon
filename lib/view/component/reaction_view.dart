@@ -47,7 +47,7 @@ class ReactionView extends ConsumerWidget {
                         );
                       },
                       child: Image.network(
-                        authorProf == null ? PrefKeys.noProfileUserPictureURL : authorProf.picture,
+                        authorProf == null ? NO_PROFILE_USER_PICTURE_URL : authorProf.picture,
                       ),
                     ),
                   ),
@@ -60,7 +60,7 @@ class ReactionView extends ConsumerWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Image.network(
-                    PrefKeys.noProfileUserPictureURL,
+                    NO_PROFILE_USER_PICTURE_URL,
                   ),
                 ),
               _ => const SizedBox(),

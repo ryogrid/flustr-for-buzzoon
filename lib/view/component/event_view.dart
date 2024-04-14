@@ -51,7 +51,7 @@ class EventView extends ConsumerWidget {
                         );
                       },
                       child: Image.network(
-                        authorProf == null ? PrefKeys.noProfileUserPictureURL : authorProf.picture,
+                        authorProf == null ? NO_PROFILE_USER_PICTURE_URL : authorProf.picture,
                       ),
                     ),
                   ),
@@ -64,7 +64,7 @@ class EventView extends ConsumerWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Image.network(
-                    PrefKeys.noProfileUserPictureURL,
+                    NO_PROFILE_USER_PICTURE_URL,
                   ),
                 ),
               _ => const SizedBox(),
@@ -95,7 +95,6 @@ class EventView extends ConsumerWidget {
                     children: [
                       IconButton( // reply button
                         onPressed: () async {
-                          // TODO: need to implement reply post popup
                           showPostDialog(ref, context, "Send reply post", (ref, ctx, sendText)
                           {
                             final secHex = ref.watch(currentSecHexProvider);
@@ -119,7 +118,7 @@ class EventView extends ConsumerWidget {
                           color: Colors.grey,
                         ),
                       ),
-                      IconButton(
+                      IconButton( // like button
                         onPressed: () async {
                           var servAddrSettting = await urls;
                           var url = servAddrSettting.getServAddr!;
@@ -153,7 +152,7 @@ class EventView extends ConsumerWidget {
                       }),
                     ],
                   ),
-                  Column(
+                  Column( // reacted user list
                     children: switch (reaction) {
                       AsyncData(value: final reactionVal) => reactionVal.pubHexs
                           .map((e) => Align(

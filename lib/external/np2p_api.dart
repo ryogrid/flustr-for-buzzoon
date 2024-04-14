@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../http_client_factory.dart'
     if (dart.library.js_interop) '../http_client_factory_web.dart';
+import 'np2p_util.dart';
 
 class Np2pAPI {
   static String genRandomHexString([int length = 32]) {
@@ -178,11 +179,3 @@ List<List<String>> constructReplyTags(WidgetRef ref, Event destEvt) {
   }
 }
 
-Map<String, List<List<String>>> extractEAndPtags(List<List<String>> tags) {
-  var eTags = tags.where((element) => element[0] == "e").toList();
-  var pTags = tags.where((element) => element[0] == "p").toList();
-  return {
-    "e": eTags,
-    "p": pTags,
-  };
-}

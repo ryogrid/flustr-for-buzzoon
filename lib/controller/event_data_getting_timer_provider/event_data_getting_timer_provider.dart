@@ -43,7 +43,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
   }
 
   var lastEvtReceived = -1;
-  t = Timer.periodic(Duration(seconds: PrefKeys.eventDataGettingIntervalSec),
+  t = Timer.periodic(Duration(seconds: EVENT_DATA_GETTING_INTERVAL_SEC),
       (timer) async {
     var isExistProfile = false;
     var isExistFollowList = false;
@@ -53,7 +53,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
     int since;
     if (lastEvtReceived == -1) {
-      since = nowUnix - PrefKeys.firstGettingDataPeriod;
+      since = nowUnix - FIRST_GETTING_DATA_PERIOD;
       lastEvtReceived = nowUnix;
     } else {
       since = lastEvtReceived;
