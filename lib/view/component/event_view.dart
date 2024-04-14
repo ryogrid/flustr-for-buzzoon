@@ -206,18 +206,18 @@ class EventView extends ConsumerWidget {
                           AsyncData(value: final reactionVal) => reactionVal
                               .pubHexs
                               .map((e) => Align(
-                                    child: Text(
-                                        switch (ref.watch(profileProvider(e))) {
-                                          AsyncData(value: final authorProf) =>
-                                            authorProf == null
-                                                ? e.substring(0, 9) + "..."
-                                                : authorProf.name + " ",
-                                          _ => e.substring(0, 9) + "..."
-                                        },
-                                        style: const TextStyle(
-                                            color: Colors.pinkAccent)),
-                                    alignment: Alignment.centerRight,
-                                  ))
+                            child: Text(
+                                switch (ref.watch(profileProvider(e))) {
+                                  AsyncData(value: final authorProf) =>
+                                  authorProf == null
+                                      ? e.substring(0, 9) + "..."
+                                      : authorProf.name + " ",
+                                  _ => e.substring(0, 9) + "..."
+                                },
+                                style: const TextStyle(
+                                    color: Colors.pinkAccent)),
+                            alignment: Alignment.centerRight,
+                          ))
                               .toList(),
                           _ => [],
                         },

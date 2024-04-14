@@ -20,7 +20,10 @@ class ReactionView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final author = ref.watch(profileProvider(event.pubkey));
+    //final author = ref.watch(profileProvider(event.pubkey));
+    final tgtPostAuthor = ref.watch(profileProvider(extractEAndPtags(this.event.tags)["p"]!.last[1]));
+    final reactedUser = ref.watch(profileProvider(this.event.pubkey));
+    final reaction = ref.watch(reactionProvider(extractEAndPtags(this.event.tags)["e"]!.last[1]));
     final notifications = ref.watch(notificationCacheNotifierProvider);
 
     return Card(
@@ -29,7 +32,7 @@ class ReactionView extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            switch (author) {
+            switch (tgtPostAuthor) {
               AsyncData(value: final authorProf) => Container(
                   clipBehavior: Clip.antiAlias,
                   width: 40,
@@ -71,7 +74,7 @@ class ReactionView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    extractAsyncValue(author, (authorProf) => authorProf!.name, "unknown"),
+                    extractAsyncValue(tgtPostAuthor, (authorProf) => authorProf!.name, "unknown"),
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(notifications.eventDataMap[event.tags[0][1]] != null
@@ -95,6 +98,18 @@ class ReactionView extends ConsumerWidget {
                       Icon(
                           Icons.favorite_border,
                           color: Colors.pinkAccent,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    // reacted user list
+                    children: [
+                      Align(
+                        child: Text(
+                            extractAsyncValue(reactedUser, (authorProf) => authorProf!.name, "unknown"),
+                            style: const TextStyle(
+                                color: Colors.pinkAccent)),
+                        alignment: Alignment.centerRight,
                       ),
                     ],
                   ),
