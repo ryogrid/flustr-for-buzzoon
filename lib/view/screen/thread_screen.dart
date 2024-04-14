@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:nostr/nostr.dart';
 import 'package:nostrp2p/controller/event_data_getting_timer_provider/event_data_getting_timer_provider.dart';
 import 'package:nostrp2p/controller/is_seckey_available_provider/is_seckey_available_provider.dart';
 import 'package:nostrp2p/controller/timeline_posts_notifier/timeline_posts_notifier.dart';
@@ -13,7 +14,9 @@ import '../component/posting_button.dart';
 import '../component/top_bar.dart';
 
 class ThreadScreen extends ConsumerWidget {
-  const ThreadScreen({Key? key}) : super(key: key);
+  const ThreadScreen({Key? key, required this.event}) : super(key: key);
+
+  final Event event;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

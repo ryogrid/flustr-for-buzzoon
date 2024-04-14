@@ -8,6 +8,7 @@ import 'package:nostrp2p/controller/reaction_cache_provider/reaction_cache_notif
 import 'package:nostrp2p/controller/reaction_provider/reaction_provider.dart';
 import 'package:nostrp2p/controller/servaddr_provider/servaddr_provider.dart';
 import 'package:nostrp2p/controller/timeline_posts_notifier/timeline_posts_notifier.dart';
+import 'package:nostrp2p/external/np2p_util.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../external/np2p_api.dart';
@@ -91,6 +92,9 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
           break;
         case 1: // text note
           ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
+          if (classifyPostKind(e.tags) == POST_KIND.REPLY) {
+            ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
+          }
           break;
         case 3: // follow
             ref.read(followListCacheNotifierProvider.notifier).setOrUpdateFollowList(e.pubkey, e.tags);
