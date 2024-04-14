@@ -13,7 +13,7 @@ class PostingButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return FloatingActionButton(
         onPressed: () {
-          showPostDialog(ref, context, (ref, ctx, sendText) {
+          showPostDialog(ref, context, "Send post", (ref, ctx, sendText) {
             final secHex = ref.watch(currentSecHexProvider);
             final pubHex = ref.watch(currentPubHexProvider);
             final servAddr = ref.watch(servAddrSettingNotifierProvider);

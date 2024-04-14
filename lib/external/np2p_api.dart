@@ -162,6 +162,27 @@ class Np2pAPI {
 }
 
 List<List<String>> constructReplyTags(WidgetRef ref, Event destEvt) {
-  // TODO: implement constructReplyTags
-  return [];
+  var epTagMap = extractEAndPtags(destEvt.tags);
+  var eTags = epTagMap["e"];
+  var pTags = epTagMap["p"];
+  if (eTags!.length == 0) {
+    // destEvt is root post
+    eTags.add(["e", destEvt.id, "", "root"]);
+    pTags!.add(["p", destEvt.pubkey]);
+    return eTags + pTags;
+  }else{
+    // destEvt is not root post
+    eTags.add(["e", destEvt.id, "", "reply"]);
+    pTags!.add(["p", destEvt.pubkey]);
+    return eTags + pTags;
+  }
+}
+
+Map<String, List<List<String>>> extractEAndPtags(List<List<String>> tags) {
+  var eTags = tags.where((element) => element[0] == "e").toList();
+  var pTags = tags.where((element) => element[0] == "p").toList();
+  return {
+    "e": eTags,
+    "p": pTags,
+  };
 }

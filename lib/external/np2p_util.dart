@@ -11,7 +11,7 @@ S extractAsyncValue<T, S>(AsyncValue<T> asyncValue, S whenNotNull(T val), S when
     };
 }
 
-void showPostDialog(WidgetRef ref, BuildContext context, void onPressed(WidgetRef ref, BuildContext ctx, String sendText)) {
+void showPostDialog(WidgetRef ref, BuildContext context, String dialogTitle, void onPressed(WidgetRef ref, BuildContext ctx, String sendText)) {
   var _textToSend = '';
 
   showGeneralDialog(
@@ -22,7 +22,7 @@ void showPostDialog(WidgetRef ref, BuildContext context, void onPressed(WidgetRe
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('send text event'),
+            Text(dialogTitle),
             TextField(
               onChanged: (value) {
                 _textToSend = value;

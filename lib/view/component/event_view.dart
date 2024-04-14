@@ -96,7 +96,7 @@ class EventView extends ConsumerWidget {
                       IconButton( // reply button
                         onPressed: () async {
                           // TODO: need to implement reply post popup
-                          showPostDialog(ref, context, (ref, ctx, sendText)
+                          showPostDialog(ref, context, "Send reply post", (ref, ctx, sendText)
                           {
                             final secHex = ref.watch(currentSecHexProvider);
                             final pubHex = ref.watch(currentPubHexProvider);
