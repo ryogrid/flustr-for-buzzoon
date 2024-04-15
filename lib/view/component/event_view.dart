@@ -63,7 +63,8 @@ class EventView extends ConsumerWidget {
               POST_KIND.MENTION => Text(
                   "@" +
                       extractAsyncValue<ProfileData?, String>(
-                          ref.watch(profileProvider(pubHex!)),
+                          ref.watch(profileProvider(
+                              extractEAndPtags(this.event.tags)["p"]!.last[1])),
                           (prof) => prof!.name,
                           "unknown"),
                   style: const TextStyle(color: Colors.blue),
