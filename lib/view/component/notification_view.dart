@@ -28,8 +28,11 @@ class NotificationView extends ConsumerWidget {
     final notifications = ref.watch(notificationCacheNotifierProvider);
     final pubHex = ref.watch(currentPubHexProvider);
 
-    if (this.event.kind == 1 && notifications.eventDataMap[extractEAndPtags(this.event.tags)["e"]!.last[1]] != null && notifications.eventDataMap[extractEAndPtags(this.event.tags)["e"]!.last[1]]!.pubkey == pubHex) {
+    if (this.event.kind == 1 && classifyPostKind(this.event.tags) == POST_KIND.REPLY && notifications.eventDataMap[extractEAndPtags(this.event.tags)["e"]!.last[1]]!.pubkey == pubHex) {
       // reply to my post
+      return EventView(event: this.event, parentScreen: "notification",);
+    }else if (this.event.kind == 1 && classifyPostKind(this.event.tags) == POST_KIND.MENTION && extractEAndPtags(this.event.tags)["p"]!.last[1] == pubHex) {
+      // mention to me
       return EventView(event: this.event, parentScreen: "notification",);
     }else if(this.event.kind == 7 && notifications.eventDataMap[this.event.tags[0][1]] != null && notifications.eventDataMap[this.event.tags[0][1]]!.pubkey == pubHex) {
       // reaction to my post

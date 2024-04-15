@@ -162,7 +162,7 @@ class Np2pAPI {
   }
 }
 
-List<List<String>> constructReplyTags(WidgetRef ref, Event destEvt) {
+List<List<String>> constructSpecialPostTags(WidgetRef ref, Event destEvt) {
   var epTagMap = extractEAndPtags(destEvt.tags);
   var eTags = epTagMap["e"];
   var pTags = epTagMap["p"];

@@ -117,7 +117,7 @@ class ThreadView extends ConsumerWidget {
                                               pubHex!,
                                               servAddr.getServAddr!,
                                               sendText,
-                                              constructReplyTags(ref, this.event)),
+                                              constructSpecialPostTags(ref, this.event)),
                                       _ => null,
                                     };
                                     Navigator.of(ctx).pop();

@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/current_sechex_provider/current_sechex_provider.dart';
+import '../../controller/is_seckey_available_provider/is_seckey_available_provider.dart';
 import '../../controller/servaddr_provider/servaddr_provider.dart';
+import '../component/posting_button.dart';
 import '../component/profile_header.dart';
 import '../component/profile_setting.dart';
 import '../component/top_bar.dart';
@@ -27,17 +29,15 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider(this.pubHex));
-    // final rawPosts = ref.watch(UserPostsNotifierProvider(pubHex));
-    // final rawPostsController =
-    //     ref.watch(UserPostsNotifierProvider(pubHex).notifier);
-    // final loadingOld = ref.watch(_loadButtonLoadingProvider);
     final urls = ref.watch(servAddrSettingNotifierProvider);
     final isProfileEditable = ref.watch(_profileEditableProvider);
     final secHex = ref.watch(currentSecHexProvider);
     final selfPubHex = ref.watch(currentPubHexProvider);
+    final isSeckeyAvailable = ref.watch(isSeckeyAvailableProvider);
 
     return Scaffold(
       appBar: AppBar(),
+      floatingActionButton: isSeckeyAvailable ? PostingButton(destPubHex: this.pubHex) : null,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),

@@ -20,10 +20,8 @@ class ReactionView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final author = ref.watch(profileProvider(event.pubkey));
     final tgtPostAuthor = ref.watch(profileProvider(extractEAndPtags(this.event.tags)["p"]!.last[1]));
     final reactedUser = ref.watch(profileProvider(this.event.pubkey));
-    final reaction = ref.watch(reactionProvider(extractEAndPtags(this.event.tags)["e"]!.last[1]));
     final notifications = ref.watch(notificationCacheNotifierProvider);
 
     return Card(

@@ -30,7 +30,6 @@ class EventView extends ConsumerWidget {
     final secHex = ref.watch(currentSecHexProvider);
     final urls = ref.watch(servAddrSettingNotifierProvider.future);
     final reaction = ref.watch(reactionProvider(event.id));
-    final notifications = ref.watch(notificationCacheNotifierProvider);
 
     return Card(
       child: Padding(
@@ -38,33 +37,44 @@ class EventView extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            classifyPostKind(this.event.tags) != POST_KIND.REPLY
-                ? Container()
-                : TextButton(
-                    child: Text(
-                      this.parentScreen == "notification"
-                          ? "Go to reply thread"
-                          : "Reply to " +
-                              extractAsyncValue<ProfileData?, String>(
-                                  ref.watch(profileProvider(
-                                      extractEAndPtags(this.event.tags)["p"]!
-                                          .last[1])),
-                                  (prof) => prof!.name,
-                                  "unknown") +
-                              "'s post",
-                      style: const TextStyle(color: Colors.blue),
-                    ),
-                    onPressed: () => {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => ThreadScreen(event: this.event),
-                        ),
-                      ),
-                    },
+            switch (classifyPostKind(this.event.tags)) {
+              POST_KIND.REPLY => TextButton(
+                  child: Text(
+                    this.parentScreen == "notification"
+                        ? "Go to reply thread"
+                        : "Reply to " +
+                            extractAsyncValue<ProfileData?, String>(
+                                ref.watch(profileProvider(
+                                    extractEAndPtags(this.event.tags)["p"]!
+                                        .last[1])),
+                                (prof) => prof!.name,
+                                "unknown") +
+                            "'s post",
+                    style: const TextStyle(color: Colors.blue),
                   ),
-            classifyPostKind(this.event.tags) != POST_KIND.REPLY
-                ? Container()
-                : const SizedBox(height: 4),
+                  onPressed: () => {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ThreadScreen(event: this.event),
+                      ),
+                    ),
+                  },
+                ),
+              POST_KIND.MENTION => Text(
+                  "@" +
+                      extractAsyncValue<ProfileData?, String>(
+                          ref.watch(profileProvider(pubHex!)),
+                          (prof) => prof!.name,
+                          "unknown"),
+                  style: const TextStyle(color: Colors.blue),
+                ),
+              _ => Container(),
+            },
+            switch (classifyPostKind(this.event.tags)) {
+              POST_KIND.REPLY => const SizedBox(height: 4),
+              POST_KIND.MENTION => const SizedBox(height: 4),
+              _ => Container(),
+            },
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -149,7 +159,8 @@ class EventView extends ConsumerWidget {
                                         pubHex!,
                                         servAddr.getServAddr!,
                                         sendText,
-                                        constructReplyTags(ref, this.event)),
+                                        constructSpecialPostTags(
+                                            ref, this.event)),
                                   _ => null,
                                 };
                                 Navigator.of(ctx).pop();
@@ -206,18 +217,18 @@ class EventView extends ConsumerWidget {
                           AsyncData(value: final reactionVal) => reactionVal
                               .pubHexs
                               .map((e) => Align(
-                            child: Text(
-                                switch (ref.watch(profileProvider(e))) {
-                                  AsyncData(value: final authorProf) =>
-                                  authorProf == null
-                                      ? e.substring(0, 9) + "..."
-                                      : authorProf.name + " ",
-                                  _ => e.substring(0, 9) + "..."
-                                },
-                                style: const TextStyle(
-                                    color: Colors.pinkAccent)),
-                            alignment: Alignment.centerRight,
-                          ))
+                                    child: Text(
+                                        switch (ref.watch(profileProvider(e))) {
+                                          AsyncData(value: final authorProf) =>
+                                            authorProf == null
+                                                ? e.substring(0, 9) + "..."
+                                                : authorProf.name + " ",
+                                          _ => e.substring(0, 9) + "..."
+                                        },
+                                        style: const TextStyle(
+                                            color: Colors.pinkAccent)),
+                                    alignment: Alignment.centerRight,
+                                  ))
                               .toList(),
                           _ => [],
                         },

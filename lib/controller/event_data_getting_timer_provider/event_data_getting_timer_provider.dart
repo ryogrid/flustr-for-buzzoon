@@ -48,7 +48,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
       (timer) async {
     var isExistProfile = false;
     var isExistFollowList = false;
-    var isExistReaction = false;
+    var isExistNotificationNeededEvt = false;
     var isExistReply = false;
 
     final now = DateTime.now();
@@ -93,9 +93,9 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
           break;
         case 1: // text note
           ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
-          if (classifyPostKind(e.tags) == POST_KIND.REPLY) {
+          if (classifyPostKind(e.tags) == POST_KIND.REPLY || classifyPostKind(e.tags) == POST_KIND.MENTION) {
             ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
-            isExistReply = true;
+            isExistNotificationNeededEvt = true;
           }
           break;
         case 3: // follow
@@ -105,7 +105,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
           // reactions.notifyReactionEvent(e);
           ref.read(reactionCacheNotifierProvider.notifier).addReaction(e);
           ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
-          isExistReaction = true;
+          isExistNotificationNeededEvt = true;
           break;
         default:
           print('unexpected event kind');
@@ -122,11 +122,8 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     if (isExistFollowList) {
       ref.invalidate(followListProvider);
     }
-    if (isExistReaction) {
+    if (isExistNotificationNeededEvt) {
       ref.invalidate(reactionProvider);
-      ref.invalidate(notificationCacheNotifierProvider);
-    }
-    if (isExistReply) {
       ref.invalidate(notificationCacheNotifierProvider);
     }
   });
