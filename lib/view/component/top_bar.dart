@@ -17,11 +17,6 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pubHex = ref.watch(currentPubHexProvider);
     final isFollowingOnlyTl = ref.watch(isFollowingOnlyTlProvider);
-    // final secHex = ref.watch(currentSecHexProvider);
-    // final timelinePosts = ref.watch(timelinePostsNotifierProvider);
-    // final isSeckeyAvailable = ref.watch(isSeckeyAvailableProvider);
-    // final servAddr = ref.watch(servAddrSettingNotifierProvider);
-    // final evtTimer = ref.watch(eventDataGettingTimerProvider);
 
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.primary,

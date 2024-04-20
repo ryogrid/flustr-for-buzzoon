@@ -11,11 +11,12 @@ class PostingButton extends ConsumerWidget {
 
   final String? destPubHex;
 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FloatingActionButton(
       onPressed: () {
-        showPostDialog(ref, context, "Send mention", (ref, ctx, sendText) {
+        showPostDialog(ref, context, this.destPubHex != null ? "Send mention" : "Send post", (ref, ctx, sendText) {
           final secHex = ref.watch(currentSecHexProvider);
           final pubHex = ref.watch(currentPubHexProvider);
           final servAddr = ref.watch(servAddrSettingNotifierProvider);

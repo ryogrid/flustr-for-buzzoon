@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostr/nostr.dart';
 import 'package:intl/intl.dart';
-import 'package:nostrp2p/external/np2p_api.dart';
 
+
+import '../../external/np2p_api.dart';
 import '../../const.dart';
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/current_sechex_provider/current_sechex_provider.dart';
@@ -13,6 +14,7 @@ import '../../controller/servaddr_provider/servaddr_provider.dart';
 import '../../external/np2p_util.dart';
 import '../screen/profile_screen.dart';
 import '../screen/thread_screen.dart';
+import './repost_button.dart';
 
 class PostCard extends ConsumerWidget {
   const PostCard({Key? key, required this.event, required this.parentScreen})
@@ -199,6 +201,7 @@ class PostCard extends ConsumerWidget {
             color: Colors.grey,
           ),
         ),
+        RepostButton(event: event),
         IconButton(
           // like button
           onPressed: () async {
