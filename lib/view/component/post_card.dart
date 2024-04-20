@@ -14,8 +14,8 @@ import '../../external/np2p_util.dart';
 import '../screen/profile_screen.dart';
 import '../screen/thread_screen.dart';
 
-class EventView extends ConsumerWidget {
-  const EventView({Key? key, required this.event, required this.parentScreen})
+class PostCard extends ConsumerWidget {
+  const PostCard({Key? key, required this.event, required this.parentScreen})
       : super(key: key);
 
   final Event event;

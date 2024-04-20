@@ -1,7 +1,7 @@
 import 'package:nostr/nostr.dart';
 import 'package:nostrp2p/controller/event_data_getting_timer_provider/event_data_getting_timer_provider.dart';
 
-import 'package:nostrp2p/view/component/event_view.dart';
+import 'package:nostrp2p/view/component/post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,7 +37,7 @@ class ThreadScreen extends ConsumerWidget {
     var parentEvent = notifications.eventDataMap[extractEAndPtags(event.tags)["e"]!.last[1]];
     while (parentEvent != null) {
       //retList.add(ThreadView(event: parentEvent));
-      retList.add(EventView(event: parentEvent, parentScreen: "thread"));
+      retList.add(PostCard(event: parentEvent, parentScreen: "thread"));
       if (extractEAndPtags(parentEvent.tags)["e"]!.length > 0){
         parentEvent = notifications.eventDataMap[extractEAndPtags(parentEvent.tags)["e"]!.last[1]];
       }else{
@@ -47,7 +47,7 @@ class ThreadScreen extends ConsumerWidget {
 
     retList = retList.reversed.toList();
     //retList.add(ThreadView(event: event));
-    retList.add(EventView(event: event, parentScreen: "thread"));
+    retList.add(PostCard(event: event, parentScreen: "thread"));
     return retList;
   }
 }

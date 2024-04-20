@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:nostrp2p/controller/event_data_getting_timer_provider/event_data_getting_timer_provider.dart';
 import 'package:nostrp2p/controller/is_seckey_available_provider/is_seckey_available_provider.dart';
 import 'package:nostrp2p/controller/timeline_posts_notifier/timeline_posts_notifier.dart';
-import 'package:nostrp2p/view/component/event_view.dart';
+import 'package:nostrp2p/view/component/post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -45,9 +45,9 @@ class HomeScreen extends ConsumerWidget {
             AsyncData(value: final posts) => isFollowingOnlyTl
                 ? posts
                     .where((e) => followListPubHexes.contains(e.pubkey))
-                    .map((e) => EventView(event: e, parentScreen: "home",))
+                    .map((e) => PostCard(event: e, parentScreen: "home",))
                     .toList()
-                : posts.map((e) => EventView(event: e, parentScreen: "home",)).toList(),
+                : posts.map((e) => PostCard(event: e, parentScreen: "home",)).toList(),
             _ => [const Text('Oops! something went wrong!')],
           },
         ),

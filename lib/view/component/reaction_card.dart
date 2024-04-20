@@ -13,8 +13,8 @@ import '../../controller/notification_cache_notifier/notification_cache_notifier
 import '../../external/np2p_util.dart';
 import '../screen/profile_screen.dart';
 
-class ReactionView extends ConsumerWidget {
-  const ReactionView({Key? key, required this.event}) : super(key: key);
+class ReactionCard extends ConsumerWidget {
+  const ReactionCard({Key? key, required this.event}) : super(key: key);
 
   final Event event;
 
