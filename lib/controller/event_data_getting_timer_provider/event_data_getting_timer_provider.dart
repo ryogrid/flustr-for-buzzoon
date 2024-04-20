@@ -93,7 +93,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
           break;
         case 1: // text note
           ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
-          if (classifyPostKind(e.tags) == POST_KIND.REPLY || classifyPostKind(e.tags) == POST_KIND.MENTION) {
+          if (classifyPostKind(e.tags) == POST_KIND.REPLY || classifyPostKind(e.tags) == POST_KIND.MENTION || classifyPostKind(e.tags) == POST_KIND.REPOST || classifyPostKind(e.tags) == POST_KIND.QUOTE_REPOST) {
             ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
             isExistNotificationNeededEvt = true;
           }

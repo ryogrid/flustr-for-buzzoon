@@ -17,11 +17,11 @@ class Np2pAPI {
     return randomStr;
   }
 
-  static publishPost(String secHex, String pubHex, String url, String content, [List<List<String>>? tags]) async {
+  static publishPost(String secHex, String pubHex, String url, String content, [List<List<String>>? tags, int? kind = 1]) async {
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
     var partialEvent = Event.partial();
-    partialEvent.kind = 1;
+    partialEvent.kind = kind != null ? kind : 1;
     partialEvent.createdAt = nowUnix;
     partialEvent.pubkey = pubHex;
     partialEvent.content = content;
@@ -29,6 +29,7 @@ class Np2pAPI {
     partialEvent.id = partialEvent.getEventId();
     partialEvent.sig = partialEvent.getSignature(secHex);
 
+    print(partialEvent.toJson());
     var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
     print(resp);
   }
@@ -122,6 +123,13 @@ class Np2pAPI {
     var resp = await Np2pAPI._request(url + '/req', filter.toJson());
     return (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
   }
+
+  static Future<List<Event>> reqPost(String url, String eventId, String pubHex) async {
+    var filter = Filter(kinds: [1], ids: [eventId], authors: [pubHex]);
+    var resp = await Np2pAPI._request(url + '/req', filter.toJson());
+    return (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
+  }
+
 
   static Future<Map<String, dynamic>> _request(String destUrl, Object params) async {
     Uri url = Uri.parse(destUrl);

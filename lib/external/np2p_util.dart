@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nostr/nostr.dart';
+import 'package:nostrp2p/external/np2p_api.dart';
 
 import '../const.dart';
 
@@ -77,3 +79,4 @@ POST_KIND classifyPostKind(List<List<String>> tags) {
     return POST_KIND.NORMAL;
   }
 }
+

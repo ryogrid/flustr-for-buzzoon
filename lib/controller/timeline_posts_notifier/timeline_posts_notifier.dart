@@ -13,6 +13,7 @@ class TimelinePostsNotifier extends _$TimelinePostsNotifier {
     //final followeePubHexList = await ref.watch(followListProvider.future);
     aggregator = StreamWrapper();
     aggregator!.eventStream.listen((e) {
+      print(e.content);
       state = switch (state) {
         AsyncData(:final value) => AsyncData([e, ...value]),
         _ => state,

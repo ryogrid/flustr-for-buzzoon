@@ -25,7 +25,7 @@ class PostCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final author = ref.watch(profileProvider(event.pubkey));
+    final author = ref.watch(profileProvider(this.event.pubkey));
 
     return Card(
       child: Padding(
@@ -49,7 +49,7 @@ class PostCard extends ConsumerWidget {
                             author, (authorProf) => authorProf!.name, "unkown"),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(event.content),
+                      Text(this.event.content),
                       Align(
                         child: Text(event.pubkey.substring(0, 9) + "..."),
                         alignment: Alignment.centerRight,
@@ -111,7 +111,7 @@ class PostCard extends ConsumerWidget {
   }
 
   Widget buildAuthorPic(BuildContext context, WidgetRef ref){
-    final author = ref.watch(profileProvider(event.pubkey));
+    final author = ref.watch(profileProvider(this.event.pubkey));
 
     return switch (author) {
       AsyncData(value: final authorProf) => Container(
@@ -127,7 +127,7 @@ class PostCard extends ConsumerWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) =>
-                      ProfileScreen(pubHex: event.pubkey),
+                      ProfileScreen(pubHex: this.event.pubkey),
                 ),
               );
             },
@@ -166,7 +166,7 @@ class PostCard extends ConsumerWidget {
     final pubHex = ref.watch(currentPubHexProvider);
     final secHex = ref.watch(currentSecHexProvider);
     final urls = ref.watch(servAddrSettingNotifierProvider.future);
-    final reaction = ref.watch(reactionProvider(event.id));
+    final reaction = ref.watch(reactionProvider(this.event.id));
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -201,7 +201,7 @@ class PostCard extends ConsumerWidget {
             color: Colors.grey,
           ),
         ),
-        RepostButton(event: event),
+        RepostButton(event: this.event),
         IconButton(
           // like button
           onPressed: () async {
@@ -215,8 +215,8 @@ class PostCard extends ConsumerWidget {
                   secHex!,
                   pubHex!,
                   url,
-                  event.id,
-                  event.pubkey,
+                  this.event.id,
+                  this.event.pubkey,
                   "+")
                   : null,
               AsyncValue() => null,
@@ -245,7 +245,7 @@ class PostCard extends ConsumerWidget {
   }
 
   Widget buildReactedUserList(BuildContext context, WidgetRef ref){
-    final reaction = ref.watch(reactionProvider(event.id));
+    final reaction = ref.watch(reactionProvider(this.event.id));
 
     return Column(
       // reacted user list

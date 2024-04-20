@@ -45,9 +45,9 @@ class HomeScreen extends ConsumerWidget {
             AsyncData(value: final posts) => isFollowingOnlyTl
                 ? posts
                     .where((e) => followListPubHexes.contains(e.pubkey))
-                    .map((e) => PostCard(event: e, parentScreen: "home",))
+                    .map((e) => PostCard(event: e, parentScreen: "home"))
                     .toList()
-                : posts.map((e) => PostCard(event: e, parentScreen: "home",)).toList(),
+                : posts.map((e) => PostCard(event: e, parentScreen: "home")).toList(),
             _ => [const Text('Oops! something went wrong!')],
           },
         ),

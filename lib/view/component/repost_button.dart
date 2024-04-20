@@ -18,8 +18,35 @@ class RepostButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     return IconButton(
-        onPressed: () async {
-          // do nothing
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (ctx) => SimpleDialog(
+              children: <Widget>[
+                SimpleDialogOption( // Repost
+                  onPressed: () {
+                    final servAddr = ref.watch(servAddrSettingNotifierProvider);
+                    final pubHex = ref.watch(currentPubHexProvider);
+                    final secHex = ref.watch(currentSecHexProvider);
+
+                    final _ = switch (servAddr) {
+                      AsyncData(value: final servAddr) =>
+                          this.sendRepostEvent(servAddr.getServAddr!, secHex!, pubHex!, this.event),
+                      _ => print("no value"),//null,
+                    };
+                    Navigator.of(ctx).pop();
+                  },
+                  child: const Text('Repost'),
+                ),
+                SimpleDialogOption( // Quote Repost
+                  onPressed: () {
+                    showQuoteRepostDialog(ref, ctx);
+                  },
+                  child: const Text('Quote Repost'),
+                ),
+              ],
+            ),
+          );
         },
         icon: Icon(
           Icons.autorenew,
@@ -31,23 +58,36 @@ class RepostButton extends ConsumerWidget {
   void showQuoteRepostDialog(WidgetRef ref, BuildContext context) {
     final pubHex = ref.watch(currentPubHexProvider);
     final secHex = ref.watch(currentSecHexProvider);
-    final servAddr = ref.watch(servAddrSettingNotifierProvider.future);
+    final servAddr = ref.watch(servAddrSettingNotifierProvider);
 
     showPostDialog(ref, context, "Send quote repost",
           (ref, ctx, sendText) {
-        showPostDialog(
-            ref, context, "Send mention", (ref, ctx, sendText) {
-          final _ = switch (servAddr) {
-            AsyncData(value: final servAddr) =>
-                Np2pAPI.publishPost(
-                    secHex!, pubHex!, servAddr.getServAddr!, sendText, [
-                  ["p", this.event.pubkey]
-                ]),
-            _ => null,
-          };
-          Navigator.of(ctx).pop();
-        });
-      },
+        final _ = switch (servAddr) {
+          AsyncData(value: final servAddr) =>
+              Np2pAPI.publishPost(
+                  secHex!, pubHex!, servAddr.getServAddr!, sendText, [
+                ["e", this.event.id, "", "mention"],
+                ["p", this.event.pubkey],
+                ["q"], // mark as quote repost
+              ]),
+          _ => null,
+        };
+        Navigator.of(ctx).pop();
+        Navigator.of(ctx).pop();
+      });
+
+  }
+
+  void sendRepostEvent(String url, String secHex, String pubHex, Event destEvt) {
+    print("sendRepostEvent called.");
+    var evtStr = destEvt.serialize();
+    Np2pAPI.publishPost(secHex, pubHex, url, evtStr,
+      [
+        ["e", destEvt.id, ""],
+        ["p", destEvt.pubkey],
+      ],
+      6 // mark as repost
     );
   }
+
 }
