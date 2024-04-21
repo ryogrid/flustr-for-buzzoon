@@ -109,7 +109,6 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
           break;
         default:
           print('unexpected event kind');
-          return;
       }
       // this provider stores all events on Map...
       ref.read(notificationCacheNotifierProvider.notifier).addEvent(e);
