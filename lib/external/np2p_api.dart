@@ -5,6 +5,7 @@ import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
 import 'package:nostr/nostr.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../const.dart';
 import '../http_client_factory.dart'
     if (dart.library.js_interop) '../http_client_factory_web.dart';
 import 'np2p_util.dart';
@@ -178,6 +179,11 @@ List<List<String>> constructSpecialPostTags(WidgetRef ref, Event destEvt) {
   var epTagMap = extractEAndPtags(destEvt.tags);
   var eTags = epTagMap["e"];
   var pTags = epTagMap["p"];
+  // when destEvt is quote repost, remove all tags for multiple nesting is not supported
+  if (classifyPostKind(destEvt) == POST_KIND.QUOTE_REPOST) {
+    eTags = [];
+    pTags = [];
+  }
   if (eTags!.length == 0) {
     // destEvt is root post
     eTags.add(["e", destEvt.id, "", "root"]);

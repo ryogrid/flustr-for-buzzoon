@@ -42,8 +42,8 @@ class ProfileScreen extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: switch (profile) {
-            AsyncData(value: final profile) => isProfileEditable ||
-                    profile == null // when "edit profile" button is pressed
+            AsyncData(value: final profile) => (isProfileEditable ||
+                    profile == null) && this.pubHex == selfPubHex! // when "edit profile" button is pressed
                 ? switch (urls) {
                     AsyncData(value: final urladdr) => ProfileSetting(
                         url: urladdr.getServAddr!,
@@ -57,7 +57,7 @@ class ProfileScreen extends ConsumerWidget {
                 : ListView(
                     children: [
                       // app bar
-                      ProfileHeader(profile: profile),
+                      ProfileHeader(profile: profile!),
                       this.pubHex == selfPubHex!
                           ? TextButton(
                               onPressed: () async {

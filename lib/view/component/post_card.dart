@@ -14,6 +14,7 @@ import '../../external/np2p_util.dart';
 import '../screen/profile_screen.dart';
 import '../screen/thread_screen.dart';
 import './repost_button.dart';
+import 'component_funcs.dart';
 
 class PostCard extends ConsumerWidget {
   const PostCard(
@@ -38,15 +39,15 @@ class PostCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             this.parentScreen != "thread"
-                ? buildPostAnnotation1(context, ref)
+                ? this.buildPostAnnotation1(context, ref)
                 : Container(),
             this.parentScreen != "thread"
-                ? buildPostAnnotation2(context, ref)
+                ? this.buildPostAnnotation2(context, ref)
                 : Container(),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildAuthorPic(context, ref),
+                buildAuthorPic(context, ref, this.event),
                 const SizedBox(width: 8),
                 Flexible(
                   child: Column(
@@ -70,6 +71,9 @@ class PostCard extends ConsumerWidget {
                       ),
                       buildReplyAndLikeButton(context, ref),
                       buildReactedUserList(context, ref),
+                      classifyPostKind(this.event) == POST_KIND.QUOTE_REPOST
+                          ? buildChildCard(context, ref, this.event)
+                          : Container(),
                     ],
                   ),
                 ),
@@ -87,24 +91,21 @@ class PostCard extends ConsumerWidget {
             child: Text(
               "Repost by " +
                   extractAsyncValue<ProfileData?, String>(
-                      ref.watch(profileProvider(
-                          this.repostUserPubHex!)),
+                      ref.watch(profileProvider(this.repostUserPubHex!)),
                       (prof) => prof!.name,
                       "unknown"),
               style: const TextStyle(color: Colors.blue),
             ),
             onPressed: () => {
               extractAsyncValue<ProfileData?, String>(
-                          ref.watch(profileProvider(
-                              this.repostUserPubHex!)),
+                          ref.watch(profileProvider(this.repostUserPubHex!)),
                           (prof) => prof!.name,
                           "unknown") !=
                       "unkown"
                   ? Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => ProfileScreen(
-                          pubHex:
-                              this.repostUserPubHex!,
+                          pubHex: this.repostUserPubHex!,
                         ),
                       ),
                     )
@@ -167,48 +168,7 @@ class PostCard extends ConsumerWidget {
           };
   }
 
-  Widget buildAuthorPic(BuildContext context, WidgetRef ref) {
-    final author = ref.watch(profileProvider(this.event.pubkey));
 
-    return switch (author) {
-      AsyncData(value: final authorProf) => Container(
-          clipBehavior: Clip.antiAlias,
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-          ),
-          child: GridTile(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => ProfileScreen(pubHex: this.event.pubkey),
-                  ),
-                );
-              },
-              child: Image.network(
-                authorProf == null
-                    ? NO_PROFILE_USER_PICTURE_URL
-                    : authorProf.picture,
-              ),
-            ),
-          ),
-        ),
-      AsyncError(:final error, :final stackTrace) => Container(
-          clipBehavior: Clip.antiAlias,
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-          ),
-          child: Image.network(
-            NO_PROFILE_USER_PICTURE_URL,
-          ),
-        ),
-      _ => const SizedBox(),
-    };
-  }
 
   Widget buildPostAnnotation2(BuildContext context, WidgetRef ref) {
     return switch (classifyPostKind(this.event)) {
@@ -314,4 +274,6 @@ class PostCard extends ConsumerWidget {
       },
     );
   }
+
+
 }

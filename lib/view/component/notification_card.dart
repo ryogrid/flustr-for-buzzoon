@@ -27,7 +27,10 @@ class NotificationCard extends ConsumerWidget {
     } else if (this.event.kind == 6 && notifications.eventDataMap[extractEAndPtags(this.event.tags)["e"]!.last[1]] != null) {
       // repost of my post
       var decodedJsonMap = jsonDecode(this.event.content);
-      var repostedEvt = Np2pAPI.jsonToEvent(decodedJsonMap);
+      if (!(decodedJsonMap is Map)){
+        return Container();
+      }
+      var repostedEvt = Np2pAPI.jsonToEvent(decodedJsonMap as Map<String, dynamic>);
       return PostCard(event: repostedEvt, parentScreen: "notification",repostUserPubHex: this.event.pubkey,);
     } else if (this.event.kind == 1 && classifyPostKind(this.event) == POST_KIND.QUOTE_REPOST && notifications.eventDataMap[extractEAndPtags(this.event.tags)["e"]!.last[1]] != null) {
       // quote repost to my post

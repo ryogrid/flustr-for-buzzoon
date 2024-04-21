@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostr/nostr.dart';
 import 'package:intl/intl.dart';
+import 'package:nostrp2p/view/component/component_funcs.dart';
 
 import '../../const.dart';
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
@@ -111,6 +112,9 @@ class ReactionCard extends ConsumerWidget {
                       ),
                     ],
                   ),
+                  classifyPostKind(notifications.eventDataMap[event.tags[0][1]]!) == POST_KIND.QUOTE_REPOST
+                      ? buildChildCard(context, ref, notifications.eventDataMap[event.tags[0][1]]!)
+                      : Container(),
                 ],
               ),
             ),
