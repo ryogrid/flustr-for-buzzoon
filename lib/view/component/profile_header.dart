@@ -68,7 +68,6 @@ class ProfileHeader extends ConsumerWidget {
                     () {
                       final newList = followList.toSet().toList();
                       newList.removeWhere((element) => element[1] == profile.pubHex);
-                      print(newList);
                       final _ = switch (url) {
                         AsyncData(value: final servAddr) => Np2pAPI.publishFollowList(secHex!, pubHex!, servAddr.getServAddr!, newList),
                         _ => null,
@@ -77,7 +76,6 @@ class ProfileHeader extends ConsumerWidget {
                     () {
                       final newList = followList.toSet().toList();
                       newList.add(["p", profile.pubHex, "", ""]);
-                      print(newList);
                       final _ = switch (url) {
                         AsyncData(value: final servAddr) => Np2pAPI.publishFollowList(secHex!, pubHex!, servAddr.getServAddr!, newList),
                         _ => null,

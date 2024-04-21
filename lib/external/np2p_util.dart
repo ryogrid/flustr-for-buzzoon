@@ -58,25 +58,37 @@ Map<String, List<List<String>>> extractEAndPtags(List<List<String>> tags) {
   };
 }
 
-POST_KIND classifyPostKind(List<List<String>> tags) {
-  var eTags = tags.where((element) => element[0] == "e").toList();
-  var pTags = tags.where((element) => element[0] == "p").toList();
-  if (eTags.isNotEmpty && pTags.isNotEmpty) {
-    var mentionTag = eTags.firstWhere((element) => element[3] == "mention", orElse: () => ["","","",""]);
-    if (mentionTag[3] == "mention") {
-      return POST_KIND.QUOTE_REPOST;
-    }else{
-      return POST_KIND.REPLY;
-    }
-  } else if (pTags.isNotEmpty) {
-    return POST_KIND.MENTION;
-  } else if (eTags.isNotEmpty) {
-    print("invalidate post event found");
-    print(eTags);
-    return POST_KIND.INVALID;
+POST_KIND classifyPostKind(Event evt) {
+  if (evt.kind == 6) {
+    return POST_KIND.REPOST;
   }
-  else {
-    return POST_KIND.NORMAL;
+  var tags = evt.tags;
+  if (tags == null) {
+    return POST_KIND.INVALID;
+  }else{
+    var eTags = tags.where((element) => element[0] == "e").toList();
+    var pTags = tags.where((element) => element[0] == "p").toList();
+    if (eTags.isNotEmpty && pTags.isNotEmpty) {
+      var mentionTag = eTags.firstWhere((element) => element[3] == "mention", orElse: () => ["","","",""]);
+      if (mentionTag[3] == "mention") {
+        return POST_KIND.QUOTE_REPOST;
+      }else{
+        return POST_KIND.REPLY;
+      }
+    } else if (pTags.isNotEmpty) {
+      return POST_KIND.MENTION;
+    } else if (eTags.isNotEmpty) {
+      print("invalidate post event found");
+      print(eTags);
+      return POST_KIND.INVALID;
+    }
+    else {
+      return POST_KIND.NORMAL;
+    }
   }
 }
 
+bool isIncludePubHexAsPtag(List<List<String>> tags, String pubHex) {
+  var pTags = tags.where((element) => element[0] == "p").toList();
+  return pTags.where((elem) => elem.length >= 2 && elem[1] == pubHex).toList().isNotEmpty;
+}

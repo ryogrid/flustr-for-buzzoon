@@ -1,14 +1,20 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
+import 'package:nostr/nostr.dart';
 import 'package:nostrp2p/controller/event_data_getting_timer_provider/event_data_getting_timer_provider.dart';
 import 'package:nostrp2p/controller/is_seckey_available_provider/is_seckey_available_provider.dart';
 import 'package:nostrp2p/controller/timeline_posts_notifier/timeline_posts_notifier.dart';
+import 'package:nostrp2p/external/np2p_util.dart';
 import 'package:nostrp2p/view/component/post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../const.dart';
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/follow_list_provider/follow_list_provider.dart';
 import '../../controller/is_following_only_tl_provider/is_following_only_tl_provider.dart';
+import '../../external/np2p_api.dart';
 import '../component/posting_button.dart';
 import '../component/top_bar.dart';
 
@@ -45,13 +51,26 @@ class HomeScreen extends ConsumerWidget {
             AsyncData(value: final posts) => isFollowingOnlyTl
                 ? posts
                     .where((e) => followListPubHexes.contains(e.pubkey))
-                    .map((e) => PostCard(event: e, parentScreen: "home"))
+                    .map(this.buildAppropriateCard)
                     .toList()
-                : posts.map((e) => PostCard(event: e, parentScreen: "home")).toList(),
+                : posts.map(this.buildAppropriateCard).toList(),
             _ => [const Text('Oops! something went wrong!')],
           },
         ),
       ),
     );
+  }
+
+  Widget buildAppropriateCard(Event evt) {
+    if (classifyPostKind(evt) == POST_KIND.REPOST){
+      var decodedJsonMap = jsonDecode(evt.content);
+      if (!(decodedJsonMap is Map)){
+        return Container();
+      }
+      var repostedEvt = Np2pAPI.jsonToEvent(decodedJsonMap as Map<String, dynamic>);
+      return PostCard(event: repostedEvt, parentScreen: "home", repostUserPubHex: evt.pubkey,);
+    }else{
+      return PostCard(event: evt, parentScreen: "home");
+    }
   }
 }

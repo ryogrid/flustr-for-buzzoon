@@ -168,6 +168,10 @@ class Np2pAPI {
       verify: false,
     );
   }
+
+  static String eventToJson(Event evt) {
+    return json.encode(evt.toJson());
+  }
 }
 
 List<List<String>> constructSpecialPostTags(WidgetRef ref, Event destEvt) {

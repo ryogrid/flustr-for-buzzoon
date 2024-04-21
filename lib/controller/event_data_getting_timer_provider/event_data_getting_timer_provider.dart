@@ -49,7 +49,6 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     var isExistProfile = false;
     var isExistFollowList = false;
     var isExistNotificationNeededEvt = false;
-    var isExistReply = false;
 
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
@@ -91,9 +90,21 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
             print(e);
           }
           break;
-        case 1: // text note
+        case 1: // text note (including quote repost)
           ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
-          if (classifyPostKind(e.tags) == POST_KIND.REPLY || classifyPostKind(e.tags) == POST_KIND.MENTION || classifyPostKind(e.tags) == POST_KIND.REPOST || classifyPostKind(e.tags) == POST_KIND.QUOTE_REPOST) {
+          // check notification is needed
+          if ((classifyPostKind(e) == POST_KIND.REPLY ||
+              classifyPostKind(e) == POST_KIND.MENTION ||
+              classifyPostKind(e) == POST_KIND.QUOTE_REPOST) &&
+              isIncludePubHexAsPtag(e.tags, pubHex!)){
+            ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
+            isExistNotificationNeededEvt = true;
+          }
+          break;
+        case 6: // text note (repost)
+          ref.read(timelinePostsNotifierProvider.notifier).addEvent(e);
+          // check notification is needed
+          if (isIncludePubHexAsPtag(e.tags, pubHex!)) {
             ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
             isExistNotificationNeededEvt = true;
           }

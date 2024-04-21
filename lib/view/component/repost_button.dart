@@ -80,7 +80,7 @@ class RepostButton extends ConsumerWidget {
 
   void sendRepostEvent(String url, String secHex, String pubHex, Event destEvt) {
     print("sendRepostEvent called.");
-    var evtStr = destEvt.serialize();
+    var evtStr = Np2pAPI.eventToJson(destEvt);
     Np2pAPI.publishPost(secHex, pubHex, url, evtStr,
       [
         ["e", destEvt.id, ""],

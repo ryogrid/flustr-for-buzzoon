@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/follow_list_provider/follow_list_provider.dart';
-import '../component/notification_view.dart';
+import '../component/notification_card.dart';
 
 
 class NotificationScreen extends ConsumerWidget {
@@ -14,10 +14,6 @@ class NotificationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final notifications = ref
-    //     .watch(notificationCacheNotifierProvider.notifier)
-    //     .notificationRepo
-    //     .notificationDataList;
     final notifications = ref
         .watch(notificationCacheNotifierProvider);
 
@@ -34,7 +30,7 @@ class NotificationScreen extends ConsumerWidget {
         onRefresh: () async => ref.invalidate(eventDataGettingTimerProvider),
         child: ListView(
           children: notifications.notificationDataList
-              .map((e) => NotificationView(event: e))
+              .map((e) => NotificationCard(event: e))
               .toList()
               .reversed
               .toList()
