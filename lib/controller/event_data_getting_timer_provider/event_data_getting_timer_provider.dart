@@ -115,8 +115,10 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
         case 7: //reaction
           // reactions.notifyReactionEvent(e);
           ref.read(reactionCacheNotifierProvider.notifier).addReaction(e);
-          ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
-          isExistNotificationNeededEvt = true;
+          if (isIncludePubHexAsPtag(e.tags, pubHex!)) {
+            ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
+            isExistNotificationNeededEvt = true;
+          }
           break;
         default:
           print('unexpected event kind');
@@ -124,7 +126,6 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
       // this provider stores all events on Map...
       ref.read(notificationCacheNotifierProvider.notifier).addEvent(e);
     }
-
 
     if (isExistProfile) {
       ref.invalidate(profileProvider);

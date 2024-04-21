@@ -179,7 +179,7 @@ List<List<String>> constructSpecialPostTags(WidgetRef ref, Event destEvt) {
   var epTagMap = extractEAndPtags(destEvt.tags);
   var eTags = epTagMap["e"];
   var pTags = epTagMap["p"];
-  // when destEvt is quote repost, remove all tags for multiple nesting is not supported
+  // when destEvt is quote repost, remove all tags because multiple nesting is not supported
   if (classifyPostKind(destEvt) == POST_KIND.QUOTE_REPOST) {
     eTags = [];
     pTags = [];
