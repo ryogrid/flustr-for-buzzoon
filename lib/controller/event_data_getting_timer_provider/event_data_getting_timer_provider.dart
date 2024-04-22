@@ -49,6 +49,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     var isExistProfile = false;
     var isExistFollowList = false;
     var isExistNotificationNeededEvt = false;
+    var isExistReaction = false;
 
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
@@ -119,6 +120,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
             ref.read(notificationCacheNotifierProvider.notifier).addNotification(e);
             isExistNotificationNeededEvt = true;
           }
+          isExistReaction = true;
           break;
         default:
           print('unexpected event kind');
@@ -136,6 +138,9 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     if (isExistNotificationNeededEvt) {
       ref.invalidate(reactionProvider);
       ref.invalidate(notificationCacheNotifierProvider);
+    }
+    if (isExistReaction) {
+      ref.invalidate(reactionProvider);
     }
   });
 
