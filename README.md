@@ -3,7 +3,7 @@ This is a fork of flustr for NostrP2P
 [server side](https://github.com/ryogrid/nostrp2p)
 
 - Build
-  - <pre>$ flutter build web --web-renderer html</pre>
+  - <pre>$ flutter build web --web-renderer html --profile</pre>
 
 ---
 
