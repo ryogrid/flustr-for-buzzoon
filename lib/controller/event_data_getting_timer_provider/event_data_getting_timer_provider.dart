@@ -35,11 +35,14 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     t!.cancel();
   }
 
+  var isFollowListSetuped = false;
+
   // setup self follow list
   if (pubHex != null) {
     final followListEvt = await Np2pAPI.fetchFolloList(urls.getServAddr!, pubHex!);
     if (followListEvt != null) {
       ref.read(followListCacheNotifierProvider.notifier).setOrUpdateFollowList(pubHex, followListEvt.tags);
+      isFollowListSetuped = true;
     }
   }
 
@@ -60,6 +63,18 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     } else {
       since = lastEvtReceived;
       lastEvtReceived = nowUnix;
+    }
+
+    // setup self follow list (retrying)
+    if (pubHex != null && !isFollowListSetuped){
+      final followListEvt = await Np2pAPI.fetchFolloList(
+          urls.getServAddr!, pubHex!);
+      if (followListEvt != null) {
+        ref.read(followListCacheNotifierProvider.notifier)
+            .setOrUpdateFollowList(pubHex, followListEvt.tags);
+        isFollowListSetuped = true;
+        isExistFollowList = true;
+      }
     }
 
     var events = await Np2pAPI.reqEvents(urls.getServAddr!, since, nowUnix);
@@ -134,6 +149,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     }
     if (isExistFollowList) {
       ref.invalidate(followListProvider);
+      ref.invalidate(followListCacheNotifierProvider);
     }
     if (isExistNotificationNeededEvt) {
       ref.invalidate(reactionProvider);

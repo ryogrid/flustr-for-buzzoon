@@ -18,9 +18,9 @@ class ProfileHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final followList = ref.watch(followListProvider(this.profile.pubHex));
-    final secHex = ref.watch(currentSecHexProvider);
     final pubHex = ref.watch(currentPubHexProvider);
+    final followList = ref.watch(followListProvider(pubHex));
+    final secHex = ref.watch(currentSecHexProvider);
     final url = ref.watch(servAddrSettingNotifierProvider);
 
     return Column(

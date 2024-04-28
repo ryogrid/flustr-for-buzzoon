@@ -6,7 +6,7 @@ part of 'follow_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$followListHash() => r'2c402e5a31379037d426799b4c44877477f30a2c';
+String _$followListHash() => r'dd39002ea4dc5cf571da30dfe7370ac2ad126781';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -40,7 +40,7 @@ class FollowListFamily extends Family<List<List<String>>> {
 
   /// See also [followList].
   FollowListProvider call(
-    String pubHex,
+    String? pubHex,
   ) {
     return FollowListProvider(
       pubHex,
@@ -75,7 +75,7 @@ class FollowListFamily extends Family<List<List<String>>> {
 class FollowListProvider extends Provider<List<List<String>>> {
   /// See also [followList].
   FollowListProvider(
-    String pubHex,
+    String? pubHex,
   ) : this._internal(
           (ref) => followList(
             ref as FollowListRef,
@@ -103,7 +103,7 @@ class FollowListProvider extends Provider<List<List<String>>> {
     required this.pubHex,
   }) : super.internal();
 
-  final String pubHex;
+  final String? pubHex;
 
   @override
   Override overrideWith(
@@ -144,7 +144,7 @@ class FollowListProvider extends Provider<List<List<String>>> {
 
 mixin FollowListRef on ProviderRef<List<List<String>>> {
   /// The parameter `pubHex` of this provider.
-  String get pubHex;
+  String? get pubHex;
 }
 
 class _FollowListProviderElement extends ProviderElement<List<List<String>>>
@@ -152,7 +152,7 @@ class _FollowListProviderElement extends ProviderElement<List<List<String>>>
   _FollowListProviderElement(super.provider);
 
   @override
-  String get pubHex => (origin as FollowListProvider).pubHex;
+  String? get pubHex => (origin as FollowListProvider).pubHex;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

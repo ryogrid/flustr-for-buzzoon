@@ -27,7 +27,7 @@ class HomeScreen extends ConsumerWidget {
     final isSeckeyAvailable = ref.watch(isSeckeyAvailableProvider);
     final evtTimer = ref.watch(eventDataGettingTimerProvider);
     final pubHex = ref.watch(currentPubHexProvider);
-    final followList = ref.watch(followListProvider(pubHex!));
+    final followList = ref.watch(followListProvider(pubHex));
     final isFollowingOnlyTl = ref.watch(isFollowingOnlyTlProvider);
 
     // this print is for generation of eventDataGettingTimerProvider object
