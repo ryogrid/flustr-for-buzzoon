@@ -15,7 +15,7 @@ S extractAsyncValue<T, S>(AsyncValue<T> asyncValue, S whenNotNull(T val), S when
     };
 }
 
-void showPostDialog(WidgetRef ref, BuildContext context, String dialogTitle, void onPressed(WidgetRef ref, BuildContext ctx, String sendText)) {
+void showPostDialog(WidgetRef ref, BuildContext context, String dialogTitle, void onPressedFunc(WidgetRef ref, BuildContext ctx, String sendText)) {
   var _textToSend = '';
 
   showGeneralDialog(
@@ -28,13 +28,15 @@ void showPostDialog(WidgetRef ref, BuildContext context, String dialogTitle, voi
           children: [
             Text(dialogTitle),
             TextField(
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
               onChanged: (value) {
                 _textToSend = value;
               },
             ),
             ElevatedButton(
               onPressed: () {
-                 onPressed(ref, ctx, _textToSend);
+                 onPressedFunc(ref, ctx, _textToSend);
               },
               child: const Text('send!'),
             ),

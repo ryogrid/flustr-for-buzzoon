@@ -63,6 +63,8 @@ class ProfileSetting extends ConsumerWidget {
                 children: [
                   Flexible(
                     child: TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
                       initialValue: this.about,
                       onChanged: (value) {
                         this.about = value;
