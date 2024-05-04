@@ -60,7 +60,7 @@ class PostCard extends ConsumerWidget {
                       ),
                       Text(this.event.content),
                       Align(
-                        child: Text(event.pubkey.substring(0, 9) + "..."),
+                        child: Text((Nip19.encodePubkey(event.pubkey).replaceAll("npub", "")).substring(0, 9) + "..."),
                         alignment: Alignment.centerRight,
                       ),
                       Align(

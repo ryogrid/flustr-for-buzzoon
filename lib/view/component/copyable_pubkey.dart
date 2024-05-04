@@ -12,7 +12,7 @@ class CopyablePubkey extends StatelessWidget {
     return MaterialButton(
       onPressed: () async {
         try {
-          await Clipboard.setData(ClipboardData(text: pubkey));
+          await Clipboard.setData(ClipboardData(text: Nip19.encodePubkey(pubkey)));
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

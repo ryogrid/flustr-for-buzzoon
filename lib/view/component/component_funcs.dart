@@ -98,7 +98,7 @@ Widget buildChildCard(BuildContext context, WidgetRef ref, Event evt) {
                 ),
                 Text(quotedEvt.content),
                 Align(
-                  child: Text(evt.pubkey.substring(0, 9) + "..."),
+                  child: Text((Nip19.encodePubkey(evt.pubkey).replaceAll("npub", "")).substring(0, 9) + "..."),
                   alignment: Alignment.centerRight,
                 ),
                 Align(
