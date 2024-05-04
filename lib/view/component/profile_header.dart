@@ -1,9 +1,9 @@
-import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
-import 'package:nostrp2p/external/np2p_api.dart';
-import 'package:nostrp2p/view/component/copyable_pubkey.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../controller/profile_provider/profile_provider.dart';
+import '../../external/np2p_api.dart';
+import './copyable_pubkey.dart';
 import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
 import '../../controller/current_sechex_provider/current_sechex_provider.dart';
 import '../../controller/follow_list_provider/follow_list_provider.dart';

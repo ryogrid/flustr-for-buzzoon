@@ -1,10 +1,9 @@
 import 'package:nostr/nostr.dart';
-import 'package:nostrp2p/controller/event_data_getting_timer_provider/event_data_getting_timer_provider.dart';
-
-import 'package:nostrp2p/view/component/post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../controller/event_data_getting_timer_provider/event_data_getting_timer_provider.dart';
+import '../component/post_card.dart';
 import '../../controller/notification_cache_notifier/notification_cache_notifier.dart';
 import '../../external/np2p_util.dart';
 

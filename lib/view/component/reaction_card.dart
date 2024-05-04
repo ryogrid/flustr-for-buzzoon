@@ -6,10 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:nostrp2p/view/component/component_funcs.dart';
 
 import '../../const.dart';
-import '../../controller/current_pubhex_provider/current_pubhex_provider.dart';
-import '../../controller/current_sechex_provider/current_sechex_provider.dart';
-import '../../controller/reaction_provider/reaction_provider.dart';
-import '../../controller/servaddr_provider/servaddr_provider.dart';
 import '../../controller/notification_cache_notifier/notification_cache_notifier.dart';
 import '../../external/np2p_util.dart';
 import '../screen/profile_screen.dart';

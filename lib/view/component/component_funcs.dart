@@ -1,9 +1,10 @@
-import 'package:nostrp2p/controller/notification_cache_notifier/notification_cache_notifier.dart';
-import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostr/nostr.dart';
 import 'package:intl/intl.dart';
+
+import '../../controller/notification_cache_notifier/notification_cache_notifier.dart';
+import '../../controller/profile_provider/profile_provider.dart';
 import '../../const.dart';
 import '../../external/np2p_util.dart';
 import '../screen/profile_screen.dart';
