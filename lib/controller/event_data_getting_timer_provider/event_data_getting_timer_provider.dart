@@ -36,6 +36,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
   }
 
   var isFollowListSetuped = false;
+  var isFirstDataReceived = false;
 
   // setup self follow list
   if (pubHex != null) {
@@ -57,12 +58,17 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     final now = DateTime.now();
     final nowUnix = (now.millisecondsSinceEpoch / 1000).toInt();
     int since;
-    if (lastEvtReceived == -1) {
-      since = nowUnix - FIRST_GETTING_DATA_PERIOD;
-      lastEvtReceived = nowUnix;
+    int until;
+    int limit;
+    if (!isFirstDataReceived) {
+      since = -1;
+      until = -1;
+      limit = FIRTST_EVENT_DATA_GETTING_NUM_MAX;
     } else {
       since = lastEvtReceived;
       lastEvtReceived = nowUnix;
+      until = nowUnix;
+      limit = -1;
     }
 
     // setup self follow list (retrying)
@@ -77,7 +83,10 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
       }
     }
 
-    var events = await Np2pAPI.reqEvents(urls.getServAddr!, since, nowUnix);
+    var events = await Np2pAPI.reqEvents(urls.getServAddr!, since, until, limit);
+    if (events.length > 0) {
+    lastEvtReceived = nowUnix;
+    }
     for (var e in events) {
       switch (e.kind) {
         case 0: // profile

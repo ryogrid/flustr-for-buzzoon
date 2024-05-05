@@ -119,7 +119,8 @@ class Np2pAPI {
   }
 
   // use NostP2P specific kind 40000
-  static Future<List<Event>> reqEvents(String url, int since, int until) async {
+  // -1 specified argument is ignored at server
+  static Future<List<Event>> reqEvents(String url, int since, int until, int limit) async {
     var filter = Filter(kinds: [40000], since: since, until: until);
     var resp = await Np2pAPI._request(url + '/req', filter.toJson());
     return (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
