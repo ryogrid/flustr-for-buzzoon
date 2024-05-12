@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "flustr" "\0"
+            VALUE "CompanyName", "ryogrid.net" "\0"
+            VALUE "FileDescription", "nostrp2p" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flustr" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "flustr.exe" "\0"
-            VALUE "ProductName", "flustr" "\0"
+            VALUE "InternalName", "nostrp2p" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 ryogrid.net. All rights reserved." "\0"
+            VALUE "OriginalFilename", "nostrp2p.exe" "\0"
+            VALUE "ProductName", "nostrp2p" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
