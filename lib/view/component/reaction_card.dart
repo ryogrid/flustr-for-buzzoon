@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostr/nostr.dart';
 import 'package:intl/intl.dart';
 import 'package:nostrp2p/view/component/component_funcs.dart';
+import 'package:nostrp2p/view/extension/text_ex.dart';
 
 import '../../const.dart';
 import '../../controller/notification_cache_notifier/notification_cache_notifier.dart';
@@ -75,7 +76,7 @@ class ReactionCard extends ConsumerWidget {
                   Text(notifications.eventDataMap[event.tags[0][1]] != null
                         ? notifications.eventDataMap[event.tags[0][1]]!.content
                         : "",
-                  ),
+                  ).urlToLink(context),
                   Align(
                     child: Text((Nip19.encodePubkey(event.pubkey).replaceAll("npub", "")).substring(0, 9) + "..."),
                     alignment: Alignment.centerRight,

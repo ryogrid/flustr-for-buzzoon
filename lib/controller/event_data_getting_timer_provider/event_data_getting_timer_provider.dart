@@ -86,6 +86,7 @@ Future<bool> eventDataGettingTimer(EventDataGettingTimerRef ref) async {
     var events = await Np2pAPI.reqEvents(urls.getServAddr!, since, until, limit);
     if (events.length > 0) {
       isFirstDataReceived = true;
+      lastEvtReceived = nowUnix;
     }
     for (var e in events) {
       switch (e.kind) {

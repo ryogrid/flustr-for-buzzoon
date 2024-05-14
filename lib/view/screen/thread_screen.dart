@@ -21,13 +21,13 @@ class ThreadScreen extends ConsumerWidget {
       body: RefreshIndicator(
         onRefresh: () async => ref.invalidate(eventDataGettingTimerProvider),
         child: ListView(
-          children: constructEventViewList(ref, this.event),
+          children: constructPostCardList(ref, this.event),
         ),
       ),
     );
   }
 
-  List<Widget> constructEventViewList(WidgetRef ref, Event event) {
+  List<Widget> constructPostCardList(WidgetRef ref, Event event) {
     var retList = <Widget>[];
 
     final notifications = ref.watch(notificationCacheNotifierProvider);

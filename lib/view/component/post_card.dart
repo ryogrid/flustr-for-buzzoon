@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostr/nostr.dart';
 import 'package:intl/intl.dart';
+import 'package:nostrp2p/view/extension/text_ex.dart';
 
 import '../../external/np2p_api.dart';
 import '../../const.dart';
@@ -58,7 +59,7 @@ class PostCard extends ConsumerWidget {
                             author, (authorProf) => authorProf!.name, "unkown"),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(this.event.content),
+                      Text(this.event.content).urlToLink(context),
                       Align(
                         child: Text((Nip19.encodePubkey(event.pubkey).replaceAll("npub", "")).substring(0, 9) + "..."),
                         alignment: Alignment.centerRight,
