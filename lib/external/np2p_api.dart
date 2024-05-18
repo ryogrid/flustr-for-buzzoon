@@ -140,6 +140,7 @@ class Np2pAPI {
       "accept": "application/json",
       "Access-Control-Request-Method": "POST",
       "Access-Control-Request-Private-Network": "true",
+      "Accept-Encoding": "gzip, deflate",
     };
     String body = json.encode(params);
     print(body);
@@ -148,6 +149,7 @@ class Np2pAPI {
     if (resp.statusCode == 200) {
       var retJson = json.decode(resp.body);
       print("receied responses (deserialized)");
+      print(resp.headers);
       print(retJson);
       return retJson;
     } else {
