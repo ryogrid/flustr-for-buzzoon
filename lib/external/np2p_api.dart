@@ -31,7 +31,7 @@ class Np2pAPI {
     partialEvent.sig = partialEvent.getSignature(secHex);
 
     print(partialEvent.toJson());
-    var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
+    var resp = await Np2pAPI._requestRespJSON(url + '/publish', partialEvent.toJson());
     print(resp);
   }
 
@@ -47,7 +47,7 @@ class Np2pAPI {
     partialEvent.id = partialEvent.getEventId();
     partialEvent.sig = partialEvent.getSignature(secHex);
 
-    var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
+    var resp = await Np2pAPI._requestRespJSON(url + '/publish', partialEvent.toJson());
     print(resp);
   }
 
@@ -71,7 +71,7 @@ class Np2pAPI {
     partialEvent.id = partialEvent.getEventId();
     partialEvent.sig = partialEvent.getSignature(secHex);
 
-    var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
+    var resp = await Np2pAPI._requestRespJSON(url + '/publish', partialEvent.toJson());
     print(resp);
   }
 
@@ -87,13 +87,13 @@ class Np2pAPI {
     partialEvent.id = partialEvent.getEventId();
     partialEvent.sig = partialEvent.getSignature(secHex);
 
-    var resp = await Np2pAPI._request(url + '/publish', partialEvent.toJson());
+    var resp = await Np2pAPI._requestRespJSON(url + '/publish', partialEvent.toJson());
     print(resp);
   }
 
   static Future<ProfileData?> fetchProfile(String url, String pubHex) async {
     var filter = Filter(kinds: [0], authors: [pubHex]);
-    var resp = await Np2pAPI._request(url + '/req', filter.toJson());
+    var resp = await Np2pAPI._requestRespJSON(url + '/req', filter.toJson());
     var profList = (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
     if (profList.length > 0) {
       return ProfileData.fromEvent(profList[0]);
@@ -104,7 +104,7 @@ class Np2pAPI {
 
   static Future<Event?> fetchFolloList(String url, String pubHex) async {
     var filter = Filter(kinds: [3], authors: [pubHex]);
-    var resp = await Np2pAPI._request(url + '/req', filter.toJson());
+    var resp = await Np2pAPI._requestRespJSON(url + '/req', filter.toJson());
     var profEvtList = (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
     if (profEvtList.length > 0) {
       return profEvtList[0];
@@ -122,18 +122,42 @@ class Np2pAPI {
   // -1 specified argument is ignored at server
   static Future<List<Event>> reqEvents(String url, int since, int until, int limit) async {
     var filter = Filter(kinds: [40000], since: since, until: until, limit: limit);
-    var resp = await Np2pAPI._request(url + '/req', filter.toJson());
+    var resp = await Np2pAPI._requestRespJSON(url + '/req', filter.toJson());
     return (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
   }
 
   static Future<List<Event>> reqPost(String url, String eventId, String pubHex) async {
     var filter = Filter(kinds: [1], ids: [eventId], authors: [pubHex]);
-    var resp = await Np2pAPI._request(url + '/req', filter.toJson());
+    var resp = await Np2pAPI._requestRespJSON(url + '/req', filter.toJson());
     return (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
   }
 
 
-  static Future<Map<String, dynamic>> _request(String destUrl, Object params) async {
+  static Future<Map<String, dynamic>> _requestRespJSON(String destUrl, Object params) async {
+    Uri url = Uri.parse(destUrl);
+    Map<String, String> headers = {
+      'content-type': 'application/json',
+      "accept": "application/json",
+      "Access-Control-Request-Method": "POST",
+      "Access-Control-Request-Private-Network": "true",
+      "Accept-Encoding": "gzip, deflate",
+    };
+    String body = json.encode(params);
+    print(body);
+    var client = httpClient();
+    http.Response resp = await client.post(url, headers: headers, body: body);
+    if (resp.statusCode == 200) {
+      var retJson = json.decode(resp.body);
+      print("receied responses (deserialized)");
+      print(resp.headers);
+      print(retJson);
+      return retJson;
+    } else {
+      return new Future(() => {});
+    }
+  }
+
+  static Future<Map<String, dynamic>> _requestRespBin(String destUrl, Object params) async {
     Uri url = Uri.parse(destUrl);
     Map<String, String> headers = {
       'content-type': 'application/json',
