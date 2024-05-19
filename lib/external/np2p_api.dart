@@ -1,5 +1,8 @@
 import 'dart:math';
+import 'dart:typed_data';
 
+import "package:hex/hex.dart";
+import 'package:message_pack_dart/message_pack_dart.dart' as m2;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nostrp2p/controller/profile_provider/profile_provider.dart';
 import 'package:nostr/nostr.dart';
@@ -93,8 +96,8 @@ class Np2pAPI {
 
   static Future<ProfileData?> fetchProfile(String url, String pubHex) async {
     var filter = Filter(kinds: [0], authors: [pubHex]);
-    var resp = await Np2pAPI._requestRespJSON(url + '/req', filter.toJson());
-    var profList = (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
+    var resp = await Np2pAPI._requestRespBin(url + '/req', filter.toJson());
+    var profList = (resp["Evts"] as List).map((e) => Np2pAPI.msgPackMapToEvent(e)).toList();
     if (profList.length > 0) {
       return ProfileData.fromEvent(profList[0]);
     }else{
@@ -104,8 +107,8 @@ class Np2pAPI {
 
   static Future<Event?> fetchFolloList(String url, String pubHex) async {
     var filter = Filter(kinds: [3], authors: [pubHex]);
-    var resp = await Np2pAPI._requestRespJSON(url + '/req', filter.toJson());
-    var profEvtList = (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
+    var resp = await Np2pAPI._requestRespBin(url + '/req', filter.toJson());
+    var profEvtList = (resp["Evts"] as List).map((e) => Np2pAPI.msgPackMapToEvent(e)).toList();
     if (profEvtList.length > 0) {
       return profEvtList[0];
     }else{
@@ -122,14 +125,14 @@ class Np2pAPI {
   // -1 specified argument is ignored at server
   static Future<List<Event>> reqEvents(String url, int since, int until, int limit) async {
     var filter = Filter(kinds: [40000], since: since, until: until, limit: limit);
-    var resp = await Np2pAPI._requestRespJSON(url + '/req', filter.toJson());
-    return (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
+    var resp = await Np2pAPI._requestRespBin(url + '/req', filter.toJson());
+    return (resp["Evts"] as List).map((e) => Np2pAPI.msgPackMapToEvent(e)).toList();
   }
 
   static Future<List<Event>> reqPost(String url, String eventId, String pubHex) async {
     var filter = Filter(kinds: [1], ids: [eventId], authors: [pubHex]);
-    var resp = await Np2pAPI._requestRespJSON(url + '/req', filter.toJson());
-    return (resp["results"] as List).map((e) => Np2pAPI.jsonToEvent(e)).toList();
+    var resp = await Np2pAPI._requestRespBin(url + '/req', filter.toJson());
+    return (resp["Evts"] as List).map((e) => Np2pAPI.msgPackMapToEvent(e)).toList();
   }
 
 
@@ -157,11 +160,11 @@ class Np2pAPI {
     }
   }
 
-  static Future<Map<String, dynamic>> _requestRespBin(String destUrl, Object params) async {
+  static Future<Map<dynamic, dynamic>> _requestRespBin(String destUrl, Object params) async {
     Uri url = Uri.parse(destUrl);
     Map<String, String> headers = {
       'content-type': 'application/json',
-      "accept": "application/json",
+      "accept": "application/octet-stream",
       "Access-Control-Request-Method": "POST",
       "Access-Control-Request-Private-Network": "true",
       "Accept-Encoding": "gzip, deflate",
@@ -171,10 +174,11 @@ class Np2pAPI {
     var client = httpClient();
     http.Response resp = await client.post(url, headers: headers, body: body);
     if (resp.statusCode == 200) {
-      var retJson = json.decode(resp.body);
+      //var retJson = json.decode(resp.body);
+      var retJson = m2.deserialize(resp.bodyBytes);
       print("receied responses (deserialized)");
       print(resp.headers);
-      print(retJson);
+      //print(retJson);
       return retJson;
     } else {
       return new Future(() => {});
@@ -195,6 +199,24 @@ class Np2pAPI {
       json['sig'],
       verify: false,
     );
+  }
+
+  static Event msgPackMapToEvent(dynamic evtMap) {
+    var tags = (evtMap['Tags'] as List<dynamic>)
+        .map((e) => (e as List<dynamic>).map((e) => utf8.decode(e as Uint8List)).toList())
+        .toList();
+    var retEvt = Event(
+      HEX.encode(evtMap['Id']),
+      HEX.encode(evtMap['Pubkey']),
+      evtMap['Created_at'],
+      evtMap['Kind'],
+      tags,
+      evtMap['Content'],
+      "",
+      verify: false,
+    );
+    print(retEvt.toJson());
+    return retEvt;
   }
 
   static String eventToJson(Event evt) {
