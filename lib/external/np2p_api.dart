@@ -208,7 +208,7 @@ class Np2pAPI {
     var retEvt = Event(
       HEX.encode(evtMap['Id']),
       HEX.encode(evtMap['Pubkey']),
-      evtMap['Created_at'],
+      evtMap['Created_at'].toInt(),
       evtMap['Kind'],
       tags,
       evtMap['Content'],
